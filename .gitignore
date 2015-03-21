@@ -1,0 +1,31 @@
+
+## general
+*.log
+
+## sbt specific
+.cache
+.lib/
+target/
+lib_managed/
+project/boot/
+project/plugins/project/
+
+
+## IDE specific
+.idea/
+
+## File-based project format:
+*.ipr
+*.iws
+
+## Plugin-specific files:
+# IntelliJ
+/out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
