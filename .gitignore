@@ -10,7 +10,6 @@ lib_managed/
 project/boot/
 project/plugins/project/
 
-
 ## IDE specific
 .idea/
 
