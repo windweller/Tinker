@@ -1,37 +1,23 @@
 package files.filetypes
 
-import com.bizo.mighty.csv.{CSVDictReader, CSVReader, CSVWriter}
-import files.Doc
+import com.bizo.mighty.csv.CSVWriter
+import files.DataContainer
 import files.parsers.CSVHandler
-import org.apache.commons.csv.CSVFormat
 import scala.collection.mutable.ArrayBuffer
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
- * Provide a whole-file read access, and an iterator access
+ * Provide save and parse function
  */
-class CSV(f: String, header: Boolean, rawData: Option[ArrayBuffer[Array[String]]], CSVformat: Option[CSVFormat]) extends Doc {
+trait CSV extends DataContainer {
 
-  lazy val data = if (rawData.isEmpty) processCSV(f, header) else rawData.get
-
-  def save(loc: String): Unit = {
-    val output: CSVWriter = CSVWriter(loc)
-    data.foreach(r => output.write(r))
+  abstract override def save(data: Vector[Array[String]], outputFile: String): Future[Unit] = {
+   Future{ val output: CSVWriter = CSVWriter(outputFile)
+    data.foreach(d => output.write(d))}
   }
 
-  def processCSV(loc: String, header: Boolean): ArrayBuffer[Array[String]] = {
-    readFile(loc, header, (line) =>  CSVHandler.parseline(line))
-  }
-
-  //what's the return type of this?
-  def iterator = if (header) Right(CSVDictReader(f)) else Left(CSVReader(f))
-
-  override def parse: (String) => Seq[String] = CSVHandler.parseline
-}
-
-object CSV {
-  //access file this way if you want to read file
-  def apply(f: String, header: Boolean): CSV = new CSV(f, header, None, None)
-  def apply(f: String, header: Boolean, data: ArrayBuffer[Array[String]]): CSV = new CSV(f, header, Some(data), None)
-  def apply(f: String, header: Boolean, data: ArrayBuffer[Array[String]], format: CSVFormat): CSV = new CSV(f, header, Some(data), Some(format))
+  abstract override def parse: (String) => Array[String] = CSVHandler.parseline
 
 }
+

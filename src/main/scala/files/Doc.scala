@@ -1,34 +1,37 @@
 package files
 
-import com.bizo.mighty.csv.CSVWriter
+import org.apache.commons.csv.CSVFormat
 import utils.FailureHandle
-import scala.collection.mutable.ArrayBuffer
-import scala.language.higherKinds
+import scala.concurrent.Future
 
 /**
  * Created by anie on 3/19/2015.
- * T: is the data output type you want
+ * Doc is the base class
+ * it implements all DataContainer methods
+ * as they were simple one column text file
  */
 trait Doc extends DataContainer with FailureHandle {
 
-  def save(loc: String): Unit
-  def parse: (String) => Seq[String]
+  lazy val data = if (rawData.isEmpty) process() else rawData.get
+  lazy val file = FileIterator(f, header)
 
-  protected def saveFile(data: ArrayBuffer[Array[String]], outputFile: String): Unit = {
-    val output: CSVWriter = CSVWriter(outputFile)
-    data.foreach(d => output.write(d))
+  def process(): Vector[Array[String]] = {
+    readFileAll[Array[String]]((line) => super.parse(line))
   }
 
-  //uses high-performance FileIterator
-  protected def readFile[T[String]](loc: String, header: Boolean, transform: (String) => T[String]): ArrayBuffer[T[String]] = {
-
-    val result = ArrayBuffer[T[String]]()
-    val file = FileIterator(loc, header)
-
-    while (file.hasNext) {
-      result += transform(file.next())
-    }
-
-    result
+  protected def readFileAll[T](transform: (String) => T): Vector[T] = {
+   file.map(l => transform(l)).toVector
   }
+
+  protected def readFileIterator[T](transform: (String) => T): Iterator[T] = file.map(l => transform(l))
+
+  //If the file has header, you can get either the header version
+  //or non-header version.
+  abstract override def dataIterator: Either[Iterator[Array[String]], Iterator[Map[String, String]]] = {
+    if (header) Left(readFileIterator[Array[String]]((line) => super.parse(line)))
+    else Right(readFileIterator[Map[String, String]]((line) => super.parseWithHeader(line)))
+  }
+
+  abstract override def dataIteratorPure: Iterator[Array[String]] = readFileIterator[Array[String]]((line) => super.parse(line))
+
 }

@@ -43,7 +43,7 @@ object CSVHandler {
   def apply(): CSVHandler = new CSVHandler(CSVFormat.RFC4180) //default
   def apply(csvFormat: CSVFormat): CSVHandler = new CSVHandler(csvFormat) //custom
 
-  private val defaultCSVHandler = apply()
+  private lazy val defaultCSVHandler = apply()
 
   def parseline(line: String): Array[String] = defaultCSVHandler.parseline(line)
 }

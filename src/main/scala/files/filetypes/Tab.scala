@@ -1,26 +1,36 @@
 package files.filetypes
 
-import files.Doc
+
+import files.DataContainer
 
 import scala.collection.mutable.ArrayBuffer
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
+import java.io.RandomAccessFile
+import java.nio.MappedByteBuffer
+import java.nio.channels.FileChannel
 
 /**
  * Created by anie on 3/19/2015.
+ * (f: String, header: Boolean, rawData: Option[ArrayBuffer[Array[String]]])
  */
-class TabFile(f: String, header: Boolean, rawData: Option[ArrayBuffer[Array[String]]]) extends Doc {
+trait Tab extends DataContainer {
+  abstract override def parse: (String) => Array[String] = (line: String) => line.split("\t")
 
-  lazy val data = if (rawData.isEmpty) processTab(f, header) else rawData.get
-
-  def processTab(loc: String, header: Boolean): ArrayBuffer[Array[String]] = {
-    readFile[Array](loc, header, (line) => line.split("\t"))
+  //Implements Java NIO MemoryMapper
+  //forcefully writing to disk after data is done
+  abstract override def save(data: Vector[Array[String]], outputFile: String): Future[Unit] = {
+    Future {
+      val fc = new RandomAccessFile(new File(outputFile), "rw").getChannel
+      val bufferSize= data.length
+      val mem: MappedByteBuffer = fc.map(FileChannel.MapMode.READ_WRITE, 0, bufferSize)
+      data.foreach(e => mem.put(e.mkString("\t").getBytes))
+      mem.force()
+    }
   }
-
-  override def save(loc: String): Unit = ???
-
-  override def iterator = ???
-
-}
-
-object TabFile {
 
 }

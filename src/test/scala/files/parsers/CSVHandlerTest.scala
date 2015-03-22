@@ -11,4 +11,8 @@ class CSVHandlerTest extends FlatSpec {
     assert(CSVHandler.parseline("1,2,3,4,5,6").mkString("") == "123456")
   }
 
+  "a new object" should "inherit from stackable traits" in {
+
+  }
+
 }
