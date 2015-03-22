@@ -22,10 +22,14 @@ Then you can use it like any other Scala REPL from the command line.
 import files.filetypes.CSV
 import files.filetypes.Tab
 
-  val doc = new DataContainer("..\\src\\test\\scala\\files\\testFiles\\testCSV.txt", true) with Doc with CSV
-  println(doc.dataIteratorPure.next().mkString("\t"))
+  val csv = new DataContainer("././testCSV.csv", true) with Doc with CSV
+  val tab = new DataContainer("././testTab.tab", true) with Doc with Tab
+  println(csv.dataIteratorPure.next().mkString("\t"))
 ```
+
+Stackable trait pattern means you can swap in and out different modules, like playing Lego. If you are dealing with a tab file, you can choose to use Tab module instead of CSV. Also in the future, you might be able to use HTML module or other types of module instead of Doc module.
 
 Basic File I/O has a nice high-level abstraction that treats a directory of files and a single file as the same entity, and allow `Iterator` access throught the whole data corpus.
 
 Advanced File I/O is being developed.
+Interface to ML and NLP libraries are being developed.
