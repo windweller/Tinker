@@ -34,3 +34,21 @@ Basic File I/O has a nice high-level abstraction that treats a directory of file
 Advanced File I/O is being developed.
 
 Interface to ML and NLP libraries are being developed.
+
+## Quick Start - Customization
+
+```
+trait Subtree extends DataContainer with FailureHandle {
+  lazy val data = //your way of obtaining data
+}
+
+trait VarroSubtreeXML extends FileTypes {
+  val headerMap: Option[Array[String]] = None
+}
+
+//Use these two modules by calling:
+
+val doc = new DataContainer("../varroXML.xml") with Subtree with VarroSubtreeXML
+```
+
+This is an example from `Subtree` folder. You can extend any trait to DataContainer, and start adding new modules and new functions to it.
