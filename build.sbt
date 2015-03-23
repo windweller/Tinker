@@ -25,7 +25,7 @@ libraryDependencies ++= {
     "org.apache.commons" % "commons-csv" % "1.1",
     //NLP-components
     "cc.mallet" % "mallet" % "2.0.7-RC2",
-    "edu.emory.clir" % "clearnlp" % "3.0.1",
+    "edu.emory.clir" % "parser/clearnlp" % "3.0.1",
     "edu.emory.clir" % "clearnlp-dictionary" % "3.0",
     "edu.emory.clir" % "clearnlp-general-en-dep" % "3.1",
     "edu.emory.clir" % "clearnlp-general-en-pos" % "3.1",

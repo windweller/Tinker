@@ -1,5 +1,6 @@
 package files
 
+import files.filetypes.FileTypes
 import org.apache.commons.csv.CSVFormat
 import utils.FailureHandle
 
@@ -13,9 +14,21 @@ import scala.concurrent.Future
  * It is not perfect (too many visible/redefining methods),
  * it will be refactored for 1.0 release
  *
+ * We can extend base class with other traits. The functions
+ * that are destined to be override, must have concrete implementations
+ * in those traits
+ *
  * @param rawData this is the data to be saved put in by user
  */
-abstract class DataContainer(val f: String, val header: Boolean, val rawData: Option[Vector[Array[String]]], val CSVformat: Option[CSVFormat]) extends FailureHandle {
+abstract class DataContainer(val f: String, val header: Boolean,
+                             val rawData: Option[Vector[Array[String]]], val CSVformat: Option[CSVFormat])
+                              extends FailureHandle with FileTypes {
+
+  val data: Vector[Array[String]]
+
+  val file: FileIterator
+
+  lazy val headerMap: Option[Array[String]] = file.headerRaw.map(header => parse(header))
 
   //For a file with header, we sometimes just want to ignore them
   def dataIteratorPure: Iterator[Array[String]] = {
@@ -27,27 +40,6 @@ abstract class DataContainer(val f: String, val header: Boolean, val rawData: Op
     fatal("Cannot obtain iterator without mixing in Doc trait")
     throw new Exception
   }
-
-  val data: Vector[Array[String]]
-
-  def parse: (String) => Array[String] = (line: String) => Array(line)
-
-  def save(data: Vector[Array[String]], outputFile: String): Future[Unit] = {
-    fatal("Cannot use save function without knowing the format of file")
-    throw new Exception
-  }
-
-  val file: FileIterator
-
-  def parseWithHeader: (String) => Map[String, String] = {
-    (nextLine: String) => {
-      if (headerMap.nonEmpty)
-        Map(headerMap.get.zip(parse(nextLine)): _*)
-      else {fatal("Cannot invoke header parse for a file with no header"); throw new Exception}
-    }
-  }
-
-  lazy val headerMap: Option[Array[String]] = file.headerRaw.map(header => parse(header))
 
   //Auxiliary Constructor (Sacrifice made for Stackable Trait Pattern)
   //You have to always invoke "new" to aseembly the desired class

@@ -10,7 +10,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
  * Provide save and parse function
  */
-trait CSV extends DataContainer {
+trait CSV extends FileTypes {
 
   abstract override def save(data: Vector[Array[String]], outputFile: String): Future[Unit] = {
    Future{ val output: CSVWriter = CSVWriter(outputFile)
