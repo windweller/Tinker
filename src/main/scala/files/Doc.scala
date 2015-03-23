@@ -12,6 +12,7 @@ import scala.concurrent.Future
  */
 trait Doc extends DataContainer with FailureHandle {
 
+  //by doing this, data is only evaluated once
   lazy val data = if (rawData.isEmpty) process() else rawData.get
   lazy val file = FileIterator(f, header)
 

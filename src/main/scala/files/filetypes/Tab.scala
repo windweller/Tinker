@@ -2,14 +2,10 @@ package files.filetypes
 
 
 import files.DataContainer
-
-import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import java.io.File
-import java.io.FileNotFoundException
-import java.io.IOException
 import java.io.RandomAccessFile
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel

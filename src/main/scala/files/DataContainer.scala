@@ -12,6 +12,8 @@ import scala.concurrent.Future
  *
  * It is not perfect (too many visible/redefining methods),
  * it will be refactored for 1.0 release
+ *
+ * @param rawData this is the data to be saved put in by user
  */
 abstract class DataContainer(val f: String, val header: Boolean, val rawData: Option[Vector[Array[String]]], val CSVformat: Option[CSVFormat]) extends FailureHandle {
 

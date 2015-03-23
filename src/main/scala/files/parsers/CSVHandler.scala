@@ -15,14 +15,14 @@ class CSVHandler(csvFormat: CSVFormat) extends FailureHandle {
 
   def parseline(line: String): Array[String] = {
 
-    var result: Array[String] = Array()
+    var result: Array[String] = Array.empty[String]
 
     Try(CSVParser.parse(line, csvFormat)) match {
       case Success(parser) =>
         val parserIt = parser.iterator()
         while (parserIt.hasNext) {
           val record = parserIt.next()
-          result = collectRow(Array(), record.iterator())
+          result = collectRow(Array.empty[String], record.iterator())
         }
         result
       case Failure(ex) =>
