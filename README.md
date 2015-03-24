@@ -35,7 +35,7 @@ Advanced File I/O is being developed.
 
 Interface to ML and NLP libraries are being developed.
 
-## Quick Start - Customization
+## Customization
 
 ```
 trait Subtree extends DataContainer with FailureHandle {
