@@ -14,9 +14,10 @@ trait Doc extends DataContainer with FailureHandle {
 
   //by doing this, data is only evaluated once
   lazy val data = if (rawData.isEmpty) process() else rawData.get
-  lazy val file = FileIterator(f, header)
+  //a fresh iterator every time
+  def file = FileIterator(f, header)
 
-  lazy val headerString: Option[Array[String]] = file.headerRaw.map(header => parse(header))
+  lazy val headerString: Option[Array[String]] = file.headerRaw.map(header => super.parse(header))
 
   //you might want to test this
   lazy val headerMap: Option[Map[String, Int]] = headerString.map(array => Map(array.zip(0 to array.length): _*))

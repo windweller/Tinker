@@ -1,5 +1,6 @@
 package files.filetypes
 
+import files.DataContainer
 import utils.FailureHandle
 
 import scala.concurrent.Future

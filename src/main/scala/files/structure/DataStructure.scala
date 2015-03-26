@@ -36,7 +36,24 @@ abstract class DataStructure(val idColumn: Option[Int] = None,
                               val targetColumn: Option[IndexedSeq[Int]] = None,
                               val keepColumns: Option[IndexedSeq[Int]] = None) extends FormatChecks{
 
+  var size = 0
+
   if (targetColumn.isEmpty) fatal("target column cannot be empty.")
+
+  //we forbid both because then we won't be able to calculate total size of this structure
+  if (idColumn.nonEmpty && idColumnWithName.nonEmpty) fatal("Either use name or id number. Don't use both.")
+  if (attributeColumns.nonEmpty && attributeColumnsWithName.nonEmpty) fatal("Either use name or id number. Don't use both.")
+  if (labelColumn.nonEmpty && labelColumnWithName.nonEmpty) fatal("Either use name or id number. Don't use both.")
+
+  if (idColumn.nonEmpty) size += 1
+  if (idColumnWithName.nonEmpty) size += 1
+  if (labelColumn.nonEmpty) size += 1
+  if (labelColumnWithName.nonEmpty) size += 1
+
+  if (attributeColumns.nonEmpty) size += attributeColumns.get.size
+  if (attributeColumnsWithName.nonEmpty) size += attributeColumnsWithName.get.size
+  if (targetColumn.nonEmpty) size += targetColumn.get.size
+  if (keepColumns.nonEmpty) size += keepColumns.get.size
 
   //this method is overridden
   //by specific format

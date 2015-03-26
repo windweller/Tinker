@@ -14,7 +14,8 @@ import java.nio.channels.FileChannel
  * Created by anie on 3/19/2015.
  * (f: String, header: Boolean, rawData: Option[ArrayBuffer[Array[String]]])
  */
-trait Tab extends FileTypes {
+trait Tab extends DataContainer {
+
   abstract override def parse: (String) => Array[String] = (line: String) => line.split("\t")
 
   //Implements Java NIO MemoryMapper

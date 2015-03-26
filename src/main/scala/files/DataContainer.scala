@@ -22,7 +22,7 @@ import scala.concurrent.Future
  */
 abstract class DataContainer(val f: String, val header: Boolean,
                              val rawData: Option[Vector[Array[String]]], val CSVformat: Option[CSVFormat])
-                              extends FailureHandle with FileTypes {
+                              extends FileTypes with FailureHandle {
 
   val data: Vector[Array[String]]
 
