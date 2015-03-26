@@ -16,6 +16,11 @@ trait Doc extends DataContainer with FailureHandle {
   lazy val data = if (rawData.isEmpty) process() else rawData.get
   lazy val file = FileIterator(f, header)
 
+  lazy val headerString: Option[Array[String]] = file.headerRaw.map(header => parse(header))
+
+  //you might want to test this
+  lazy val headerMap: Option[Map[String, Int]] = headerString.map(array => Map(array.zip(0 to array.length): _*))
+
   def process(): Vector[Array[String]] = {
     readFileAll[Array[String]]((line) => super.parse(line))
   }

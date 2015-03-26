@@ -1,3 +1,4 @@
+
 name := "Tinker"
 
 version := "0.1"
@@ -25,7 +26,7 @@ libraryDependencies ++= {
     "org.apache.commons" % "commons-csv" % "1.1",
     //NLP-components
     "cc.mallet" % "mallet" % "2.0.7-RC2",
-    "edu.emory.clir" % "parser/clearnlp" % "3.0.1",
+    "edu.emory.clir" % "parser/implementations/clearnlp" % "3.0.1",
     "edu.emory.clir" % "clearnlp-dictionary" % "3.0",
     "edu.emory.clir" % "clearnlp-general-en-dep" % "3.1",
     "edu.emory.clir" % "clearnlp-general-en-pos" % "3.1",
@@ -35,6 +36,7 @@ libraryDependencies ++= {
 
 initialCommands in console := """
 import files.filetypes._
+import utils.ParameterCallToOption.implicits._
 println("===============================")
 println("Welcome to Tinker 0.1 pre-alpha release")
 println("===============================")

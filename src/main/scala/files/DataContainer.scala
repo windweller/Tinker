@@ -26,10 +26,6 @@ abstract class DataContainer(val f: String, val header: Boolean,
 
   val data: Vector[Array[String]]
 
-  val file: FileIterator
-
-  lazy val headerMap: Option[Array[String]] = file.headerRaw.map(header => parse(header))
-
   //For a file with header, we sometimes just want to ignore them
   def dataIteratorPure: Iterator[Array[String]] = {
     fatal("Cannot obtain iterator without mixing in Doc trait")
@@ -43,6 +39,7 @@ abstract class DataContainer(val f: String, val header: Boolean,
 
   //Auxiliary Constructor (Sacrifice made for Stackable Trait Pattern)
   //You have to always invoke "new" to aseembly the desired class
+  def this(f: String) {this(f, false, None, None)}
   def this(f: String, header: Boolean) {this(f, header, None, None)}
   def this(f: String, header: Boolean, data: Vector[Array[String]]) {this(f, header, Some(data), None)}
   def this(f: String, header: Boolean, data: Vector[Array[String]], format: CSVFormat) {this(f, header, Some(data), Some(format))}

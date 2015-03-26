@@ -1,4 +1,4 @@
-package fileReadingNIO;
+package fileIO;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;

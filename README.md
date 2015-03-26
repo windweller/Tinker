@@ -52,3 +52,10 @@ val doc = new DataContainer("../varroXML.xml") with Subtree with VarroSubtreeXML
 ```
 
 This is an example from `Subtree` folder. You can extend any trait to DataContainer, and start adding new modules and new functions to it.
+
+## Library
+
+When you are using Tinker as a library, there are several components to it. Here is what they are:
+
+**DataStructure**: Data structure is a standalone marker class that allows user to freely mark down the data format as they see fit. We do not automatically generate those from the data file due to speed and flexibility issue (think about R's horrible speed issue, and how you have to painfully cast strings to factors or factors to strings). We do not check if a `DataStructure` matches with a file until you start using it with a real `DataContainer` file.
+

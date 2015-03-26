@@ -2,12 +2,17 @@ package files
 
 /**
  * Specifies file operations including
- * search(return specific line - even file name), replace,
+ * search(return specific line - even file name)
+ * split: split the file based on certain criteria
  */
-trait FileOp {
+trait FileOp extends DataContainer {
 
-  def search(piece: String)(implicit doc: Doc): {
+  //not important
+  def search(piece: String):Unit = {
 
   }
+
+  def split()
+
 
 }

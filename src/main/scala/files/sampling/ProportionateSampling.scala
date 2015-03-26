@@ -3,6 +3,6 @@ package files.sampling
 /**
  * Created by anie on 3/22/2015.
  */
-trait ProportionateSampling {
+trait ProportionateSampling extends NFold {
 
 }

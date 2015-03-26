@@ -5,18 +5,21 @@ import utils.FailureHandle
 import scala.concurrent.Future
 
 /**
- * Created by anie on 3/23/2015.
+ * FileTypes include normal/generic file types
+ * as well as special file types such as
+ * MalletFileType or VarroSubtreeXML format
  */
 trait FileTypes extends FailureHandle{
 
-  val headerMap: Option[Array[String]]
+  val headerString: Option[Array[String]]
+  val headerMap: Option[Map[String, Int]]
 
-  def parse: (String) => Array[String] = (line: String) => Array(line)
+  protected def parse: (String) => Array[String] = (line: String) => Array(line)
 
-  def parseWithHeader: (String) => Map[String, String] = {
+  protected def parseWithHeader: (String) => Map[String, String] = {
     (nextLine: String) => {
-      if (headerMap.nonEmpty)
-        Map(headerMap.get.zip(parse(nextLine)): _*)
+      if (headerString.nonEmpty)
+        Map(headerString.get.zip(parse(nextLine)): _*)
       else {fatal("Cannot invoke header parse for a file with no header"); throw new Exception}
     }
   }
