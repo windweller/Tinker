@@ -57,11 +57,11 @@ This is an example from `Subtree` folder. You can extend any trait to DataContai
 
 When you are using Tinker as a library, there are several components to it. Here is what they are:
 
-**DataStructure**: Data structure is a standalone marker class that allows user to freely mark down the data format as they see fit. We do not automatically generate those from the data file due to speed and flexibility issue (think about R's horrible speed issue, and how you have to painfully cast strings to factors or factors to strings). We do not check if a `DataStructure` matches with a file until you start using it with a real `DataContainer` file.
+**DataStructure**: Data structure is a standalone marker class that allows user to freely mark down the data format as they see fit. We do not automatically generate those from the data file due to speed and flexibility issue (think about R's horrible speed, and how you have to painfully cast strings to factors or factors to strings). We do not check if a `DataStructure` matches with a file until you start using it with a real `DataContainer` file.
 
 ## Advanced Usage
 
-Since Tinker is parallel by default, there isn't a seperate parallel module. All parallel operations are already embeded with basic operation modules such as `FileOp`. If you want to switch from parallel to sequential execution, you need to add specific `Sequential` module that's under each directory:
+Since Tinker is parallel by default, there isn't a seperate parallel module. All parallel operations are already embeded with basic operation modules such as `FileOp`. If you want to switch from parallel to sequential execution, you need to add specific `Sequential` module that's under each module:
 
 ```
 val doc = new DataContainer("../testCSV.csv", true) with CSV with Doc with FileOp with files.operations.Sequential
