@@ -12,6 +12,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
  */
 trait CSV extends FileTypes {
 
+  override val typesuffix: Vector[String] = Vector("csv")
+
   abstract override def save(data: Vector[Array[String]], outputFile: String): Future[Unit] = {
    Future{ val output: CSVWriter = CSVWriter(outputFile)
     data.foreach(d => output.write(d))}

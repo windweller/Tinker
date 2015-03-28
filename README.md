@@ -59,6 +59,14 @@ When you are using Tinker as a library, there are several components to it. Here
 
 **DataStructure**: Data structure is a standalone marker class that allows user to freely mark down the data format as they see fit. We do not automatically generate those from the data file due to speed and flexibility issue (think about R's horrible speed, and how you have to painfully cast strings to factors or factors to strings). We do not check if a `DataStructure` matches with a file until you start using it with a real `DataContainer` file.
 
+## Module Hierarchy
+
+Modules should be inserted as a given order. `/` means two modules overrides each other (you can only include one module). `|` means two modules are on the same level and will not override each other.
+
+**DataContainer**: `CSV / Tab > Doc > FileOp > Sequential`
+
+**Parser**: `ParserImpl (specific) > Processing`
+
 ## Advanced Usage
 
 Since Tinker is parallel by default, there isn't a seperate parallel module. All parallel operations are already embeded with basic operation modules such as `FileOp`. If you want to switch from parallel to sequential execution, you need to add specific `Sequential` module that's under each module:
@@ -69,6 +77,10 @@ val doc = new DataContainer("../testCSV.csv", true) with CSV with Doc with FileO
 
 If you don't want to write long prefixes, you must import as close to the usage as possible. Trait `Sequential` is being defined across multiple modules and repeated namespace can cause the compiler to crash. Remember, Tinker's `Sequential` operation is not as safe and well-tested as parallel operations. Use at your own discretion.
 
-## Future Features
+## Minor Improvements of Current Release
 
-1. Chained operation calls in parallel
+1. Now `DataContainer` can treat directory as a file, automatically selecting files with correct suffix names (`.csv` for CSV module, and `.txt` or `.tab` for Tab module)
+
+## Todo
+
+1. add `DataStructure` to `DataContainer` save method, so it can print headers out, when saving.

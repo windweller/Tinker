@@ -1,6 +1,9 @@
 package parser.processing
 
+import files.DataContainer
 import parser.Parser
+
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * Created by anie on 3/23/2015.
@@ -16,5 +19,7 @@ import parser.Parser
  * as much as we could
  */
 trait Processing extends Parser{
+
+//  val actionStream: ArrayBuffer[(DataContainer) => DataContainer] = ArrayBuffer.empty[(DataContainer) => DataContainer]
 
 }

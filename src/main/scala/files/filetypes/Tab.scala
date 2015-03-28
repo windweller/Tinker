@@ -16,6 +16,8 @@ import java.nio.channels.FileChannel
  */
 trait Tab extends DataContainer {
 
+  override val typesuffix: Vector[String] = Vector("tab", "txt")
+
   abstract override def parse: (String) => Array[String] = (line: String) => line.split("\t")
 
   //Implements Java NIO MemoryMapper

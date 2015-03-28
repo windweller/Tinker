@@ -5,13 +5,13 @@ import utils.FailureHandle
 /**
  * Created by anie on 3/23/2015.
  *
- * this is a template
+ * this is a template. You only create
+ * methods that are intended to be overridden
+ * here.
+ *
+ * ParserImpl only provides functions to return
+ * they don't handle anything
  */
 trait ParserImpl extends FailureHandle{
-
-  //for some it's parse, for some it's match
-  def process(data: String): Unit = {
-    fatal("must specify a specific parser implementation")
-  }
 
 }

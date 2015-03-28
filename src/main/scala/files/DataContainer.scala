@@ -37,10 +37,13 @@ abstract class DataContainer(val f: String, val header: Boolean,
     throw new Exception
   }
 
+  def save(): Unit = save(data, f)
+
   //Auxiliary Constructor (Sacrifice made for Stackable Trait Pattern)
   //You have to always invoke "new" to aseembly the desired class
   def this(f: String) {this(f, false, None, None)}
   def this(f: String, header: Boolean) {this(f, header, None, None)}
-  def this(f: String, header: Boolean, data: Vector[Array[String]]) {this(f, header, Some(data), None)}
-  def this(f: String, header: Boolean, data: Vector[Array[String]], format: CSVFormat) {this(f, header, Some(data), Some(format))}
+  def this(f: String, header: Boolean, format: CSVFormat) {this(f, header, None, Some(format))}
+  def this(f: String, data:Vector[Array[String]]) {this(f, false, Some(data), None)} //for saving, must attach file type
+  def this(f: String, data:Vector[Array[String]], format: CSVFormat) {this(f, false, Some(data), Some(format))} //for saving, must attach file type
 }

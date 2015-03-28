@@ -48,8 +48,9 @@ object FileIterator {
    * @param header
    * @return
    */
-  def apply(folder: String, header: Boolean): FileIterator = {
+  def apply(folder: String, header: Boolean)(suffix: Vector[String]): FileIterator = {
     val dir = new File(folder)
-    if (dir.isDirectory) new FileIterator(dir.listFiles(), header) else new FileIterator(Array(dir), header)
+    val files = dir.listFiles().filter(f => !f.isDirectory).filter(f => suffix.contains(f.getName.split("\\.")(1)))
+    if (dir.isDirectory) new FileIterator(files, header) else new FileIterator(Array(dir), header)
   }
 }
