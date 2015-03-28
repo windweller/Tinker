@@ -38,6 +38,7 @@ abstract class DataContainer(val f: String, val header: Boolean,
   }
 
   def save(): Unit = save(data, f)
+  def save(output: String): Unit = save(data, output)
 
   //Auxiliary Constructor (Sacrifice made for Stackable Trait Pattern)
   //You have to always invoke "new" to aseembly the desired class

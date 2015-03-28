@@ -4,7 +4,6 @@ import akka.actor.ActorSystem
 import akka.stream.ActorFlowMaterializer
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.DataContainer
-import parser.implementations.ParserImpl
 import parser.implementations.stanford.TregexMatcher
 import parser.processing.Processing
 
@@ -15,15 +14,16 @@ import scala.util.Success
  * Parser has a general meaning not just
  * sentence parsing, but tregex matching as well
  *
- * Parser()
+ * This implements Delayed Execution Pattern
+ * we traverse the DataContainer's Iterator only once
+ * because all functions are waiting to be executed
  */
-abstract class Parser(data: DataContainer, rules: Option[Vector[String]] = None)(implicit val system: ActorSystem) extends ParserImpl {
+class Parser(val data: DataContainer, val outputFile: Option[String] = None,
+                       val rules: Option[Vector[String]] = None)(implicit val system: ActorSystem) {
 
-  val iterator = data.dataIterator
+  val actionStream: ArrayBuffer[(DataContainer) => Parser] = ArrayBuffer.empty[(DataContainer) => Parser]
 
   implicit val materializer = ActorFlowMaterializer()
-
-  val actionStream: ArrayBuffer[(DataContainer) => Parser]
 
   //prepare for tregex
   val parsedRules: Option[Vector[TregexPattern]] = rules match {
@@ -31,6 +31,6 @@ abstract class Parser(data: DataContainer, rules: Option[Vector[String]] = None)
     case None => None
   }
 
-  def this(data: DataContainer, rules: Vector[String])(implicit system: ActorSystem) = this(data, Some(rules))
-
+  def this(data: DataContainer)(implicit system: ActorSystem) = this(data, None, None)
+  def this(data: DataContainer, rules: Vector[String])(implicit system: ActorSystem) = this(data, None, Some(rules))
 }
