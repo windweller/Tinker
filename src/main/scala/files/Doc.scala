@@ -1,6 +1,6 @@
 package files
 
-import files.DataContainerTypes.RowIterator
+import files.DataContainerTypes._
 import org.apache.commons.csv.CSVFormat
 import utils.FailureHandle
 import scala.concurrent.Future
@@ -33,11 +33,12 @@ trait Doc extends DataContainer with FailureHandle {
 
   protected def readFileIterator[T](transform: (String) => T): Iterator[T] = file.map(l => transform(l))
 
-  //If the file has header, you can get either the header version
-  //or non-header version.
+
   abstract override def dataIterator: RowIterator = {
-    if (header) Left(readFileIterator[Vector[String]]((line) => super.parse(line)))
-    else Right(readFileIterator[Map[String, String]]((line) => super.parseWithHeader(line)))
+    readFileIterator[Either[OrdinalRow, NamedRow]]((line) => {
+      if (!header) Left(super.parse(line))
+      else Right(super.parseWithHeader(line))
+    })
   }
 
   abstract override def dataIteratorPure: Iterator[Vector[String]] = readFileIterator[Vector[String]]((line) => super.parse(line))

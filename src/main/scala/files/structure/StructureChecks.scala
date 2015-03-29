@@ -19,7 +19,7 @@ object StructureChecks extends FailureHandle{
   //if Iterator returns without header, and user uses header to select columns
   //throw fatal error
   def headerMatchIterator(data: DataContainer)(struct: DataStructure): Unit = {
-    if (data.dataIterator.isLeft)
+    if (!data.header)
       if (struct.attributeColumnsWithName.nonEmpty || struct.idColumnWithName.nonEmpty || struct.labelColumnWithName.nonEmpty)
         fatal("If the file does not contain header, you cannot select columns using strings.")
   }

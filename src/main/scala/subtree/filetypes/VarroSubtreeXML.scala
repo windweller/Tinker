@@ -7,7 +7,7 @@ import files.filetypes.FileTypes
  */
 trait VarroSubtreeXML extends FileTypes {
 
-  val headerString: Option[Array[String]] = None
+  val headerString: Option[Vector[String]] = None
   val headerMap = None
 
 

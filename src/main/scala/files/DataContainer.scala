@@ -54,5 +54,5 @@ object DataContainerTypes {
   type OrdinalRow = Vector[String]
   type NamedRow = Map[String, String]
   type NormalRow= Either[OrdinalRow, NamedRow]
-  type RowIterator = Either[Iterator[OrdinalRow], Iterator[NamedRow]]
+  type RowIterator = Iterator[Either[OrdinalRow, NamedRow]]
 }
