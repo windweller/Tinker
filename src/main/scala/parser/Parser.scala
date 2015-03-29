@@ -3,8 +3,9 @@ package parser
 import akka.actor.ActorSystem
 import akka.stream.ActorFlowMaterializer
 import edu.stanford.nlp.trees.tregex.TregexPattern
-import files.DataContainer
+import files.{DataContainer, Doc}
 import files.DataContainerTypes._
+
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -20,14 +21,14 @@ import scala.collection.mutable.ArrayBuffer
  *                   This allows user to specify a desired location, or
  *                   it will be saved under System.getProperty("user.home")
  */
-class Parser(val data: DataContainer, outputFile: Option[String] = None,
+class Parser(val data: DataContainer with Doc, outputFile: Option[String] = None,
                        val rules: Option[Vector[String]] = None)(implicit val system: ActorSystem) {
 
   //right now, it can't save or carry out typed result
   val actionStream: ArrayBuffer[(NormalRow) => NormalRow] = ArrayBuffer.empty[(NormalRow) => NormalRow]
   val saveLoc = outputFile.getOrElse(System.getProperty("user.home"))
 
-  implicit val materializer = ActorFlowMaterializer()
+  protected implicit val materializer = ActorFlowMaterializer()
 
   //prepare for tregex
   val parsedRules: Option[Vector[TregexPattern]] = rules match {
@@ -35,8 +36,8 @@ class Parser(val data: DataContainer, outputFile: Option[String] = None,
     case None => None
   }
 
-  def this(data: DataContainer)(implicit system: ActorSystem) = this(data, None, None)
-  def this(data: DataContainer, rules: Vector[String])(implicit system: ActorSystem) = this(data, None, Some(rules))
-  def this(data: DataContainer, rules: Option[Vector[String]])(implicit system: ActorSystem) = this(data, None, rules)
+  def this(data: DataContainer with Doc)(implicit system: ActorSystem) = this(data, None, None)
+  def this(data: DataContainer with Doc, rules: Vector[String])(implicit system: ActorSystem) = this(data, None, Some(rules))
+  def this(data: DataContainer with Doc, rules: Option[Vector[String]])(implicit system: ActorSystem) = this(data, None, rules)
 
 }

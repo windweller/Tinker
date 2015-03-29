@@ -1,6 +1,7 @@
 package parser.processing
 
-import files.DataContainer
+import akka.stream.scaladsl._
+import files.DataContainerTypes._
 import parser.Parser
 
 import scala.collection.mutable.ArrayBuffer
@@ -20,4 +21,5 @@ import scala.collection.mutable.ArrayBuffer
  */
 trait Processing extends Parser{
 
+  protected val source: Source[NormalRow, Unit] = Source(() => data.dataIterator)
 }
