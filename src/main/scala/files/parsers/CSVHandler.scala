@@ -13,16 +13,16 @@ import scala.util.{Failure, Success, Try}
 
 class CSVHandler(csvFormat: CSVFormat) extends FailureHandle {
 
-  def parseline(line: String): Array[String] = {
+  def parseline(line: String): Vector[String] = {
 
-    var result: Array[String] = Array.empty[String]
+    var result: Vector[String] = Vector.empty[String]
 
     Try(CSVParser.parse(line, csvFormat)) match {
       case Success(parser) =>
         val parserIt = parser.iterator()
         while (parserIt.hasNext) {
           val record = parserIt.next()
-          result = collectRow(Array.empty[String], record.iterator())
+          result = collectRow(Vector.empty[String], record.iterator())
         }
         result
       case Failure(ex) =>
@@ -32,7 +32,7 @@ class CSVHandler(csvFormat: CSVFormat) extends FailureHandle {
   }
 
   @tailrec
-  private[this] def collectRow(row: Array[String], rowStringIt: Iterator[String]): Array[String] = {
+  private[this] def collectRow(row: Vector[String], rowStringIt: Iterator[String]): Vector[String] = {
     if (rowStringIt.hasNext) collectRow(row :+ rowStringIt.next, rowStringIt)
     else row
   }
@@ -45,5 +45,5 @@ object CSVHandler {
 
   private lazy val defaultCSVHandler = apply()
 
-  def parseline(line: String): Array[String] = defaultCSVHandler.parseline(line)
+  def parseline(line: String): Vector[String] = defaultCSVHandler.parseline(line)
 }

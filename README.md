@@ -35,6 +35,10 @@ Advanced File I/O is being developed.
 
 Interface to ML and NLP libraries are being developed.
 
+## Design Philosophy
+
+We want to make standard large file ML/NLP processing as smooth as easy as possible, even for computers with less power/memory. We only keep operations within one module coherent. Operations between modules or involves several modules will be provided with files saving/reading as buffer.
+
 ## Customization
 
 ```
@@ -77,7 +81,8 @@ val doc = new DataContainer("../testCSV.csv", true) with CSV with Doc with FileO
 
 If you don't want to write long prefixes, you must import as close to the usage as possible. Trait `Sequential` is being defined across multiple modules and repeated namespace can cause the compiler to crash. Remember, Tinker's `Sequential` operation is not as safe and well-tested as parallel operations. Use at your own discretion.
 
-## Minor Improvements of Current Release
+
+## Minor Improvements (current release)
 
 1. Now `DataContainer` can treat directory as a file, automatically selecting files with correct suffix names (`.csv` for CSV module, and `.txt` or `.tab` for Tab module)
 

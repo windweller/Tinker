@@ -14,12 +14,12 @@ trait CSV extends FileTypes {
 
   override val typesuffix: Vector[String] = Vector("csv")
 
-  abstract override def save(data: Vector[Array[String]], outputFile: String): Future[Unit] = {
+  abstract override def save(data: Vector[Vector[String]], outputFile: String): Future[Unit] = {
    Future{ val output: CSVWriter = CSVWriter(outputFile)
     data.foreach(d => output.write(d))}
   }
 
-  abstract override def parse: (String) => Array[String] = CSVHandler.parseline
+  abstract override def parse: (String) => Vector[String] = CSVHandler.parseline
 
 }
 

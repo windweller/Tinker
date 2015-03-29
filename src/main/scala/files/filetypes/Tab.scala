@@ -18,11 +18,11 @@ trait Tab extends DataContainer {
 
   override val typesuffix: Vector[String] = Vector("tab", "txt")
 
-  abstract override def parse: (String) => Array[String] = (line: String) => line.split("\t")
+  abstract override def parse: (String) => Vector[String] = (line: String) => line.split("\t").toVector
 
   //Implements Java NIO MemoryMapper
   //forcefully writing to disk after data is done
-  abstract override def save(data: Vector[Array[String]], outputFile: String): Future[Unit] = {
+  abstract override def save(data: Vector[Vector[String]], outputFile: String): Future[Unit] = {
     Future {
       val fc = new RandomAccessFile(new File(outputFile), "rw").getChannel
       val bufferSize= data.length

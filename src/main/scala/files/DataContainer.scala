@@ -1,5 +1,6 @@
 package files
 
+import files.DataContainerTypes._
 import files.filetypes.FileTypes
 import org.apache.commons.csv.CSVFormat
 import utils.FailureHandle
@@ -21,18 +22,18 @@ import scala.concurrent.Future
  * @param rawData this is the data to be saved put in by user
  */
 abstract class DataContainer(val f: String, val header: Boolean,
-                             val rawData: Option[Vector[Array[String]]], val CSVformat: Option[CSVFormat])
+                             val rawData: Option[Vector[Vector[String]]], val CSVformat: Option[CSVFormat])
                               extends FileTypes with FailureHandle {
 
-  val data: Vector[Array[String]]
+  val data: Vector[Vector[String]]
 
   //For a file with header, we sometimes just want to ignore them
-  def dataIteratorPure: Iterator[Array[String]] = {
+  def dataIteratorPure: Iterator[OrdinalRow] = {
     fatal("Cannot obtain iterator without mixing in Doc trait")
     throw new Exception
   }
 
-  def dataIterator: Either[Iterator[Array[String]], Iterator[Map[String, String]]] = {
+  def dataIterator: RowIterator = {
     fatal("Cannot obtain iterator without mixing in Doc trait")
     throw new Exception
   }
@@ -45,6 +46,13 @@ abstract class DataContainer(val f: String, val header: Boolean,
   def this(f: String) {this(f, false, None, None)}
   def this(f: String, header: Boolean) {this(f, header, None, None)}
   def this(f: String, header: Boolean, format: CSVFormat) {this(f, header, None, Some(format))}
-  def this(f: String, data:Vector[Array[String]]) {this(f, false, Some(data), None)} //for saving, must attach file type
-  def this(f: String, data:Vector[Array[String]], format: CSVFormat) {this(f, false, Some(data), Some(format))} //for saving, must attach file type
+  def this(f: String, data:Vector[Vector[String]]) {this(f, false, Some(data), None)} //for saving, must attach file type
+  def this(f: String, data:Vector[Vector[String]], format: CSVFormat) {this(f, false, Some(data), Some(format))} //for saving, must attach file type
+}
+
+object DataContainerTypes {
+  type OrdinalRow = Vector[String]
+  type NamedRow = Map[String, String]
+  type NormalRow= Either[OrdinalRow, NamedRow]
+  type RowIterator = Either[Iterator[Vector[String]], Iterator[Map[String, String]]]
 }

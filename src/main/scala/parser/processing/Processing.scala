@@ -20,6 +20,4 @@ import scala.collection.mutable.ArrayBuffer
  */
 trait Processing extends Parser{
 
-//  val actionStream: ArrayBuffer[(DataContainer) => DataContainer] = ArrayBuffer.empty[(DataContainer) => DataContainer]
-
 }

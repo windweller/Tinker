@@ -4,11 +4,9 @@ import akka.actor.ActorSystem
 import akka.stream.ActorFlowMaterializer
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.DataContainer
-import parser.implementations.stanford.TregexMatcher
-import parser.processing.Processing
+import files.DataContainerTypes._
 
 import scala.collection.mutable.ArrayBuffer
-import scala.util.Success
 
 /**
  * Parser has a general meaning not just
@@ -17,11 +15,17 @@ import scala.util.Success
  * This implements Delayed Execution Pattern
  * we traverse the DataContainer's Iterator only once
  * because all functions are waiting to be executed
+ *
+ * @param outputFile after the exec() in Parser, it's automatically saved.
+ *                   This allows user to specify a desired location, or
+ *                   it will be saved under System.getProperty("user.home")
  */
-class Parser(val data: DataContainer, val outputFile: Option[String] = None,
+class Parser(val data: DataContainer, outputFile: Option[String] = None,
                        val rules: Option[Vector[String]] = None)(implicit val system: ActorSystem) {
 
-  val actionStream: ArrayBuffer[(DataContainer) => Parser] = ArrayBuffer.empty[(DataContainer) => Parser]
+  //right now, it can't save or carry out typed result
+  val actionStream: ArrayBuffer[(NormalRow) => NormalRow] = ArrayBuffer.empty[(NormalRow) => NormalRow]
+  val saveLoc = outputFile.getOrElse(System.getProperty("user.home"))
 
   implicit val materializer = ActorFlowMaterializer()
 
@@ -33,4 +37,6 @@ class Parser(val data: DataContainer, val outputFile: Option[String] = None,
 
   def this(data: DataContainer)(implicit system: ActorSystem) = this(data, None, None)
   def this(data: DataContainer, rules: Vector[String])(implicit system: ActorSystem) = this(data, None, Some(rules))
+  def this(data: DataContainer, rules: Option[Vector[String]])(implicit system: ActorSystem) = this(data, None, rules)
+
 }

@@ -1,5 +1,6 @@
 package files
 
+import files.DataContainerTypes.RowIterator
 import org.apache.commons.csv.CSVFormat
 import utils.FailureHandle
 import scala.concurrent.Future
@@ -17,13 +18,13 @@ trait Doc extends DataContainer with FailureHandle {
   //a fresh iterator every time
   def file = FileIterator(f, header)(typesuffix)
 
-  lazy val headerString: Option[Array[String]] = file.headerRaw.map(header => super.parse(header))
+  lazy val headerString: Option[Vector[String]] = file.headerRaw.map(header => super.parse(header))
 
   //you might want to test this
   lazy val headerMap: Option[Map[String, Int]] = headerString.map(array => Map(array.zip(0 to array.length): _*))
 
-  def process(): Vector[Array[String]] = {
-    readFileAll[Array[String]]((line) => super.parse(line))
+  def process(): Vector[Vector[String]] = {
+    readFileAll[Vector[String]]((line) => super.parse(line))
   }
 
   protected def readFileAll[T](transform: (String) => T): Vector[T] = {
@@ -34,11 +35,11 @@ trait Doc extends DataContainer with FailureHandle {
 
   //If the file has header, you can get either the header version
   //or non-header version.
-  abstract override def dataIterator: Either[Iterator[Array[String]], Iterator[Map[String, String]]] = {
-    if (header) Left(readFileIterator[Array[String]]((line) => super.parse(line)))
+  abstract override def dataIterator: RowIterator = {
+    if (header) Left(readFileIterator[Vector[String]]((line) => super.parse(line)))
     else Right(readFileIterator[Map[String, String]]((line) => super.parseWithHeader(line)))
   }
 
-  abstract override def dataIteratorPure: Iterator[Array[String]] = readFileIterator[Array[String]]((line) => super.parse(line))
+  abstract override def dataIteratorPure: Iterator[Vector[String]] = readFileIterator[Vector[String]]((line) => super.parse(line))
 
 }

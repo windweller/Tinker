@@ -14,10 +14,10 @@ trait FileTypes extends FailureHandle{
 
   val typesuffix: Vector[String] = Vector.empty[String]
 
-  val headerString: Option[Array[String]]
+  val headerString: Option[Vector[String]]
   val headerMap: Option[Map[String, Int]]
 
-  protected def parse: (String) => Array[String] = (line: String) => Array(line)
+  protected def parse: (String) => Vector[String] = (line: String) => Vector(line)
 
   protected def parseWithHeader: (String) => Map[String, String] = {
     (nextLine: String) => {
@@ -29,7 +29,7 @@ trait FileTypes extends FailureHandle{
 
   //save function is rather independent of DataContainer
   //put in correct address, and you are done
-  def save(data: Vector[Array[String]], outputFile: String): Future[Unit] = {
+  def save(data: Vector[Vector[String]], outputFile: String): Future[Unit] = {
     fatal("Cannot use save function without knowing the format of file")
     throw new Exception
   }
