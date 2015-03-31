@@ -19,12 +19,19 @@ Then you can use it like any other Scala REPL from the command line.
 ## Quick Start - Library
 
 ```
-import files.filetypes.CSV
-import files.filetypes.Tab
+import files.filetypes._
 
   val csv = new DataContainer("././testCSV.csv", header = true) with CSV with Doc
   val tab = new DataContainer("././testTab.tab", header = true) with Tab with Doc
   println(csv.dataIteratorPure.next().mkString("\t"))
+```
+
+```
+import files.filetypes._
+import parser._
+
+val doc = new DataContainer("E:\\Allen\\Tinker\\src\\test\\scala\\files\\testFiles\\testCSV.csv", true) with CSV with Doc
+val parser = new Parser(doc) with CSV with FileBuffer with TregexMatcher with Processing
 ```
 
 Stackable trait pattern means you can swap in and out different modules, like playing Lego. If you are dealing with a tab file, you can choose to use `Tab` module instead of `CSV`. Also in the future, you might be able to use `HTML` module or other types of module instead of `Doc` module.
@@ -37,7 +44,7 @@ Interface to ML and NLP libraries are being developed.
 
 ## Design Philosophy
 
-We want to make standard large file ML/NLP processing as smooth as easy as possible, even for computers with less power/memory. We only keep operations within one module coherent. Operations between modules or involves several modules will be provided with files saving/reading as buffer.
+We want to make standard large file ML/NLP processing as smooth as easy as possible, even for computers with less power/memory. We only keep operations within one module coherent. Operations between modules or involves several modules will be provided with files saving/reading as buffer. If no explicit location specified, Tinker will create temporary files that will be deleted after JVM exits.
 
 ## Customization
 

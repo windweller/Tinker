@@ -1,6 +1,6 @@
 package parser
 
-import java.nio.file.Paths
+import java.nio.file.{Files, Paths}
 
 import files.{Doc, DataContainer}
 import files.filetypes.CSV
@@ -18,9 +18,14 @@ class ParserTest extends FlatSpec {
 
   "A parser" should "function well" in {
     val doc = new DataContainer("E:\\Allen\\Tinker\\src\\test\\scala\\files\\testFiles\\testCSV.csv", true) with CSV with Doc
-    val parser = new Parser(doc) with TregexMatcher with CSV with Processing
+    val parser = new Parser(doc) with CSV with FileBuffer with TregexMatcher with Processing
 
+
+    def printSuffix(par: Parser with CSV with FileBuffer): Unit = {
+      println(par.typesuffix.head)
+    }
   }
+
 
   "header printing with rows" should "be aligned" in {
     val maps = Array(Map("A" -> 1, "B" -> 2, "C" -> 3, "D" -> 4, "E" -> 5),
@@ -35,7 +40,9 @@ class ParserTest extends FlatSpec {
   }
 
   "Path" should "create the right temp file" in {
-    println(Paths.get(System.getProperty("user.home")).resolve("Tinker").resolve("parserTmp.tab").toString)
+    val tempFile = Paths.get(System.getProperty("user.home")).resolve(".Tinker")
+//    Files.createDirectory(tempFile)
+    Files.createTempFile(tempFile, "parser", ".csv")
   }
 
 }
