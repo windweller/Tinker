@@ -4,8 +4,8 @@ import akka.stream.scaladsl._
 import files.DataContainerTypes._
 import parser.ParserType._
 import parser._
-
-import scala.collection.mutable.ArrayBuffer
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 /**
  * Created by anie on 3/23/2015.
@@ -28,18 +28,20 @@ trait Processing extends Parser {
   val printSink = Sink.foreach[IntermediateResult](e => save(combine(e._1, e._2)))
 
   def exec(): Unit = {
-
+    if (actionStream.size == 0) fatal("cannot call exec() when there is no action defined")
+    val sourceReady = actionStream.drop(1).foldLeft(source
+                          .via(Flow[NormalRow]
+                          .mapAsync(e => applyHeadFlow(e, actionStream.head)))
+                          ){(source, action) =>
+      source.via(Flow[IntermediateResult].mapAsync(e => Future(action(e))))
+    }
+    sourceReady.to(printSink)
   }
 
-  private[this] def headFlow(): Flow[NormalRow, ProcessedType, Unit] = {
-
+  //this is an open access function
+  //users can use it when they write their custom Akka Stream flows
+  def applyHeadFlow(row: NormalRow, action: (IntermediateResult) => IntermediateResult): Future[IntermediateResult] = Future {
+    action.apply(row, None)
   }
-
-  private[this] def convertToFlowSeries(): Vector[Flow[ProcessedType, ProcessedType, Unit]] = {
-
-  }
-
-
-
 
 }

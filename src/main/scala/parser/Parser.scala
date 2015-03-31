@@ -34,7 +34,7 @@ abstract class Parser(val data: DataContainer with Doc, protected val outputFile
 
   import parser.ParserType._
   //right now, it can't save or carry out typed result
-  val actionStream: ArrayBuffer[(ProcessedType) => ProcessedType] = ArrayBuffer.empty[(ProcessedType) => ProcessedType]
+  val actionStream: ArrayBuffer[(IntermediateResult) => IntermediateResult] = ArrayBuffer.empty[(IntermediateResult) => IntermediateResult]
 
   implicit val saveLoc: Option[Path] = None
 
@@ -55,8 +55,7 @@ abstract class Parser(val data: DataContainer with Doc, protected val outputFile
 object ParserType extends FailureHandle {
   //first one is original, second one is the processed
   type GeneratedRow = NormalRow
-  type IntermediateResult = (NormalRow, GeneratedRow)
-  type ProcessedType = (NormalRow, Option[GeneratedRow])
+  type IntermediateResult = (NormalRow, Option[GeneratedRow])
 
   //let's hope the flatMap is working
   def combine(a: NormalRow, b: GeneratedRow): NormalRow = {
@@ -65,5 +64,9 @@ object ParserType extends FailureHandle {
     else if (a.isRight && b.isRight)
       a.right.flatMap(a => b.right.map(b => a ++ b))
     else {fatal("Row must be either array based or mapped row based."); throw new Exception}
+  }
+
+  def combine(a: NormalRow, b: Option[GeneratedRow]): NormalRow = {
+    if (b.isEmpty) a else combine(a, b)
   }
 }

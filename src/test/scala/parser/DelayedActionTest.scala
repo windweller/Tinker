@@ -13,6 +13,12 @@ class DelayedActionTest extends FlatSpec {
     val result = test.add(5).add(5)
     println(result.exec())
   }
+
+  "ArrayBuffer's drop" should "not affect original arraybuffer" in {
+    val seq = ArrayBuffer(1,2,3,4,5)
+    println(seq.drop(1).foldLeft(seq.head)((a,b) => a + b))
+  }
+
 }
 
 class TestA(val a: Int, newAction: Option[ArrayBuffer[(Int) => Int]]) {
