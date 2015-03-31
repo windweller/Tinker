@@ -2,7 +2,7 @@ package parser.processing
 
 import akka.stream.scaladsl._
 import files.DataContainerTypes._
-import parser.Parser
+import parser._
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -21,13 +21,16 @@ import scala.collection.mutable.ArrayBuffer
  */
 trait Processing extends Parser {
 
+  protected val source: Source[NormalRow, Unit] = Source(() => data.dataIterator)
+
+  //save it to specified location or temp file
+  val printSink = Sink.foreach[NormalRow](e => save(e))
+
   def exec(): Unit = {
 
   }
 
-  protected val source: Source[NormalRow, Unit] = Source(() => data.dataIterator)
 
-//  val printSink = Sink.foreach(e => save())
 
 
 }

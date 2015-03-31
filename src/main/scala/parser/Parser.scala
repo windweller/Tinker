@@ -1,7 +1,6 @@
 package parser
 
 import java.nio.file.{Files, Path, Paths}
-import java.util.UUID
 
 import akka.actor.ActorSystem
 import akka.stream.ActorFlowMaterializer
@@ -11,7 +10,7 @@ import files.{DataContainer, Doc}
 import files.DataContainerTypes._
 import utils.FailureHandle
 
-
+import ParserType._
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -34,7 +33,8 @@ abstract class Parser(val data: DataContainer with Doc, protected val outputFile
   override val headerMap: Option[Map[String, Int]] = data.headerMap
 
   //right now, it can't save or carry out typed result
-  val actionStream: ArrayBuffer[(NormalRow) => NormalRow] = ArrayBuffer.empty[(NormalRow) => NormalRow]
+  val actionStream: ArrayBuffer[(NormalRow, Option[GeneratedRow]) => (NormalRow, Option[GeneratedRow])] =
+                              ArrayBuffer.empty[(NormalRow, Option[GeneratedRow]) => (NormalRow, Option[GeneratedRow])]
 
   implicit val saveLoc: Option[Path] = None
 
@@ -50,4 +50,10 @@ abstract class Parser(val data: DataContainer with Doc, protected val outputFile
   def this(data: DataContainer with Doc, rules: Vector[String])(implicit system: ActorSystem) = this(data, None, false, Some(rules))
   def this(data: DataContainer with Doc, outputFile: String, outputOverride: Boolean, rules: Vector[String])(implicit system: ActorSystem) = this(data, Some(outputFile), outputOverride, Some(rules))
 
+}
+
+object ParserType {
+  //first one is original, second one is the processed
+  type GeneratedRow = NormalRow
+  type IntermediateResult = (NormalRow, GeneratedRow)
 }

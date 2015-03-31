@@ -5,17 +5,35 @@ import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.DataContainerTypes.{NamedRow, OrdinalRow}
 import parser.Parser
 import utils.FailureHandle
+import parser.ParserType._
 
 /**
  * Created by anie on 3/26/2015.
+ * Function call encouraged to include function name
+ * or otherwise it's too many parameters
  */
 trait TregexMatcher extends Parser with FailureHandle {
 
-  def matches(rowNum: Option[Int] = None, rowStr: Option[String] = None): Unit = {
+  /**
+   *
+   * @param rowNum
+   * @param rowStr
+   * @param useGeneratedRow this indicates whether above two parameters indicate
+   *                  generated results (array) or original array
+   */
+  def matches(rowNum: Option[Int] = None, rowStr: Option[String] = None,
+               useGeneratedRow: Boolean): Unit = {
     if (parsedRules.isEmpty) fatal("Can't proceed if rules aren't specified")
-    actionStream += (row => {
-      row.left.map(e => matchWithOrdinal(rowNum, e))
-      row.right.map(e => matchWithNamed(rowStr, e))
+    actionStream += ( (row, generated) => {
+      val result: GeneratedRow = if (useGeneratedRow) {
+        generated.get.left.map(e => matchWithOrdinal(rowNum, e))
+        generated.get.right.map(e => matchWithNamed(rowStr, e))
+      }
+      else {
+        row.left.map(e => matchWithOrdinal(rowNum, e))
+        row.right.map(e => matchWithNamed(rowStr, e))
+      }
+      (row, Some(result))
     })
   }
 
