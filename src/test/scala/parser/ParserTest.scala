@@ -8,6 +8,8 @@ import org.scalatest.FlatSpec
 import parser.implementations.stanford.TregexMatcher
 import parser.processing.Processing
 import utils.OnStartUp._
+import parser.ParserType._
+import files.DataContainerTypes._
 
 import scala.collection.immutable.HashMap
 
@@ -26,6 +28,19 @@ class ParserTest extends FlatSpec {
     }
   }
 
+  "combine" should "combine tow NormalRow on left" in {
+    val normalRow: NormalRow = Left(Vector("1", "2", "3", "4", "5", "6", "7"))
+    val normalRow2: NormalRow = Left(Vector("1", "2", "3", "4", "5", "6", "7"))
+    val combined = combine(normalRow, normalRow2)
+    println(combined.left.get)
+  }
+
+  it should "combine two NormalRow on right" in {
+    val normalRow: NormalRow = Right(Map("A" -> "1", "B" -> "2", "C" -> "3"))
+    val normalRow2: NormalRow = Right(Map("D" -> "1", "E" -> "2", "F" -> "3"))
+    val combined = combine(normalRow, normalRow2)
+    println(combined.right.get)
+  }
 
   "header printing with rows" should "be aligned" in {
     val maps = Array(Map("A" -> 1, "B" -> 2, "C" -> 3, "D" -> 4, "E" -> 5),

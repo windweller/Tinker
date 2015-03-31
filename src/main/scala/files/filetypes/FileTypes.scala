@@ -41,12 +41,12 @@ trait FileTypes extends FailureHandle{
   }
 
   //this is to save iteratively
-  def save(it: NormalRow)(implicit file: Path): Future[Unit] = {
+  def save(it: NormalRow)(implicit file: Option[Path]): Future[Unit] = {
     fatal("Cannot use save function without knowing the format of file")
     throw new Exception
   }
 
-  def printHeader(it: NormalRow)(implicit file: Path): Unit = {
+  def printHeader(it: NormalRow)(implicit file: Option[Path]): Unit = {
     fatal("Cannot use save function without knowing the format of file")
     throw new Exception
   }

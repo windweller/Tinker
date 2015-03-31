@@ -8,9 +8,9 @@ import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.filetypes.FileTypes
 import files.{DataContainer, Doc}
 import files.DataContainerTypes._
+import parser.ParserType.GeneratedRow
 import utils.FailureHandle
 
-import ParserType._
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -57,6 +57,7 @@ object ParserType extends FailureHandle {
   type GeneratedRow = NormalRow
   type IntermediateResult = (NormalRow, GeneratedRow)
 
+  //let's hope the flatMap is working
   def combine(a: NormalRow, b: GeneratedRow): NormalRow = {
     if (a.isLeft && b.isLeft)
       a.left.flatMap(a => b.left.map(b => a ++ b))
