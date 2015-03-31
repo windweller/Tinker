@@ -2,7 +2,7 @@ package parser.implementations.stanford
 
 import edu.stanford.nlp.trees.Tree
 import edu.stanford.nlp.trees.tregex.TregexPattern
-import files.DataContainerTypes.{NamedRow, OrdinalRow}
+import files.DataContainerTypes.{NormalRow, NamedRow, OrdinalRow}
 import parser.Parser
 import utils.FailureHandle
 import parser.ParserType._
@@ -16,8 +16,6 @@ trait TregexMatcher extends Parser with FailureHandle {
 
   /**
    *
-   * @param rowNum
-   * @param rowStr
    * @param useGeneratedRow this indicates whether above two parameters indicate
    *                  generated results (array) or original array
    */
@@ -26,26 +24,28 @@ trait TregexMatcher extends Parser with FailureHandle {
     if (parsedRules.isEmpty) fatal("Can't proceed if rules aren't specified")
     actionStream += ( (row, generated) => {
       val result: GeneratedRow = if (useGeneratedRow) {
-        generated.get.left.map(e => matchWithOrdinal(rowNum, e))
-        generated.get.right.map(e => matchWithNamed(rowStr, e))
+        if (generated.isEmpty) fatal("intermediate result is empty, cannot 'useGeneratedRow'.")
+        genResult(generated.get, rowNum, rowStr)
       }
-      else {
-        row.left.map(e => matchWithOrdinal(rowNum, e))
-        row.right.map(e => matchWithNamed(rowStr, e))
-      }
+      else genResult(row, rowNum, rowStr)
       (row, Some(result))
     })
   }
 
+  private[this] def genResult(row: NormalRow, rowNum: Option[Int], rowStr: Option[String]): GeneratedRow = {
+    row.left.map(e => matchWithOrdinal(rowNum, e))
+    row.right.map(e => matchWithNamed(rowStr, e))
+  }
+
   private[this] def matchWithOrdinal(rowNum: Option[Int], row: OrdinalRow): OrdinalRow = {
     if (rowNum.isEmpty) fatal("Can't proceed if row number is not specified with ordinal rows")
-    row ++ matchesFunc(parsedRules.get)(row(rowNum.get))
+    matchesFunc(parsedRules.get)(row(rowNum.get))
   }
 
   private[this] def matchWithNamed(rowStr: Option[String], namedRow: NamedRow): NamedRow = {
     if (namedRow.isEmpty) fatal("Can't proceed if row number is not specified with ordinal rows")
     val mappedRulesWithResult = Map(rules.get.zip(matchesFunc(parsedRules.get)(namedRow(rowStr.get))): _*)
-    namedRow ++ mappedRulesWithResult
+    mappedRulesWithResult
   }
 
   //could experience NULL Pointer exception with StanfordNLP Tregex library

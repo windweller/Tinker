@@ -52,8 +52,16 @@ abstract class Parser(val data: DataContainer with Doc, protected val outputFile
 
 }
 
-object ParserType {
+object ParserType extends FailureHandle {
   //first one is original, second one is the processed
   type GeneratedRow = NormalRow
   type IntermediateResult = (NormalRow, GeneratedRow)
+
+  def combine(a: NormalRow, b: GeneratedRow): NormalRow = {
+    if (a.isLeft && b.isLeft)
+      a.left.flatMap(a => b.left.map(b => a ++ b))
+    else if (a.isRight && b.isRight)
+      a.right.flatMap(a => b.right.map(b => a ++ b))
+    else {fatal("Row must be either array based or mapped row based."); throw new Exception}
+  }
 }
