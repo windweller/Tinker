@@ -8,7 +8,7 @@ import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.filetypes.FileTypes
 import files.{DataContainer, Doc}
 import files.DataContainerTypes._
-import parser.ParserType.GeneratedRow
+
 import utils.FailureHandle
 
 import scala.collection.mutable.ArrayBuffer
@@ -32,9 +32,9 @@ abstract class Parser(val data: DataContainer with Doc, protected val outputFile
   override val headerString: Option[Vector[String]] = data.headerString
   override val headerMap: Option[Map[String, Int]] = data.headerMap
 
+  import parser.ParserType._
   //right now, it can't save or carry out typed result
-  val actionStream: ArrayBuffer[(NormalRow, Option[GeneratedRow]) => (NormalRow, Option[GeneratedRow])] =
-                              ArrayBuffer.empty[(NormalRow, Option[GeneratedRow]) => (NormalRow, Option[GeneratedRow])]
+  val actionStream: ArrayBuffer[(ProcessedType) => ProcessedType] = ArrayBuffer.empty[(ProcessedType) => ProcessedType]
 
   implicit val saveLoc: Option[Path] = None
 
@@ -56,6 +56,7 @@ object ParserType extends FailureHandle {
   //first one is original, second one is the processed
   type GeneratedRow = NormalRow
   type IntermediateResult = (NormalRow, GeneratedRow)
+  type ProcessedType = (NormalRow, Option[GeneratedRow])
 
   //let's hope the flatMap is working
   def combine(a: NormalRow, b: GeneratedRow): NormalRow = {

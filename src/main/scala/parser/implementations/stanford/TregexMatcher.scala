@@ -22,13 +22,13 @@ trait TregexMatcher extends Parser with FailureHandle {
   def matches(rowNum: Option[Int] = None, rowStr: Option[String] = None,
                useGeneratedRow: Boolean): Unit = {
     if (parsedRules.isEmpty) fatal("Can't proceed if rules aren't specified")
-    actionStream += ( (row, generated) => {
+    actionStream += (combinedRow => {
       val result: GeneratedRow = if (useGeneratedRow) {
-        if (generated.isEmpty) fatal("intermediate result is empty, cannot 'useGeneratedRow'.")
-        genResult(generated.get, rowNum, rowStr)
+        if (combinedRow._2.isEmpty) fatal("intermediate result is empty, cannot 'useGeneratedRow'.")
+        genResult(combinedRow._2.get, rowNum, rowStr)
       }
-      else genResult(row, rowNum, rowStr)
-      (row, Some(result))
+      else genResult(combinedRow._1, rowNum, rowStr)
+      (combinedRow._1, Some(result))
     })
   }
 

@@ -31,6 +31,14 @@ trait Processing extends Parser {
 
   }
 
+  private[this] def headFlow(): Flow[NormalRow, ProcessedType, Unit] = {
+
+  }
+
+  private[this] def convertToFlowSeries(): Vector[Flow[ProcessedType, ProcessedType, Unit]] = {
+
+  }
+
 
 
 
