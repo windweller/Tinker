@@ -1,10 +1,14 @@
 package parser
 
+import java.nio.file.{Files, Path, Paths}
+
 import akka.actor.ActorSystem
 import akka.stream.ActorFlowMaterializer
 import edu.stanford.nlp.trees.tregex.TregexPattern
+import files.filetypes.FileTypes
 import files.{DataContainer, Doc}
 import files.DataContainerTypes._
+import utils.FailureHandle
 
 
 import scala.collection.mutable.ArrayBuffer
@@ -22,11 +26,22 @@ import scala.collection.mutable.ArrayBuffer
  *                   it will be saved under System.getProperty("user.home")
  */
 class Parser(val data: DataContainer with Doc, outputFile: Option[String] = None,
-                       val rules: Option[Vector[String]] = None)(implicit val system: ActorSystem) {
+                       outputOverride: Boolean = false,
+                       val rules: Option[Vector[String]] = None)(implicit val system: ActorSystem) extends FileTypes with FailureHandle{
+
+  override val headerString: Option[Vector[String]] = data.headerString
+  override val headerMap: Option[Map[String, Int]] = data.headerMap
 
   //right now, it can't save or carry out typed result
   val actionStream: ArrayBuffer[(NormalRow) => NormalRow] = ArrayBuffer.empty[(NormalRow) => NormalRow]
-  val saveLoc = outputFile.getOrElse(System.getProperty("user.home"))
+  implicit val saveLoc: Path = outputFile match {
+    case Some(file) =>
+      val permFile = Paths.get(file)
+      if (Files.isDirectory(permFile)) fatal("outputfile cannot be a directory")
+      if (Files.exists(permFile) && !outputOverride) fatal("output file already exist")
+      permFile
+    case None => Paths.get(System.getProperty("user.home")).resolve(".Tinker").resolve("parserTmp."+typesuffix.head)
+  }
 
   protected implicit val materializer = ActorFlowMaterializer()
 
@@ -36,8 +51,9 @@ class Parser(val data: DataContainer with Doc, outputFile: Option[String] = None
     case None => None
   }
 
-  def this(data: DataContainer with Doc)(implicit system: ActorSystem) = this(data, None, None)
-  def this(data: DataContainer with Doc, rules: Vector[String])(implicit system: ActorSystem) = this(data, None, Some(rules))
-  def this(data: DataContainer with Doc, rules: Option[Vector[String]])(implicit system: ActorSystem) = this(data, None, rules)
+  def this(data: DataContainer with Doc)(implicit system: ActorSystem) = this(data, None, false, None)
+  def this(data: DataContainer with Doc, rules: Vector[String])(implicit system: ActorSystem) = this(data, None, false, Some(rules))
+//  def this(data: DataContainer with Doc, rules: Option[Vector[String]])(implicit system: ActorSystem) = this(data, None, false, rules)
+
 
 }

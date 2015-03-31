@@ -19,7 +19,15 @@ import scala.collection.mutable.ArrayBuffer
  * We'll use Akka Stream implementation here
  * as much as we could
  */
-trait Processing extends Parser{
+trait Processing extends Parser {
+
+  def exec(): Unit = {
+
+  }
 
   protected val source: Source[NormalRow, Unit] = Source(() => data.dataIterator)
+
+//  val printSink = Sink.foreach(e => save())
+
+
 }

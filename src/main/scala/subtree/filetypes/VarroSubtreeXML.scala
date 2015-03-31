@@ -10,5 +10,4 @@ trait VarroSubtreeXML extends FileTypes {
   val headerString: Option[Vector[String]] = None
   val headerMap = None
 
-
 }

@@ -1,7 +1,10 @@
 package files.filetypes
 
 
+import java.nio.file.Path
+
 import files.DataContainer
+import files.DataContainerTypes._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -22,14 +25,28 @@ trait Tab extends DataContainer {
 
   //Implements Java NIO MemoryMapper
   //forcefully writing to disk after data is done
-  abstract override def save(data: Vector[Vector[String]], outputFile: String): Future[Unit] = {
+  abstract override def save(data: Vector[Vector[String]], outputFile: String): Future[Unit] =
     Future {
       val fc = new RandomAccessFile(new File(outputFile), "rw").getChannel
       val bufferSize= data.length
       val mem: MappedByteBuffer = fc.map(FileChannel.MapMode.READ_WRITE, 0, bufferSize)
       data.foreach(e => mem.put(e.mkString("\t").getBytes))
       mem.force()
+      fc.close()
     }
+
+  //header printing is done in another method
+  override def save(it: NormalRow)(implicit file: Path): Future[Unit] = Future {
+    val rafile = new RandomAccessFile(file.toFile, "rw")
+    it.left.foreach(row => rafile.write(row.mkString("\t").getBytes))
+    it.right.foreach(row => rafile.write(row.values.mkString("\t").getBytes))
   }
+
+  override def printHeader(it: NormalRow)(implicit file: Path): Unit = {
+    if (it.isLeft) fatal("Cannot print header if the original file has no header")
+    val rafile = new RandomAccessFile(file.toFile, "rw")
+    rafile.write(it.right.get.keys.mkString("\t").getBytes)
+  }
+
 
 }

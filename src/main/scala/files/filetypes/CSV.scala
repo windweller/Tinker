@@ -1,9 +1,11 @@
 package files.filetypes
 
+import java.io.RandomAccessFile
+import java.nio.file.Path
+
 import com.bizo.mighty.csv.CSVWriter
-import files.DataContainer
+import files.DataContainerTypes._
 import files.parsers.CSVHandler
-import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -21,5 +23,16 @@ trait CSV extends FileTypes {
 
   abstract override def parse: (String) => Vector[String] = CSVHandler.parseline
 
-}
+  override def save(it: NormalRow)(implicit file: Path): Future[Unit] = Future {
+    val output: CSVWriter = CSVWriter(file.toString)
+    it.left.foreach(row => output.write(row))
+    it.right.foreach(row => output.write(row.values.toSeq)) //this might be slower, and could be order of order? Check
+  }
 
+  override def printHeader(it: NormalRow)(implicit file: Path): Unit = {
+    if (it.isLeft) fatal("Cannot print header if the original file has no header")
+    val output: CSVWriter = CSVWriter(file.toString)
+    output.write(it.right.get.keys.toArray)
+  }
+
+}

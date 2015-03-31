@@ -89,3 +89,4 @@ If you don't want to write long prefixes, you must import as close to the usage 
 ## Todo
 
 1. add `DataStructure` to `DataContainer` save method, so it can print headers out, when saving.
+2. For the next major iteration, eliminate mapped header row, replace it with `DataStructure` (this is still debated). `NamedRow` creates inconsistency and could be slower than `OrdinalRow`.
