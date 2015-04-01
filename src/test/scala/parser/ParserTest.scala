@@ -2,11 +2,11 @@ package parser
 
 import java.nio.file.{Files, Paths}
 
+import _root_.processing.Processing
 import files.{Doc, DataContainer}
-import files.filetypes.CSV
+import files.filetypes._
 import org.scalatest.FlatSpec
 import parser.implementations.stanford.TregexMatcher
-import parser.processing.Processing
 import utils.OnStartUp._
 import parser.ParserType._
 import files.DataContainerTypes._
@@ -26,6 +26,13 @@ class ParserTest extends FlatSpec {
     def printSuffix(par: Parser with CSV with FileBuffer): Unit = {
       println(par.typesuffix.head)
     }
+  }
+
+  it should "be able to chain one function" in {
+    val doc = new DataContainer("E:\\Allen\\Tinker\\src\\test\\scala\\files\\testFiles\\NYTimes.tab", true) with Tab with Doc
+    val parser = new Parser(doc) with CSV with FileBuffer with TregexMatcher with Processing
+
+    parser.matches(rowStr = "Parse")
   }
 
   "combine" should "combine tow NormalRow on left" in {

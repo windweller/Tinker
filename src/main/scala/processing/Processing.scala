@@ -1,9 +1,10 @@
-package parser.processing
+package processing
 
 import akka.stream.scaladsl._
 import files.DataContainerTypes._
-import parser.ParserType._
+import OperationType._
 import parser._
+import utils.FailureHandle
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -17,10 +18,10 @@ import scala.concurrent.Future
  * It does not have the "backpressure" we want, so
  * it might spin into a disaster
  *
- * We'll use Akka Stream implementation here
- * as much as we could
+ * This is a function/implementation agnostic
+ * concurrency model
  */
-trait Processing extends Parser {
+trait Processing extends Operation with FailureHandle {
 
   protected val source: Source[NormalRow, Unit] = Source(() => data.dataIterator)
 

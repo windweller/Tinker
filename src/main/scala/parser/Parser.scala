@@ -7,8 +7,7 @@ import akka.stream.ActorFlowMaterializer
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.filetypes.FileTypes
 import files.{DataContainer, Doc}
-import files.DataContainerTypes._
-
+import processing.OperationType._
 import utils.FailureHandle
 
 import scala.collection.mutable.ArrayBuffer
@@ -25,16 +24,15 @@ import scala.collection.mutable.ArrayBuffer
  *                   This allows user to specify a desired location, or
  *                   it will be saved under System.getProperty("user.home")
  */
-abstract class Parser(val data: DataContainer with Doc, protected val outputFile: Option[String] = None,
+abstract class Parser(input: DataContainer with Doc, protected val outputFile: Option[String] = None,
                        protected  val outputOverride: Boolean = false,
                        val rules: Option[Vector[String]] = None)(implicit val system: ActorSystem) extends FileTypes with FailureHandle{
 
-  override val headerString: Option[Vector[String]] = data.headerString
-  override val headerMap: Option[Map[String, Int]] = data.headerMap
-
-  import parser.ParserType._
-  //right now, it can't save or carry out typed result
+  val data: DataContainer with Doc = input
   val actionStream: ArrayBuffer[(IntermediateResult) => IntermediateResult] = ArrayBuffer.empty[(IntermediateResult) => IntermediateResult]
+
+  override protected val headerString: Option[Vector[String]] = data.headerString
+  override protected val headerMap: Option[Map[String, Int]] = data.headerMap
 
   implicit val saveLoc: Option[Path] = None
 
@@ -50,23 +48,4 @@ abstract class Parser(val data: DataContainer with Doc, protected val outputFile
   def this(data: DataContainer with Doc, rules: Vector[String])(implicit system: ActorSystem) = this(data, None, false, Some(rules))
   def this(data: DataContainer with Doc, outputFile: String, outputOverride: Boolean, rules: Vector[String])(implicit system: ActorSystem) = this(data, Some(outputFile), outputOverride, Some(rules))
 
-}
-
-object ParserType extends FailureHandle {
-  //first one is original, second one is the processed
-  type GeneratedRow = NormalRow
-  type IntermediateResult = (NormalRow, Option[GeneratedRow])
-
-  //let's hope the flatMap is working
-  def combine(a: NormalRow, b: GeneratedRow): NormalRow = {
-    if (a.isLeft && b.isLeft)
-      a.left.flatMap(a => b.left.map(b => a ++ b))
-    else if (a.isRight && b.isRight)
-      a.right.flatMap(a => b.right.map(b => a ++ b))
-    else {fatal("Row must be either array based or mapped row based."); throw new Exception}
-  }
-
-  def combine(a: NormalRow, b: Option[GeneratedRow]): NormalRow = {
-    if (b.isEmpty) a else combine(a, b)
-  }
 }

@@ -5,7 +5,7 @@ import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.DataContainerTypes.{NormalRow, NamedRow, OrdinalRow}
 import parser.Parser
 import utils.FailureHandle
-import parser.ParserType._
+import processing.OperationType._
 
 /**
  * Created by anie on 3/26/2015.
@@ -20,7 +20,7 @@ trait TregexMatcher extends Parser with FailureHandle {
    *                  generated results (array) or original array
    */
   def matches(rowNum: Option[Int] = None, rowStr: Option[String] = None,
-               useGeneratedRow: Boolean): Unit = {
+              useGeneratedRow: Boolean): Unit = {
     if (parsedRules.isEmpty) fatal("Can't proceed if rules aren't specified")
     actionStream += (combinedRow => {
       val result: GeneratedRow = if (useGeneratedRow) {
@@ -54,5 +54,5 @@ trait TregexMatcher extends Parser with FailureHandle {
       parsedRules.map(r => if (r.matcher(Tree.valueOf(tree)).find()) "1" else "0")
 
   private[this] def matchesTreeFunc(parsedRules: Vector[TregexPattern]): Tree => Vector[String] =
-  	(tree: Tree) => parsedRules.map(r => if (r.matcher(tree).find()) "1" else "0")
+    (tree: Tree) => parsedRules.map(r => if (r.matcher(tree).find()) "1" else "0")
 }
