@@ -1,20 +1,25 @@
 package processing
 
+import java.nio.file.Path
+
 import files.filetypes.FileTypes
 import files.{Doc, DataContainer}
 import utils.FailureHandle
 
 import scala.collection.mutable.ArrayBuffer
 import files.DataContainerTypes._
-import OperationType._
 
 /**
  * Created by anie on 4/1/2015.
  */
 trait Operation extends FileTypes {
 
+  import OperationType._
+
   val data: DataContainer with Doc
   val actionStream: ArrayBuffer[(IntermediateResult) => IntermediateResult] = ArrayBuffer.empty[(IntermediateResult) => IntermediateResult]
+
+  implicit val saveLoc: Option[Path] = None
 
 }
 

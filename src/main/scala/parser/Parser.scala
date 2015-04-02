@@ -9,7 +9,7 @@ import files.filetypes.FileTypes
 import files.{DataContainer, Doc}
 import processing.OperationType._
 import utils.FailureHandle
-
+import processing.Operation
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -26,15 +26,15 @@ import scala.collection.mutable.ArrayBuffer
  */
 abstract class Parser(input: DataContainer with Doc, protected val outputFile: Option[String] = None,
                        protected  val outputOverride: Boolean = false,
-                       val rules: Option[Vector[String]] = None)(implicit val system: ActorSystem) extends FileTypes with FailureHandle{
+                       val rules: Option[Vector[String]] = None)(implicit val system: ActorSystem) extends FileTypes with FailureHandle with Operation{
 
   val data: DataContainer with Doc = input
-  val actionStream: ArrayBuffer[(IntermediateResult) => IntermediateResult] = ArrayBuffer.empty[(IntermediateResult) => IntermediateResult]
+  override val actionStream: ArrayBuffer[(IntermediateResult) => IntermediateResult] = ArrayBuffer.empty[(IntermediateResult) => IntermediateResult]
 
-  override protected val headerString: Option[Vector[String]] = data.headerString
-  override protected val headerMap: Option[Map[String, Int]] = data.headerMap
+  override val headerString: Option[Vector[String]] = data.headerString
+  override val headerMap: Option[Map[String, Int]] = data.headerMap
 
-  implicit val saveLoc: Option[Path] = None
+  override implicit val saveLoc: Option[Path] = None
 
   protected implicit val materializer = ActorFlowMaterializer()
 

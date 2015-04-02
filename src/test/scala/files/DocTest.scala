@@ -30,7 +30,7 @@ class DocTest extends FlatSpec {
 
     print(doc)
     def print(data: DataContainer): Unit = {
-      println(data.dataIteratorPure.next()(0))
+      println(data.dataIteratorPure.next().head)
     }
   }
 

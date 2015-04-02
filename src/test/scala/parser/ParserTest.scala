@@ -2,14 +2,15 @@ package parser
 
 import java.nio.file.{Files, Paths}
 
-import _root_.processing.Processing
+import processing.Processing
 import files.{Doc, DataContainer}
 import files.filetypes._
 import org.scalatest.FlatSpec
 import parser.implementations.stanford.TregexMatcher
 import utils.OnStartUp._
-import parser.ParserType._
+import processing.OperationType._
 import files.DataContainerTypes._
+import utils.ParameterCallToOption.implicits._
 
 import scala.collection.immutable.HashMap
 
@@ -32,7 +33,7 @@ class ParserTest extends FlatSpec {
     val doc = new DataContainer("E:\\Allen\\Tinker\\src\\test\\scala\\files\\testFiles\\NYTimes.tab", true) with Tab with Doc
     val parser = new Parser(doc) with CSV with FileBuffer with TregexMatcher with Processing
 
-    parser.matches(rowStr = "Parse")
+    parser.matches(rowStr = "Parse", useGeneratedRow =  false)
   }
 
   "combine" should "combine tow NormalRow on left" in {

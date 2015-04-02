@@ -3,7 +3,6 @@ package processing
 import akka.stream.scaladsl._
 import files.DataContainerTypes._
 import OperationType._
-import parser._
 import utils.FailureHandle
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
