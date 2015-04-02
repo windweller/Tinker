@@ -17,7 +17,7 @@ import java.nio.channels.FileChannel
  * Created by anie on 3/19/2015.
  * (f: String, header: Boolean, rawData: Option[ArrayBuffer[Array[String]]])
  */
-trait Tab extends DataContainer {
+trait Tab extends FileTypes {
 
   override val typesuffix: Vector[String] = Vector("tab", "txt")
 
@@ -36,15 +36,17 @@ trait Tab extends DataContainer {
     }
 
   //header printing is done in another method
-  override def save(it: NormalRow)(implicit file: Path): Future[Unit] = Future {
-    val rafile = new RandomAccessFile(file.toFile, "rw")
+  override def save(it: NormalRow)(implicit file: Option[Path]): Future[Unit] = Future {
+    if (file.isEmpty) fatal("You haven't included module FileBuffer")
+    val rafile = new RandomAccessFile(file.get.toFile, "rw")
     it.left.foreach(row => rafile.write(row.mkString("\t").getBytes))
     it.right.foreach(row => rafile.write(row.values.mkString("\t").getBytes))
   }
 
-  override def printHeader(it: NormalRow)(implicit file: Path): Unit = {
+  override def printHeader(it: NormalRow)(implicit file: Option[Path]): Unit = {
+    if (file.isEmpty) fatal("You haven't included module FileBuffer")
     if (it.isLeft) fatal("Cannot print header if the original file has no header")
-    val rafile = new RandomAccessFile(file.toFile, "rw")
+    val rafile = new RandomAccessFile(file.get.toFile, "rw")
     rafile.write(it.right.get.keys.mkString("\t").getBytes)
   }
 

@@ -23,10 +23,13 @@ import scala.collection.mutable.ArrayBuffer
  * @param outputFile after the exec() in Parser, it's automatically saved.
  *                   This allows user to specify a desired location, or
  *                   it will be saved under System.getProperty("user.home")
+ *
+ * @param outputOverride flag this if you want to override your output file
+ *                       or otherwise if the file exists, an error is thrown.
  */
 abstract class Parser(input: DataContainer with Doc, protected val outputFile: Option[String] = None,
                        protected  val outputOverride: Boolean = false,
-                       val rules: Option[Vector[String]] = None)(implicit val system: ActorSystem) extends FileTypes with FailureHandle with Operation{
+                       val rules: Option[Vector[String]] = None) extends FileTypes with FailureHandle with Operation{
 
   val data: DataContainer with Doc = input
   override val actionStream: ArrayBuffer[(IntermediateResult) => IntermediateResult] = ArrayBuffer.empty[(IntermediateResult) => IntermediateResult]
@@ -36,16 +39,14 @@ abstract class Parser(input: DataContainer with Doc, protected val outputFile: O
 
   override implicit val saveLoc: Option[Path] = None
 
-  protected implicit val materializer = ActorFlowMaterializer()
-
   //prepare for tregex
   val parsedRules: Option[Vector[TregexPattern]] = rules match {
     case Some(v) => Some(v.map(e => TregexPattern.compile(e)))
     case None => None
   }
 
-  def this(data: DataContainer with Doc)(implicit system: ActorSystem) = this(data, None, false, None)
-  def this(data: DataContainer with Doc, rules: Vector[String])(implicit system: ActorSystem) = this(data, None, false, Some(rules))
-  def this(data: DataContainer with Doc, outputFile: String, outputOverride: Boolean, rules: Vector[String])(implicit system: ActorSystem) = this(data, Some(outputFile), outputOverride, Some(rules))
+  def this(data: DataContainer with Doc) = this(data, None, false, None)
+  def this(data: DataContainer with Doc, rules: Vector[String]) = this(data, None, false, Some(rules))
+  def this(data: DataContainer with Doc, outputFile: String, outputOverride: Boolean, rules: Vector[String]) = this(data, Some(outputFile), outputOverride, Some(rules))
 
 }

@@ -1,9 +1,10 @@
 package processing
 
+import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
 import files.DataContainerTypes._
 import OperationType._
-import utils.FailureHandle
+import utils.{ActorSystem, FailureHandle}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -20,7 +21,9 @@ import scala.concurrent.Future
  * This is a function/implementation agnostic
  * concurrency model
  */
-trait Processing extends Operation with FailureHandle {
+trait Processing extends Operation with FailureHandle with ActorSystem {
+
+  protected implicit val materializer = ActorFlowMaterializer()
 
   protected val source: Source[NormalRow, Unit] = Source(() => data.dataIterator)
 
@@ -29,13 +32,19 @@ trait Processing extends Operation with FailureHandle {
 
   def exec(): Unit = {
     if (actionStream.size == 0) fatal("cannot call exec() when there is no action defined")
-    val sourceReady = actionStream.drop(1).foldLeft(source
+
+    val sourceReady = if (actionStream.size == 1)
+                          source
                           .via(Flow[NormalRow]
-                          .mapAsync(e => applyHeadFlow(e, actionStream.head)))
-                          ){(source, action) =>
-      source.via(Flow[IntermediateResult].mapAsync(e => Future(action(e))))
+                          .mapAsync(e => {println("inside here"); applyHeadFlow(e, actionStream.head)}))
+                      else
+                         actionStream.drop(1).foldLeft(source
+                           .via(Flow[NormalRow]
+                           .mapAsync(e =>applyHeadFlow(e, actionStream.head)))
+                         ){(source, action) =>
+                          source.via(Flow[IntermediateResult].mapAsync(e => Future(action(e))))
     }
-    sourceReady.to(printSink)
+    sourceReady.runWith(printSink)
   }
 
   //this is an open access function

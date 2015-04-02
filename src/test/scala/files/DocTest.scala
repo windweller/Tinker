@@ -7,7 +7,6 @@ import files.structure.specifics.BasicNLP
 import org.scalatest.FlatSpec
 import parser._
 import utils.ParameterCallToOption.implicits._
-import utils.OnStartUp._
 
 /**
  * Created by anie on 3/21/2015.

@@ -16,6 +16,7 @@ trait FileBuffer extends Parser {
       if (Files.exists(permFile) && !outputOverride) fatal("output file already exist")
       Files.deleteIfExists(permFile)
       Files.createFile(permFile)
+//      if (data.header) printHeader()
       Some(permFile)
     case None =>
       val tempFile = Paths.get(System.getProperty("user.home")).resolve(".Tinker")

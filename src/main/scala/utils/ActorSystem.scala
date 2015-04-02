@@ -3,11 +3,8 @@ package utils
 import akka.actor.ActorSystem
 
 /**
- * Created by anie on 3/26/2015.
- * contains a universal actor system
+ * Created by anie on 4/1/2015.
  */
-object OnStartUp {
-
+trait ActorSystem {
   implicit val system = ActorSystem("Tinker-parallel-processing")
-
 }

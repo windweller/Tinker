@@ -7,7 +7,6 @@ import files.{Doc, DataContainer}
 import files.filetypes._
 import org.scalatest.FlatSpec
 import parser.implementations.stanford.TregexMatcher
-import utils.OnStartUp._
 import processing.OperationType._
 import files.DataContainerTypes._
 import utils.ParameterCallToOption.implicits._
@@ -23,17 +22,29 @@ class ParserTest extends FlatSpec {
     val doc = new DataContainer("E:\\Allen\\Tinker\\src\\test\\scala\\files\\testFiles\\testCSV.csv", true) with CSV with Doc
     val parser = new Parser(doc) with CSV with FileBuffer with TregexMatcher with Processing
 
-
     def printSuffix(par: Parser with CSV with FileBuffer): Unit = {
       println(par.typesuffix.head)
     }
   }
 
-  it should "be able to chain one function" in {
+  it should "be able to tregex match" in {
     val doc = new DataContainer("E:\\Allen\\Tinker\\src\\test\\scala\\files\\testFiles\\NYTimes.tab", true) with Tab with Doc
-    val parser = new Parser(doc) with CSV with FileBuffer with TregexMatcher with Processing
+    val parser = new Parser(doc,
+      outputFile = "E:\\Allen\\NYTFuture\\NYT_sample\\experiment.txt",
+      outputOverride = true,
+      rules = Vector(
+        "(VP < (VBG < going) < (S < (VP < TO)))",
+        "(VP < (VBG < going) > (PP < TO))",
+        "MD < will",
+        "MD < ‘ll’",
+        "MD < shall",
+        "MD < would",
+        "MD < 'd’",
+        "VP < VBD << would",
+        "MD < may")) with Tab with FileBuffer with TregexMatcher with Processing
 
     parser.matches(rowStr = "Parse", useGeneratedRow =  false)
+    parser.exec()
   }
 
   "combine" should "combine tow NormalRow on left" in {
