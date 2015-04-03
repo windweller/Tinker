@@ -2,13 +2,14 @@ package parser
 
 import java.nio.file.{Files, Paths}
 
-import processing.Processing
+import processing.Parallel
 import files.{Doc, DataContainer}
 import files.filetypes._
 import org.scalatest.FlatSpec
 import parser.implementations.stanford.TregexMatcher
 import processing.OperationType._
 import files.DataContainerTypes._
+import processing.buffers.FileBuffer
 import utils.ParameterCallToOption.implicits._
 
 import scala.collection.immutable.HashMap
@@ -20,7 +21,7 @@ class ParserTest extends FlatSpec {
 
   "A parser" should "function well" in {
     val doc = new DataContainer("E:\\Allen\\Tinker\\src\\test\\scala\\files\\testFiles\\testCSV.csv", true) with CSV with Doc
-    val parser = new Parser(doc) with CSV with FileBuffer with TregexMatcher with Processing
+    val parser = new Parser(doc) with CSV with FileBuffer with TregexMatcher with Parallel
 
     def printSuffix(par: Parser with CSV with FileBuffer): Unit = {
       println(par.typesuffix.head)
@@ -30,8 +31,6 @@ class ParserTest extends FlatSpec {
   it should "be able to tregex match" in {
     val doc = new DataContainer("E:\\Allen\\Tinker\\src\\test\\scala\\files\\testFiles\\NYTimes.tab", true) with Tab with Doc
     val parser = new Parser(doc,
-      outputFile = "E:\\Allen\\NYTFuture\\NYT_sample\\experiment.txt",
-      outputOverride = true,
       rules = Vector(
         "(VP < (VBG < going) < (S < (VP < TO)))",
         "(VP < (VBG < going) > (PP < TO))",
@@ -41,10 +40,11 @@ class ParserTest extends FlatSpec {
         "MD < would",
         "MD < 'd’",
         "VP < VBD << would",
-        "MD < may")) with Tab with FileBuffer with TregexMatcher with Processing
+        "MD < may")) with Tab with FileBuffer with TregexMatcher with Parallel
 
     parser.matches(rowStr = "Parse", useGeneratedRow =  false)
-    parser.exec()
+    parser.exec(outputFile = "E:\\Allen\\NYTFuture\\NYT_sample\\experiment.txt",
+      outputOverride = true)
   }
 
   "combine" should "combine tow NormalRow on left" in {

@@ -1,0 +1,22 @@
+package processing.buffers
+
+import java.nio.file.Path
+
+import utils.FailureHandle
+
+/**
+ * Created by anie on 4/3/2015
+ *
+ * This is the higher-level Buffer module
+ * lower level implementation includes
+ * FileBuffer, DBBuffer and so forth
+ */
+trait Buffer extends FailureHandle {
+
+  def getSaveLoc(outputFile: Option[String] = None,
+                 outputOverride: Boolean = false): Option[Path] = {
+    fatal("Cannot use save function without knowing the format of file")
+    throw new Exception
+  }
+
+}

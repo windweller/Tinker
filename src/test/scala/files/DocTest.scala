@@ -1,7 +1,7 @@
 package files
 
 import files.filetypes.{FileTypes, CSV, Tab}
-import files.operations.{FileOp, Sequential}
+import files.operations.FileOp
 import files.structure.DataStructure
 import files.structure.specifics.BasicNLP
 import org.scalatest.FlatSpec

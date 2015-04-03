@@ -1,5 +1,7 @@
 package processing
 
+import java.nio.file.Path
+
 import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
 import files.DataContainerTypes._
@@ -21,7 +23,7 @@ import scala.concurrent.Future
  * This is a function/implementation agnostic
  * concurrency model
  */
-trait Processing extends Operation with FailureHandle with ActorSystem {
+trait Parallel extends Operation with FailureHandle with ActorSystem {
 
   protected implicit val materializer = ActorFlowMaterializer()
 
@@ -30,8 +32,11 @@ trait Processing extends Operation with FailureHandle with ActorSystem {
   //save it to specified location or temp file
   val printSink = Sink.foreach[IntermediateResult](e => save(combine(e._1, e._2)))
 
-  def exec(): Unit = {
+  def exec(outputFile: Option[String] = None,
+           outputOverride: Boolean = false): Unit = {
     if (actionStream.size == 0) fatal("cannot call exec() when there is no action defined")
+
+    implicit val saveLoc: Option[Path] = getSaveLoc(outputFile, outputOverride)
 
     val sourceReady = if (actionStream.size == 1)
                           source

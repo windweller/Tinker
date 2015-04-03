@@ -15,6 +15,9 @@ import scala.concurrent.Future
  * FileTypes include normal/generic file types
  * as well as special file types such as
  * MalletFileType or VarroSubtreeXML format
+ *
+ * FileTypes trait is not just about file type
+ * it's mostly about saving/reading strategy
  */
 trait FileTypes extends FailureHandle{
 

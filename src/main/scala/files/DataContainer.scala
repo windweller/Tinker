@@ -3,6 +3,7 @@ package files
 import files.DataContainerTypes._
 import files.filetypes.FileTypes
 import org.apache.commons.csv.CSVFormat
+import processing.Operation
 import utils.FailureHandle
 
 import scala.collection.mutable.ArrayBuffer
@@ -23,7 +24,7 @@ import scala.concurrent.Future
  */
 abstract class DataContainer(val f: String, val header: Boolean,
                              val rawData: Option[Vector[Vector[String]]], val CSVformat: Option[CSVFormat])
-                              extends FileTypes with FailureHandle {
+                              extends FileTypes with FailureHandle with Operation {
 
   val data: Vector[Vector[String]]
 
@@ -55,4 +56,5 @@ object DataContainerTypes {
   type NamedRow = Map[String, String]
   type NormalRow= Either[OrdinalRow, NamedRow]
   type RowIterator = Iterator[Either[OrdinalRow, NamedRow]]
+  type RowSelector = Either[Int, String]
 }

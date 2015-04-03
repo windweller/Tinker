@@ -1,6 +1,7 @@
 package files.operations
 
-import files.DataContainer
+import files.{Doc, DataContainer}
+import files.DataContainerTypes._
 
 /**
  * Specifies file operations including
@@ -13,7 +14,25 @@ trait FileOp extends DataContainer {
   //not important
   def search(piece: String):Unit = {}
 
-//  def split()
+  //combine two dataContainer
+  //if no common column is found, we just combine them
+  def combine(dataB: DataContainer, joinColNum: Option[Int] = None,
+              joinColStr: Option[String] = None): Unit = {
+    if (joinColNum.nonEmpty || joinColStr.nonEmpty)
+      combineWithJoin(dataIterator, dataB.dataIterator, if (joinColNum.nonEmpty) Left(joinColNum.get) else Right(joinColStr.get))
+    else
+      new DataContainer("")with Doc
+  }
+
+  private[this] def combineWithJoin(dataA: RowIterator, dataB: RowIterator, column: RowSelector): Unit = {
+
+  }
+
+  //split the dataset into several files
+  //based on a criterion
+  def split(): Unit = {
+
+  }
 
 
 }
