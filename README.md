@@ -1,5 +1,5 @@
 # Tinker
-Tinker is a parallel-by-default File/Directory Management System with additional interface to NLP and ML libraries. Tinker right now employs Scala's notoriously awesome Stackable Trait Pattern, and just finished it's asynchronous File I/O implementation.
+Tinker is a parallel-by-default File/Directory Management System with additional interface to NLP and ML libraries. Tinker right now uses Scala's awesome Stackable Trait Pattern, and just finished it's asynchronous File I/O implementation.
 
 ## Design Philosophy
 
@@ -12,9 +12,9 @@ Start by typing `sbt console` from the root of the project. Currently the Unix/L
 Then you would see
 
 ```
-===============================
+=======================================
 Welcome to Tinker 0.1 pre-alpha release
-===============================
+=======================================
 >
 ```
 
@@ -46,24 +46,6 @@ Advanced File I/O is being developed.
 
 Interface to ML and NLP libraries are being developed.
 
-## Customization
-
-```
-trait Subtree extends DataContainer with FailureHandle {
-  lazy val data = //your way of obtaining data
-}
-
-trait VarroSubtreeXML extends FileTypes {
-  val headerMap: Option[Array[String]] = None
-}
-
-//Use these two modules by calling:
-
-val doc = new DataContainer("../varroXML.xml") with Subtree with VarroSubtreeXML
-```
-
-This is an example from `Subtree` folder. You can extend any trait to DataContainer, and start adding new modules and new functions to it.
-
 ## Modules
 
 `FileBuffer`: This is a module you call when you are attaching an operational module to your algorithm or data container. This module is almost mandatory (which means there's a chance it might just get absorbed/integrated into the main module) for any processing, becasuse of Tinker's delayed execution pattern.
@@ -86,6 +68,24 @@ val doc = new DataContainer("../testCSV.csv", true) with CSV with Doc with FileO
 
 If you don't want to write long prefixes, you must import as close to the usage as possible. Trait `Sequential` is being defined across multiple modules and repeated namespace can cause the compiler to crash. Remember, Tinker's `Sequential` operation is not as safe and well-tested as parallel operations. Use at your own discretion.
 
+## Customization
+
+```
+trait Subtree extends DataContainer with FailureHandle {
+  lazy val data = //your way of obtaining data
+}
+
+trait VarroSubtreeXML extends FileTypes {
+  val headerMap: Option[Array[String]] = None
+}
+
+//Use these two modules by calling:
+
+val doc = new DataContainer("../varroXML.xml") with Subtree with VarroSubtreeXML
+```
+
+This is an example from `Subtree` folder. You can extend any trait to DataContainer, and start adding new modules and new functions to it.
+
 
 ## Minor Improvements (current release)
 
@@ -93,5 +93,4 @@ If you don't want to write long prefixes, you must import as close to the usage 
 
 ## Todo
 
-1. add `DataStructure` to `DataContainer` save method, so it can print headers out, when saving.
-2. For the next major iteration, eliminate mapped header row, replace it with `DataStructure` (this is still debated). `NamedRow` creates inconsistency and could be slower than `OrdinalRow`.
+1. `Tab` now still generates lines in random order (probably a problem with Java NIO)
