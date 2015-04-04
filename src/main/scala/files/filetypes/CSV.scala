@@ -25,7 +25,7 @@ trait CSV extends FileTypes {
 
   import com.github.tototoshi.csv.CSVWriter
 
-  override def save(it: NormalRow)(implicit file: Option[Path]): Future[Unit] = Future {
+  override def save(it: NormalRow)(implicit file: Option[Path]): Unit = {
     if (file.isEmpty) fatal("You haven't included module FileBuffer")
     val output: CSVWriter = CSVWriter.open(file.get.toString, append = true)
     if (file.get.toFile.length() == 0 && it.isRight) printWithHeaderKeys(it.right.get, output)

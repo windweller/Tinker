@@ -35,7 +35,7 @@ trait Tab extends FileTypes {
     }
 
   //TODO: fix the output problem
-  override def save(it: NormalRow)(implicit file: Option[Path]): Future[Unit] = Future {
+  override def save(it: NormalRow)(implicit file: Option[Path]): Unit = {
     if (file.isEmpty) fatal("You haven't included module FileBuffer")
     val f = file.get.toFile
     val rafile = new RandomAccessFile(f, "rw")

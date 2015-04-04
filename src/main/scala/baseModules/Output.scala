@@ -15,7 +15,7 @@ import scala.concurrent.Future
  */
 trait Output extends FailureHandle {
 
-  def save(it: NormalRow)(implicit file: Option[Path]): Future[Unit] = {
+  def save(it: NormalRow)(implicit file: Option[Path]): Unit = {
     fatal("Cannot use save function without knowing the format of file")
     throw new Exception
   }
