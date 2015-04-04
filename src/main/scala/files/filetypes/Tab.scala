@@ -34,20 +34,20 @@ trait Tab extends FileTypes {
       fc.close()
     }
 
-  //TODO: fix the output problem
   override def save(it: NormalRow)(implicit file: Option[Path]): Unit = {
     if (file.isEmpty) fatal("You haven't included module FileBuffer")
     val f = file.get.toFile
     val rafile = new RandomAccessFile(f, "rw")
     rafile.seek(f.length())
+    if (f.length() == 0 && it.isRight) printWithHeaderKeys(it.right.get, rafile)
     it.left.foreach(row => rafile.write(row.mkString("\t").concat("\r\n").getBytes))
     it.right.foreach(row => rafile.write(row.values.mkString("\t").concat("\r\n").getBytes))
     rafile.close()
   }
 
-  //TODO: implement this
   private[this] def printWithHeaderKeys(row: NamedRow, output: RandomAccessFile): Unit = {
-
+    output.write(row.keys.mkString("\t").concat("\r\n").getBytes)
+    output.write(row.values.mkString("\t").concat("\r\n").getBytes)
   }
 
   override def printHeader(it: NormalRow)(implicit file: Option[Path]): Unit = {

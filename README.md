@@ -93,4 +93,4 @@ This is an example from `Subtree` folder. You can extend any trait to DataContai
 
 ## Todo
 
-1. `Tab` now still generates lines in random order (probably a problem with Java NIO)
+1. Does file output (save) function be asynchronous or synchronous?
