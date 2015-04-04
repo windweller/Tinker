@@ -7,7 +7,7 @@ import java.nio.file.Path
 
 import files.DataContainer
 import files.DataContainerTypes.NormalRow
-import output.Output
+import baseModules.Output
 import utils.FailureHandle
 
 import scala.concurrent.Future
@@ -51,6 +51,11 @@ trait FileTypes extends Output with FailureHandle{
   }
 
   def printHeader(it: NormalRow)(implicit file: Option[Path]): Unit = {
+    fatal("Cannot use save function without knowing the format of file")
+    throw new Exception
+  }
+
+  def printHeader(it: Option[Vector[String]])(implicit file: Option[Path]): Unit = {
     fatal("Cannot use save function without knowing the format of file")
     throw new Exception
   }

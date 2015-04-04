@@ -25,8 +25,7 @@ trait Tab extends FileTypes {
 
   //Implements Java NIO MemoryMapper
   //forcefully writing to disk after data is done
-  abstract override def save(data: Vector[Vector[String]], outputFile: String): Future[Unit] =
-    Future {
+  override def save(data: Vector[Vector[String]], outputFile: String): Future[Unit] = Future {
       val fc = new RandomAccessFile(new File(outputFile), "rw").getChannel
       val bufferSize= data.length
       val mem: MappedByteBuffer = fc.map(FileChannel.MapMode.READ_WRITE, 0, bufferSize)
@@ -35,19 +34,35 @@ trait Tab extends FileTypes {
       fc.close()
     }
 
-  //header printing is done in another method
+  //TODO: fix the output problem
   override def save(it: NormalRow)(implicit file: Option[Path]): Future[Unit] = Future {
     if (file.isEmpty) fatal("You haven't included module FileBuffer")
-    val rafile = new RandomAccessFile(file.get.toFile, "rw")
-    it.left.foreach(row => rafile.write(row.mkString("\t").getBytes))
-    it.right.foreach(row => rafile.write(row.values.mkString("\t").getBytes))
+    val f = file.get.toFile
+    val rafile = new RandomAccessFile(f, "rw")
+    rafile.seek(f.length())
+    it.left.foreach(row => rafile.write(row.mkString("\t").concat("\r\n").getBytes))
+    it.right.foreach(row => rafile.write(row.values.mkString("\t").concat("\r\n").getBytes))
+    rafile.close()
+  }
+
+  //TODO: implement this
+  private[this] def printWithHeaderKeys(row: NamedRow, output: RandomAccessFile): Unit = {
+
   }
 
   override def printHeader(it: NormalRow)(implicit file: Option[Path]): Unit = {
     if (file.isEmpty) fatal("You haven't included module FileBuffer")
     if (it.isLeft) fatal("Cannot print header if the original file has no header")
     val rafile = new RandomAccessFile(file.get.toFile, "rw")
-    rafile.write(it.right.get.keys.mkString("\t").getBytes)
+    rafile.write(it.right.get.keys.mkString("\t").concat("\r\n").getBytes)
+    rafile.close()
+  }
+
+  override def printHeader(it: Option[Vector[String]])(implicit file: Option[Path]): Unit = {
+    if (it.isEmpty) fatal("Cannot print header if original file has no header")
+    val rafile = new RandomAccessFile(file.get.toFile, "rw")
+    rafile.write(it.get.mkString("\t").concat("\r\n").getBytes)
+    rafile.close()
   }
 
 

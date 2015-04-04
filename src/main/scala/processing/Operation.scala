@@ -26,16 +26,15 @@ object OperationType extends FailureHandle {
   type GeneratedRow = NormalRow
   type IntermediateResult = (NormalRow, Option[GeneratedRow])
 
-  //let's hope the flatMap is working
   def combine(a: NormalRow, b: GeneratedRow): NormalRow = {
     if (a.isLeft && b.isLeft)
-      a.left.flatMap(a => b.left.map(b => a ++ b))
+      Left(a.left.get ++ b.left.get)
     else if (a.isRight && b.isRight)
-      a.right.flatMap(a => b.right.map(b => a ++ b))
+      Right(a.right.get ++ b.right.get)
     else {fatal("Row must be either array based or mapped row based."); throw new Exception}
   }
 
   def combine(a: NormalRow, b: Option[GeneratedRow]): NormalRow = {
-    if (b.isEmpty) a else combine(a, b)
+    if (b.isEmpty) a else combine(a, b.get)
   }
 }

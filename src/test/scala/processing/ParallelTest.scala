@@ -27,8 +27,6 @@ object ParallelTest extends App with ActorSystem {
     {(source, action) =>
       source.via(Flow[Int].mapAsync(e => Future{action.apply(e)}))
     }
-
-    sourceReady
     sourceReady.runWith(printSink)
   }
 

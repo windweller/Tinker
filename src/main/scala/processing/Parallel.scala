@@ -9,6 +9,7 @@ import OperationType._
 import utils.{ActorSystem, FailureHandle}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import scala.util.{Failure, Success}
 
 /**
  * Created by anie on 3/23/2015.
@@ -43,15 +44,23 @@ trait Parallel extends Operation with FailureHandle with ActorSystem {
     val sourceReady = if (actionStream.size == 1)
                           source
                           .via(Flow[NormalRow]
-                          .mapAsync(e => {println("inside here"); applyHeadFlow(e, actionStream.head)}))
+                          .mapAsync(e => {applyHeadFlow(e, actionStream.head)}))
                       else
                          actionStream.drop(1).foldLeft(source
                            .via(Flow[NormalRow]
                            .mapAsync(e =>applyHeadFlow(e, actionStream.head)))
                          ){(source, action) =>
                           source.via(Flow[IntermediateResult].mapAsync(e => Future(action(e))))
+                        }
+
+    val materialized = sourceReady.runWith(printSink)
+
+    materialized.onComplete{
+      case Success(_) => system.shutdown()
+      case Failure(e) =>
+        println(s"Failure: ${e.getMessage}")
+        system.shutdown()
     }
-    sourceReady.runWith(printSink)
   }
 
   //this is an open access function

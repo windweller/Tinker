@@ -4,7 +4,7 @@ import java.nio.file.Path
 
 import files.DataContainer
 import files.DataContainerTypes._
-import output.Output
+import baseModules.Output
 import utils.FailureHandle
 
 import scala.concurrent.Future

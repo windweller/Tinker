@@ -1,4 +1,4 @@
-package output
+package baseModules
 
 import java.nio.file.Path
 
@@ -10,8 +10,8 @@ import scala.concurrent.Future
 /**
  * Created by anie on 4/4/2015
  *
- * This is a high level output module interface
- * all output-related module must inherit this one
+ * This is a high level baseModules module interface
+ * all baseModules-related module must inherit this one
  */
 trait Output extends FailureHandle {
 

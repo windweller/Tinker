@@ -23,6 +23,7 @@ libraryDependencies ++= {
     //utilities
     "com.github.nscala-time" %% "nscala-time" % "1.8.0",
     "com.bizo" % "mighty-csv_2.11" % "0.2",
+    "com.github.tototoshi" %% "scala-csv" % "1.2.1",
     "org.apache.commons" % "commons-csv" % "1.1",
     //NLP-components
     "cc.mallet" % "mallet" % "2.0.7-RC2",

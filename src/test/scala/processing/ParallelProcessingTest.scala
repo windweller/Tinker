@@ -1,7 +1,7 @@
 package processing
 
 import files.{Doc, DataContainer}
-import files.filetypes.Tab
+import files.filetypes._
 import parser.implementations.stanford.TregexMatcher
 import parser.Parser
 import processing.buffers.FileBuffer
