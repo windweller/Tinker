@@ -13,11 +13,11 @@ import files.DataContainerTypes._
 /**
  * Created by anie on 4/1/2015.
  */
-trait Operation extends FileTypes with Buffer {
+trait Operation extends Buffer {
 
   import OperationType._
 
-  val data: DataContainer with Doc
+  val dataContainer: DataContainer
   val actionStream: ArrayBuffer[(IntermediateResult) => IntermediateResult] = ArrayBuffer.empty[(IntermediateResult) => IntermediateResult]
 
 }

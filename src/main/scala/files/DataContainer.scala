@@ -26,6 +26,8 @@ abstract class DataContainer(val f: String, val header: Boolean,
                              val rawData: Option[Vector[Vector[String]]], val CSVformat: Option[CSVFormat])
                               extends FileTypes with FailureHandle with Operation {
 
+  val dataContainer = this
+
   val data: Vector[Vector[String]]
 
   //For a file with header, we sometimes just want to ignore them

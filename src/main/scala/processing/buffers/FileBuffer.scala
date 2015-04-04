@@ -10,11 +10,12 @@ import utils.FailureHandle
  *
  * Functionality is similar to Doc
  */
-trait FileBuffer extends FailureHandle with FileTypes {
+trait FileBuffer extends Buffer with FailureHandle with FileTypes {
 
-//  override implicit val saveLoc: Option[Path] =
+  override val headerString: Option[Vector[String]] = dataContainer.headerString
+  override val headerMap: Option[Map[String, Int]] = dataContainer.headerMap
 
-    def getSaveLoc(outputFile: Option[String] = None, outputOverride: Boolean = false): Option[Path] = {
+  override def getSaveLoc(outputFile: Option[String] = None, outputOverride: Boolean = false): Option[Path] = {
       outputFile match {
       case Some(file) =>
         val permFile = Paths.get(file)

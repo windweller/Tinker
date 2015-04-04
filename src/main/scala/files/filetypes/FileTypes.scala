@@ -7,6 +7,7 @@ import java.nio.file.Path
 
 import files.DataContainer
 import files.DataContainerTypes.NormalRow
+import output.Output
 import utils.FailureHandle
 
 import scala.concurrent.Future
@@ -19,7 +20,7 @@ import scala.concurrent.Future
  * FileTypes trait is not just about file type
  * it's mostly about saving/reading strategy
  */
-trait FileTypes extends FailureHandle{
+trait FileTypes extends Output with FailureHandle{
 
   val typesuffix: Vector[String] = Vector.empty[String]
 
@@ -44,7 +45,7 @@ trait FileTypes extends FailureHandle{
   }
 
   //this is to save iteratively
-  def save(it: NormalRow)(implicit file: Option[Path]): Future[Unit] = {
+  override def save(it: NormalRow)(implicit file: Option[Path]): Future[Unit] = {
     fatal("Cannot use save function without knowing the format of file")
     throw new Exception
   }

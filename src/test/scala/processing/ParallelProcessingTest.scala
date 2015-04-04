@@ -17,8 +17,6 @@ object ParallelProcessingTest extends App {
 
   val doc = new DataContainer("E:\\Allen\\Tinker\\src\\test\\scala\\files\\testFiles\\NYTimes.tab", true) with Tab with Doc
   val parser = new Parser(doc,
-    outputFile = "E:\\Allen\\NYTFuture\\NYT_sample\\experiment.txt",
-    outputOverride = true,
     rules = Vector(
       "(VP < (VBG < going) < (S < (VP < TO)))",
       "(VP < (VBG < going) > (PP < TO))",
@@ -31,6 +29,7 @@ object ParallelProcessingTest extends App {
       "MD < may")) with Tab with FileBuffer with TregexMatcher with Parallel
 
   parser.matches(rowStr = "Parse", useGeneratedRow = false)
-  parser.exec()
+  parser.exec(outputFile = "E:\\Allen\\NYTFuture\\NYT_sample\\experiment.txt",
+    outputOverride = true)
 
 }

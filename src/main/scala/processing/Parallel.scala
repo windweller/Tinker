@@ -27,7 +27,9 @@ trait Parallel extends Operation with FailureHandle with ActorSystem {
 
   protected implicit val materializer = ActorFlowMaterializer()
 
-  protected val source: Source[NormalRow, Unit] = Source(() => data.dataIterator)
+  protected val source: Source[NormalRow, Unit] = Source(() => dataContainer.dataIterator)
+
+  implicit var saveLoc: Option[Path] = None
 
   //save it to specified location or temp file
   val printSink = Sink.foreach[IntermediateResult](e => save(combine(e._1, e._2)))
@@ -36,7 +38,7 @@ trait Parallel extends Operation with FailureHandle with ActorSystem {
            outputOverride: Boolean = false): Unit = {
     if (actionStream.size == 0) fatal("cannot call exec() when there is no action defined")
 
-    implicit val saveLoc: Option[Path] = getSaveLoc(outputFile, outputOverride)
+    saveLoc = getSaveLoc(outputFile, outputOverride)
 
     val sourceReady = if (actionStream.size == 1)
                           source

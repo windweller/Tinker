@@ -21,14 +21,11 @@ import scala.collection.mutable.ArrayBuffer
  * because all functions are waiting to be executed
  *
  */
-abstract class Parser(input: DataContainer with Doc,
-                       val rules: Option[Vector[String]] = None) extends FileTypes with FailureHandle with Operation{
+abstract class Parser(input: DataContainer,
+                       val rules: Option[Vector[String]] = None) extends FailureHandle with Operation{
 
-  val data: DataContainer with Doc = input
+  val dataContainer: DataContainer = input
   override val actionStream: ArrayBuffer[(IntermediateResult) => IntermediateResult] = ArrayBuffer.empty[(IntermediateResult) => IntermediateResult]
-
-  override val headerString: Option[Vector[String]] = data.headerString
-  override val headerMap: Option[Map[String, Int]] = data.headerMap
 
   //prepare for tregex
   val parsedRules: Option[Vector[TregexPattern]] = rules match {
