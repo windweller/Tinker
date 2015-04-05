@@ -9,9 +9,12 @@ import utils.FailureHandle
  *
  * Subtree being a trait that's on the same level
  * with Doc (swappable)
+ *
+ * PMI: p(subtreeA, Future) means the occurances of them appearing together
+ * p(subtreeA | Future) means the percentage subtree A appears inside Future
  */
 trait Subtree extends DataContainer with FailureHandle {
 
-  lazy val data = null
+
 
 }

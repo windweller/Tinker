@@ -48,8 +48,6 @@ import utils.ParameterCallToOption.implicits._
   parser.matches(rowStr = "Parse", useGeneratedRow = false)
   parser.exec(outputFile = "E:\\Allen\\NYTFuture\\NYT_sample\\experiment.txt",
     outputOverride = true)
-
-
 ```
 
 Stackable trait pattern means you can swap in and out different modules, like playing Lego. If you are dealing with a tab file, you can choose to use `Tab` module instead of `CSV`.

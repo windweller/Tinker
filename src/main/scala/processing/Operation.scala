@@ -1,8 +1,5 @@
 package processing
 
-import java.nio.file.Path
-
-import files.filetypes.FileTypes
 import files.{Doc, DataContainer}
 import utils.FailureHandle
 import buffers.Buffer

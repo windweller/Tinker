@@ -28,9 +28,15 @@ abstract class DataContainer(val f: String, val header: Boolean,
 
   val dataContainer = this
 
-  val data: Vector[Vector[String]]
+  //maybe remove this? Already pretty legacy code
+  lazy val data: Vector[Vector[String]] = if (rawData.isEmpty) process() else rawData.get
 
-  //For a file with header, we sometimes just want to ignore them
+  def process(): Vector[Vector[String]] = {
+    fatal("Cannot process without mixing in Doc trait")
+    throw new Exception
+  }
+
+    //For a file with header, we sometimes just want to ignore them
   def dataIteratorPure: Iterator[OrdinalRow] = {
     fatal("Cannot obtain iterator without mixing in Doc trait")
     throw new Exception

@@ -10,10 +10,12 @@ import scala.collection.JavaConversions._
 
 /**
  * This is a simple reimplementation of Java code
+ *
+ * Not in use
  */
 class VarroXMLSAXHandler extends DefaultHandler {
-  private[this] var negativeCount = false
-  private[this] var relativeFactor = 1
+
+  private[this] var negativeCount = false //exclusively used if we want to have initial parameter value
 
   private[this] var tree = ""
   private[this] var rootCount = ""
@@ -64,7 +66,7 @@ class VarroXMLSAXHandler extends DefaultHandler {
       if (negativeCount)
         tempRoot = -tempRoot
 
-      val root: Double = tempRoot / relativeFactor
+      val root: Double = tempRoot
 
       //if we already have the tree inside
 //      subtreeList.computeIfPresent(tree, (string, val) => val + root)

@@ -44,6 +44,11 @@ trait FileTypes extends Output with FailureHandle{
     throw new Exception
   }
 
+  def save(row: Vector[String])(implicit file: Option[Path]): Unit = {
+    fatal("Cannot use save function without knowing the format of file")
+    throw new Exception
+  }
+
   //this is to save iteratively
   override def save(it: NormalRow)(implicit file: Option[Path]): Unit = {
     fatal("Cannot use save function without knowing the format of file")

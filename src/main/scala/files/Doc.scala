@@ -14,7 +14,7 @@ import scala.concurrent.Future
 trait Doc extends DataContainer with FailureHandle {
 
   //by doing this, data is only evaluated once
-  lazy val data = if (rawData.isEmpty) process() else rawData.get
+  override lazy val data = if (rawData.isEmpty) process() else rawData.get
 
   //a fresh iterator every time
   def file = FileIterator(f, header)(typesuffix)
@@ -24,7 +24,7 @@ trait Doc extends DataContainer with FailureHandle {
   //you might want to test this
   lazy val headerMap: Option[Map[String, Int]] = headerString.map(array => Map(array.zip(0 to array.length): _*))
 
-  def process(): Vector[Vector[String]] = {
+  override def process(): Vector[Vector[String]] = {
     readFileAll[Vector[String]]((line) => super.parse(line))
   }
 
