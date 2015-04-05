@@ -1,6 +1,7 @@
 package subtree.filetypes
 
 import java.io.{File, FileInputStream, InputStreamReader}
+import java.nio.file.Paths
 import javax.xml.parsers.SAXParserFactory
 
 import files.filetypes.FileTypes
@@ -34,13 +35,15 @@ trait VarroSubtreeXML extends FileTypes {
   val ldaSentences: Map[String, Vector[String]] = Map.empty[String, Vector[String]]
   val sentenceVector: mutable.Map[String, ArrayBuffer[Int]] = mutable.Map.empty[String, ArrayBuffer[Int]]
 
-  def parse(fileAddrs: String*): Unit = {
+  //fileAddr -> label
+  def parse(fileAddrs: (String, String)*): Unit = {
     fileAddrs.foreach { f =>
-      val file = new File(f)
+      val file = new File(f._1)
       val inputStream = new FileInputStream(file)
       val reader = new InputStreamReader(inputStream, "UTF-8")
       val is = new InputSource(reader)
       is.setEncoding("UTF-8")
+      handler.label = f._2
       saxParser.parse(is, handler)
     }
   }
@@ -72,8 +75,14 @@ trait VarroSubtreeXML extends FileTypes {
     }
   }
 
-  def saveSentenceFeatures(): Unit = {
-    
+  def saveSentenceFeatures(loc: String): Unit = {
+    implicit val path = Some(Paths.get(loc))
+
+  }
+
+  //this saves subtree as a seperate file
+  def saveSubtreeWithSerialNumber(): Unit = {
+
   }
 
   private[this] def unsmoothedfeatureUpdate(a: Int): Int = a + 1

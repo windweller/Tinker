@@ -102,16 +102,6 @@ Modules should be inserted as a given order. `/` means two modules overrides eac
 
 **Parser**: `ParserImpl (specific) > Processing`
 
-## Advanced Usage
-
-Since Tinker is parallel by default, there isn't a seperate parallel module. All parallel operations are already embeded with basic operation modules such as `FileOp`. If you want to switch from parallel to sequential execution, you need to add specific `Sequential` module that's under each module:
-
-```
-val doc = new DataContainer("../testCSV.csv", true) with CSV with Doc with FileOp with files.operations.Sequential
-```
-
-If you don't want to write long prefixes, you must import as close to the usage as possible. Trait `Sequential` is being defined across multiple modules and repeated namespace can cause the compiler to crash. Remember, Tinker's `Sequential` operation is not as safe and well-tested as parallel operations. Use at your own discretion.
-
 ## Customization
 
 ```

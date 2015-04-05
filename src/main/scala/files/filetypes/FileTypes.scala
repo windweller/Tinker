@@ -1,17 +1,15 @@
 package files.filetypes
 
-import java.io.{File, RandomAccessFile}
-import java.nio.MappedByteBuffer
-import java.nio.channels.FileChannel
+
 import java.nio.file.Path
 
-import files.DataContainer
 import files.DataContainerTypes.NormalRow
 import baseModules.Output
-import files.structure.DataStructure
+import files.structure.DataStructureTypes.Structure
 import utils.FailureHandle
 
 import scala.concurrent.Future
+import scala.language.higherKinds
 
 /**
  * FileTypes include normal/generic file types
@@ -38,6 +36,10 @@ trait FileTypes extends Output with FailureHandle{
     }
   }
 
+  //the opposite of parse()
+  def compress[T[String] <: IndexedSeq[String]]: (T[String]) => String = (array: T[String]) => array.mkString(" ")
+  def compress[T[Int] <: IndexedSeq[Int]]: (T[Int]) => String = (array: T[Int]) => array.mkString(" ")
+
   //save function is rather independent of DataContainer
   //put in correct address, and you are done
   def save(data: Vector[Vector[String]], outputFile: String): Future[Unit] = {
@@ -45,7 +47,8 @@ trait FileTypes extends Output with FailureHandle{
     throw new Exception
   }
 
-  def save(row: Vector[String])(implicit file: Option[Path], dt: Option[DataStructure] = None): Unit = {
+  //use for calling compress function on the outside
+  def save(row: String)(implicit file: Option[Path], struct: Option[Structure] = None): Unit = {
     fatal("Cannot use save function without knowing the format of file")
     throw new Exception
   }

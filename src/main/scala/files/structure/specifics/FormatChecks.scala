@@ -1,6 +1,7 @@
 package files.structure.specifics
 
-import files.structure.DataStructure
+import files.structure.DataStructureTypes.Structure
+import files.structure.{DataStructureValue, DataStructure}
 import utils.FailureHandle
 
 /**
@@ -16,8 +17,10 @@ import utils.FailureHandle
  */
 trait FormatChecks extends FailureHandle{
   //fail the system is the test is not passed
-  def check(st: DataStructure): Unit = {
+  def check(st: Structure): Unit = {
     fail("You haven't mixed in a concrete specific format. Default check does not check anything.")
   }
+
+
 
 }

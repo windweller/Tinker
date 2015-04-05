@@ -21,7 +21,7 @@ import files.structure.specifics.FormatChecks
  *
  * Right now we encourage names...instead of column number
  *
- * You only need to mock up the data structure for algorithms, no need for parsing
+ * You only need to mock up the data structure for algorithms
  *
  * @param attributeColumns IndexedSeq[Int] guarantees the style like (1 to 10) ++ Vector(13)
  *                         it's columns that you can/should manipulate
@@ -61,6 +61,9 @@ abstract class DataStructure(val idColumn: Option[Int] = None,
 
   //this method is overridden
   //by specific format
-  check(this)
+  check(Left(this))
+}
 
+object DataStructureTypes {
+  type Structure = Either[DataStructure, DataStructureValue]
 }

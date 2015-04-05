@@ -9,7 +9,6 @@ import scala.collection.mutable.ArrayBuffer
 /**
  * This is a simple reimplementation of Java code
  *
- * Not in use
  */
 class VarroXMLSAXHandler extends DefaultHandler {
 
@@ -17,6 +16,10 @@ class VarroXMLSAXHandler extends DefaultHandler {
 
   private[this] var tree = ""
   private[this] var rootCount = ""
+
+  //this will add label to id
+  //format: MTUrkAllSentences_163:Future
+  var label = ""
 
   //Double-> either PMI or relative value
   val subtreeList = mutable.HashMap.empty[String, Double]
