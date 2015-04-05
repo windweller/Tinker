@@ -2,6 +2,8 @@ package files.filetypes
 
 import java.nio.file.Path
 
+import files.structure.DataStructure
+
 /**
  * Created by anie on 4/5/2015
  *
@@ -13,7 +15,8 @@ import java.nio.file.Path
  */
 trait SVM extends FileTypes {
 
-  override def save(row: Vector[String])(implicit file: Option[Path]): Unit = {
+  override def save(row: Vector[String])(implicit file: Option[Path],
+                                         dt: Option[DataStructure] = None): Unit = {
 
   }
 

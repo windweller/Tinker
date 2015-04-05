@@ -19,6 +19,8 @@ import files.structure.specifics.FormatChecks
  *
  * we'll cross-reference with headerMap
  *
+ * Right now we encourage names...instead of column number
+ *
  * You only need to mock up the data structure for algorithms, no need for parsing
  *
  * @param attributeColumns IndexedSeq[Int] guarantees the style like (1 to 10) ++ Vector(13)

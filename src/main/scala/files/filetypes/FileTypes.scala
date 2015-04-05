@@ -8,6 +8,7 @@ import java.nio.file.Path
 import files.DataContainer
 import files.DataContainerTypes.NormalRow
 import baseModules.Output
+import files.structure.DataStructure
 import utils.FailureHandle
 
 import scala.concurrent.Future
@@ -44,7 +45,7 @@ trait FileTypes extends Output with FailureHandle{
     throw new Exception
   }
 
-  def save(row: Vector[String])(implicit file: Option[Path]): Unit = {
+  def save(row: Vector[String])(implicit file: Option[Path], dt: Option[DataStructure] = None): Unit = {
     fatal("Cannot use save function without knowing the format of file")
     throw new Exception
   }

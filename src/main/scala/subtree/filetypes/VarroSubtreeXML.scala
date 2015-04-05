@@ -6,6 +6,8 @@ import javax.xml.parsers.SAXParserFactory
 import files.filetypes.FileTypes
 import org.xml.sax.InputSource
 import subtree.filetypes.VarroXMLSAXComponent.VarroXMLSAXHandler
+import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 
 /**
  * Created by anie on 3/23/2015
@@ -30,7 +32,7 @@ trait VarroSubtreeXML extends FileTypes {
   val handler = new VarroXMLSAXHandler()
 
   val ldaSentences: Map[String, Vector[String]] = Map.empty[String, Vector[String]]
-  val sentenceVector: Map[String, Vector[String]] = Map.empty[String, Vector[String]]
+  val sentenceVector: mutable.Map[String, ArrayBuffer[Int]] = mutable.Map.empty[String, ArrayBuffer[Int]]
 
   def parse(fileAddrs: String*): Unit = {
     fileAddrs.foreach { f =>
@@ -43,7 +45,41 @@ trait VarroSubtreeXML extends FileTypes {
     }
   }
 
-  def saveSentenceFeatures: Unit = {
+  //since this is for all, we don't need to worry about
+  //any matching sentence problem
+  def generateSentenceFeatures(): Unit = {
+    var counter = 0
+
+    val it = handler.subtreeSentenceMap.keysIterator
+    while(it.hasNext) {
+      val key = it.next()
+      val valuesIt = handler.subtreeSentenceMap(key).iterator
+
+      while(valuesIt.hasNext) {
+        val sentence = valuesIt.next()
+        if (sentenceVector.contains(sentence)) {
+          val features = sentenceVector(sentence)
+          //change here for update method
+          features.update(counter, unsmoothedfeatureUpdate(features(counter)))
+        }
+        else { //create an arraybuffer with equal size
+          val temp = ArrayBuffer.fill(handler.subtreeList.size)(0)
+          temp.update(counter, 1)
+          sentenceVector += (sentence -> temp)
+        }
+      }
+      counter += 1
+    }
+  }
+
+  def saveSentenceFeatures(): Unit = {
+    
+  }
+
+  private[this] def unsmoothedfeatureUpdate(a: Int): Int = a + 1
+  private[this] def ignoreMagnitudeFeatureUpdate(a: Int): Int = 1
+
+  private[this] def addToSentenceVector(key: String, value: ArrayBuffer[Int]): Unit = {
 
   }
 

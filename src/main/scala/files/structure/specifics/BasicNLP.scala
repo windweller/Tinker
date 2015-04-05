@@ -14,7 +14,7 @@ import utils.FailureHandle
 */
 trait BasicNLP extends FormatChecks with FailureHandle {
   //fail the system is the test is not passed
-  abstract override def check(st: DataStructure): Unit = {
+  override def check(st: DataStructure): Unit = {
     if (st.targetColumn.get.size > 1) fatal("BasicNLP defines target column to be one column with actual sentence")
   }
 

@@ -1,12 +1,10 @@
 package subtree.filetypes.VarroXMLSAXComponent
 
-import akka.actor.Status.Success
 import org.xml.sax.Attributes
 import org.xml.sax.helpers.DefaultHandler
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
-import scala.collection.JavaConversions._
 
 /**
  * This is a simple reimplementation of Java code
@@ -20,6 +18,7 @@ class VarroXMLSAXHandler extends DefaultHandler {
   private[this] var tree = ""
   private[this] var rootCount = ""
 
+  //Double-> either PMI or relative value
   val subtreeList = mutable.HashMap.empty[String, Double]
   val subtreeSentenceMap = mutable.HashMap.empty[String, ArrayBuffer[String]]
   val sentences = mutable.HashMap.empty[String ,Integer]
