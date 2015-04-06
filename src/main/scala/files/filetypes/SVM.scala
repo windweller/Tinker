@@ -28,18 +28,22 @@ trait SVM extends FileTypes {
     val rafile = new RandomAccessFile(f, "rw")
     rafile.seek(f.length())
 
-    dt.foreach(dtv => dtv.right.foreach(e =>
-      rafile.write((e.idValue.get + " " + e.labelValue.get + " " + row.concat("\r\n")).getBytes)
-    ))
+    dt.foreach(dtv => dtv.right.foreach {e =>
+      val prefix = if (e.idValue.nonEmpty && e.labelValue.nonEmpty) e.idValue.get + "\t" + e.labelValue.get + "\t"
+                   else if (e.idValue.nonEmpty) e.idValue.get + "\t"
+                   else if (e.labelValue.nonEmpty) e.labelValue.get + "\t"
+                   else ""
+      rafile.write((prefix + row.concat("\r\n")).getBytes)
+    })
 
     if (dt.isEmpty) rafile.write((row + "\r\n").getBytes)
 
     rafile.close()
   }
 
-  //compress to condensed form
+  //compress to SVM's condensed form
   override def compressInt[T <: IndexedSeq[Int]]: (T) => String = (array: T) =>
-    collect(array.iterator, Vector.empty[String], 0).mkString(" ")
+    collect(array.iterator, Vector.empty[String], 0).mkString("\t")
 
 
   @tailrec

@@ -10,7 +10,7 @@ import org.xml.sax.InputSource
 import subtree.filetypes.VarroXMLSAXComponent.VarroXMLSAXHandler
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
-import files.structure.specifics.{FormatChecks, SVMFile}
+import files.structure.specifics.{NoCheck, FormatChecks, SVMFile}
 import utils.ParameterCallToOption.implicits._
 
 /**
@@ -92,7 +92,12 @@ trait VarroSubtreeXML extends FileTypes {
   //this saves subtree as a seperate file
   def saveSubtreeWithSerialNumber(loc: String): Unit = {
     implicit val path = Some(Paths.get(loc))
-
+    var count = 0
+    handler.subtreeList.foreach{e =>
+      val dsv = new DataStructureValue(idValue = count.toString) with NoCheck
+      save(e._1 + "\t" + e._2)(path, Some(Right(dsv)))
+      count += 1
+    }
   }
 
   private[this] def unsmoothedfeatureUpdate(a: Int): Int = a + 1

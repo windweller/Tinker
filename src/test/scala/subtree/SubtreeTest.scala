@@ -14,9 +14,11 @@ class SubtreeTest extends FlatSpec {
 
     val doc = new Subtree with SVM with VarroSubtreeXML
     doc.parse(
-      ("E:\\Allen\\R\\naacl2015\\subtree\\mTurkAllSentencesTest.xml", "Future")
+      ("E:\\Allen\\R\\naacl2015\\subtree\\mTurkAllSentencesFuture.xml", "Future"),
+      ("E:\\Allen\\R\\naacl2015\\subtree\\mTurkAllSentencesNANFuture.xml", "NANFuture")
     )
     doc.generateSentenceFeatures()
-    doc.saveSentenceFeatures("E:\\Allen\\R\\naacl2015\\subtree\\TinkerTest.xml")
+    doc.saveSentenceFeatures("E:\\Allen\\R\\naacl2015\\subtree\\TinkerSentenceFeature.txt")
+    doc.saveSubtreeWithSerialNumber("E:\\Allen\\R\\naacl2015\\subtree\\TinkerSubtreeList.txt")
   }
 }
