@@ -37,8 +37,8 @@ trait FileTypes extends Output with FailureHandle{
   }
 
   //the opposite of parse()
-  def compress[T[String] <: IndexedSeq[String]]: (T[String]) => String = (array: T[String]) => array.mkString(" ")
-  def compress[T[Int] <: IndexedSeq[Int]]: (T[Int]) => String = (array: T[Int]) => array.mkString(" ")
+  def compressString[T[String] <: IndexedSeq[String]]: (T[String]) => String = (array: T[String]) => array.mkString(" ")
+  def compressInt[T <: IndexedSeq[Int]]: (T) => String = (array: T) => array.mkString(" ")
 
   //save function is rather independent of DataContainer
   //put in correct address, and you are done

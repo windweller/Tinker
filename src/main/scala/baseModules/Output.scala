@@ -24,14 +24,14 @@ trait Output extends FailureHandle {
 
   //I don't know if I want this function or not...
   //TODO: Incomplete, need to remove used columns
-  def extractDataStructureValue(row: Vector[String], ds: DataStructure): (Vector[String], DataStructureValue) = {
-    val dsv = DataStructureValue()
-    dsv.idValue = ds.idColumn.map(id => row(id))
-    dsv.labelValue = ds.labelColumn.map(label => row(label))
-    dsv.attributeValues = ds.attributeColumns.map(indices => indices.foldLeft[Vector[String]](Vector.fill[String](indices.length)(""))
-      ( (t,v) => t.updated(v, row(v)) ))
-
-    (row, dsv)
-  }
+//  def extractDataStructureValue(row: Vector[String], ds: DataStructure): (Vector[String], DataStructureValue) = {
+//    val dsv = new DataStructureValue()
+//    dsv.idValue = ds.idColumn.map(id => row(id))
+//    dsv.labelValue = ds.labelColumn.map(label => row(label))
+//    dsv.attributeValues = ds.attributeColumns.map(indices => indices.foldLeft[Vector[String]](Vector.fill[String](indices.length)(""))
+//      ( (t,v) => t.updated(v, row(v)) ))
+//
+//    (row, dsv)
+//  }
 
 }

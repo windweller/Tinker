@@ -1,6 +1,7 @@
 package subtree
 
 import files.DataContainer
+import files.filetypes.FileTypes
 import subtree.filetypes.VarroSubtreeXML
 import utils.FailureHandle
 
@@ -13,7 +14,6 @@ import utils.FailureHandle
  * PMI: p(subtreeA, Future) means the occurances of them appearing together
  * p(subtreeA | Future) means the percentage subtree A appears inside Future
  */
-trait Subtree extends DataContainer with FailureHandle {
-
+abstract class Subtree() extends FileTypes with FailureHandle {
 
 }

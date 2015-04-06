@@ -52,10 +52,10 @@ class VarroXMLSAXHandler extends DefaultHandler {
       }
       else if (attributes.getValue("id") != null && inAddr) {
         val pieces = attributes.getValue("id").split(":")
-        addresses += pieces(0) + "_" + pieces(1)
+        addresses += pieces(0) + "_" + pieces(1)+ ":" + label
         //will this work??
-        sentences.getOrElse(pieces(0) + "_" + pieces(1),
-          sentences += (pieces(0) + "_" + pieces(1) -> 0))
+        sentences.getOrElse(pieces(0) + "_" + pieces(1)+ ":" + label,
+          sentences += (pieces(0) + "_" + pieces(1) + ":" + label -> 0))
       }
     }
   }

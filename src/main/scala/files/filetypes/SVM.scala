@@ -6,7 +6,6 @@ import java.nio.file.Path
 import files.structure.DataStructureTypes.Structure
 
 import scala.annotation.tailrec
-import scala.language.higherKinds
 
 /**
  * Created by anie on 4/5/2015
@@ -20,10 +19,11 @@ import scala.language.higherKinds
 trait SVM extends FileTypes {
 
   //right now it only handles DataStructureValue
-  //TODO: not very complete
+  //TODO: not very complete (Not handling DataStructure, just DataStructureValue)
   override def save(row: String)(implicit file: Option[Path],
                                          dt: Option[Structure] = None): Unit = {
     if (file.isEmpty) fatal("Cannot find implicit parameter file")
+
     val f = file.get.toFile
     val rafile = new RandomAccessFile(f, "rw")
     rafile.seek(f.length())
@@ -38,7 +38,7 @@ trait SVM extends FileTypes {
   }
 
   //compress to condensed form
-  override def compress[T[Int] <: IndexedSeq[Int]]: (T[Int]) => String = (array: T[Int]) =>
+  override def compressInt[T <: IndexedSeq[Int]]: (T) => String = (array: T) =>
     collect(array.iterator, Vector.empty[String], 0).mkString(" ")
 
 

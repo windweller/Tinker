@@ -5,10 +5,13 @@ import java.nio.file.Paths
 import javax.xml.parsers.SAXParserFactory
 
 import files.filetypes.FileTypes
+import files.structure.DataStructureValue
 import org.xml.sax.InputSource
 import subtree.filetypes.VarroXMLSAXComponent.VarroXMLSAXHandler
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
+import files.structure.specifics.{FormatChecks, SVMFile}
+import utils.ParameterCallToOption.implicits._
 
 /**
  * Created by anie on 3/23/2015
@@ -33,6 +36,7 @@ trait VarroSubtreeXML extends FileTypes {
   val handler = new VarroXMLSAXHandler()
 
   val ldaSentences: Map[String, Vector[String]] = Map.empty[String, Vector[String]]
+  //the string is actually be  MTUrkAllSentences_NANFuture_Varro_767:NANFuture (label later)
   val sentenceVector: mutable.Map[String, ArrayBuffer[Int]] = mutable.Map.empty[String, ArrayBuffer[Int]]
 
   //fileAddr -> label
@@ -77,11 +81,17 @@ trait VarroSubtreeXML extends FileTypes {
 
   def saveSentenceFeatures(loc: String): Unit = {
     implicit val path = Some(Paths.get(loc))
-
+    sentenceVector.foreach{e =>
+      val pairs = e._1.split(":")
+      println(e._1)
+      val dsv = new DataStructureValue(idValue = pairs(0), labelValue = pairs(1)) with SVMFile
+      save(compressInt[ArrayBuffer[Int]](e._2))(file = path, struct = Some(Right(dsv)))
+    }
   }
 
   //this saves subtree as a seperate file
-  def saveSubtreeWithSerialNumber(): Unit = {
+  def saveSubtreeWithSerialNumber(loc: String): Unit = {
+    implicit val path = Some(Paths.get(loc))
 
   }
 

@@ -1,6 +1,8 @@
 package subtree
 
 import files.DataContainer
+import files.filetypes.SVM
+import files.structure.specifics.SVMFile
 import org.scalatest.FlatSpec
 import subtree.filetypes.VarroSubtreeXML
 
@@ -10,8 +12,11 @@ import subtree.filetypes.VarroSubtreeXML
 class SubtreeTest extends FlatSpec {
   "A Subtree" should "get data with Varro XML" in {
 
-    val doc = new DataContainer("E:\\Allen\\Tinker\\src\\test\\scala\\files\\testFiles\\testCSV.csv", true) with Subtree with VarroSubtreeXML
-
-
+    val doc = new Subtree with SVM with VarroSubtreeXML
+    doc.parse(
+      ("E:\\Allen\\R\\naacl2015\\subtree\\mTurkAllSentencesTest.xml", "Future")
+    )
+    doc.generateSentenceFeatures()
+    doc.saveSentenceFeatures("E:\\Allen\\R\\naacl2015\\subtree\\TinkerTest.xml")
   }
 }

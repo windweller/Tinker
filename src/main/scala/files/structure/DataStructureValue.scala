@@ -7,8 +7,10 @@ import files.structure.specifics.FormatChecks
  *
  * This class is more associated with each row
  * used to provide additional info
+ *
+ * This probably is a bad idea...any fix?
  */
-case class DataStructureValue(var idValue: Option[String] = None,
+abstract class DataStructureValue(var idValue: Option[String] = None,
                                var labelValue: Option[String] = None,
                                var attributeValues: Option[Vector[String]] = None) extends FormatChecks {
 
