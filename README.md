@@ -102,6 +102,24 @@ Modules should be inserted as a given order. `/` means two modules overrides eac
 
 **Parser**: `ParserImpl (specific) > Processing`
 
+## Advanced Usage
+
+Here are a list of specialized modules and how to use them.
+
+#### Subtree
+
+```
+    val doc = new Subtree with SVM with VarroSubtreeXML
+    doc.parse(
+      ("../subtree/mTurkAllSentencesFuture.xml", "Future"),
+      ("../subtree/mTurkAllSentencesNANFuture.xml", "NANFuture")
+    )
+    doc.generateSentenceFeatures()
+    doc.saveSentenceFeatures("../subtree/TinkerSentenceFeature.txt")
+    doc.saveSubtreeWithSerialNumber("../subtree/TinkerSubtreeList.txt")
+  }
+```
+
 ## Customization
 
 ```
