@@ -35,7 +35,7 @@ trait VarroSubtreeXML extends FileTypes {
   val saxParser = factory.newSAXParser()
   val handler = new VarroXMLSAXHandler()
 
-  val ldaSentences: Map[String, Vector[String]] = Map.empty[String, Vector[String]]
+  val sentenceSubtrees: mutable.Map[String, ArrayBuffer[String]] = mutable.Map.empty[String, ArrayBuffer[String]]
   //the string is actually be  MTUrkAllSentences_NANFuture_Varro_767:NANFuture (label later)
   val sentenceVector: mutable.Map[String, ArrayBuffer[Int]] = mutable.Map.empty[String, ArrayBuffer[Int]]
 
@@ -79,6 +79,24 @@ trait VarroSubtreeXML extends FileTypes {
     }
   }
 
+  //sentenceSubtrees will be filled up
+  def generateSentenceSubtrees(): Unit = {
+    val it = handler.subtreeSentenceMap.keysIterator
+    while (it.hasNext) {
+      val key = it.next()
+      val valuesIt = handler.subtreeSentenceMap(key).iterator
+      while(valuesIt.hasNext) {
+        val sentence = valuesIt.next()
+        if (sentenceSubtrees.contains(sentence)) {
+          val subtrees = sentenceSubtrees(sentence)
+          subtrees += key
+        }
+        else
+          sentenceSubtrees += (sentence -> ArrayBuffer.empty[String])
+      }
+    }
+  }
+
   def saveSentenceFeatures(loc: String): Unit = {
     implicit val path = Some(Paths.get(loc))
     sentenceVector.foreach{e =>
@@ -86,6 +104,16 @@ trait VarroSubtreeXML extends FileTypes {
       println(e._1)
       val dsv = new DataStructureValue(idValue = pairs(0), labelValue = pairs(1)) with SVMFile
       save(compressInt[ArrayBuffer[Int]](e._2))(file = path, struct = Some(Right(dsv)))
+    }
+  }
+
+  def saveSentenceSubtrees(loc: String): Unit = {
+    implicit val path = Some(Paths.get(loc))
+    sentenceSubtrees.foreach {e =>
+      val pairs = e._1.split(":")
+      println(e._1)
+      val dsv = new DataStructureValue(idValue = pairs(0), labelValue = pairs(1)) with SVMFile
+      save(compressString[ArrayBuffer[String]](e._2))(file = path, struct = Some(Right(dsv)))
     }
   }
 

@@ -17,8 +17,12 @@ class SubtreeTest extends FlatSpec {
       ("E:\\Allen\\R\\naacl2015\\subtree\\mTurkAllSentencesFuture.xml", "Future"),
       ("E:\\Allen\\R\\naacl2015\\subtree\\mTurkAllSentencesNANFuture.xml", "NANFuture")
     )
-    doc.generateSentenceFeatures()
-    doc.saveSentenceFeatures("E:\\Allen\\R\\naacl2015\\subtree\\TinkerSentenceFeature.txt")
-    doc.saveSubtreeWithSerialNumber("E:\\Allen\\R\\naacl2015\\subtree\\TinkerSubtreeList.txt")
+//    doc.generateSentenceFeatures()
+//    doc.saveSentenceFeatures("E:\\Allen\\R\\naacl2015\\subtree\\TinkerSentenceFeature.txt")
+//    doc.saveSubtreeWithSerialNumber("E:\\Allen\\R\\naacl2015\\subtree\\TinkerSubtreeList.txt")
+
+    doc.generateSentenceSubtrees()
+    doc.saveSentenceSubtrees("E:\\\\Allen\\\\R\\\\naacl2015\\\\subtree\\\\TinkerSentenceSubtree.txt")
+
   }
 }

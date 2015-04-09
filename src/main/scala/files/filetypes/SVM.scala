@@ -6,6 +6,7 @@ import java.nio.file.Path
 import files.structure.DataStructureTypes.Structure
 
 import scala.annotation.tailrec
+import scala.language.higherKinds
 
 /**
  * Created by anie on 4/5/2015
@@ -44,6 +45,8 @@ trait SVM extends FileTypes {
   //compress to SVM's condensed form
   override def compressInt[T <: IndexedSeq[Int]]: (T) => String = (array: T) =>
     collect(array.iterator, Vector.empty[String], 0).mkString("\t")
+
+  override def compressString[T <: IndexedSeq[String]]: (T) => String = (array: T) => array.mkString("\t")
 
 
   @tailrec
