@@ -6,7 +6,7 @@ import processing.Parallel
 import files.{Doc, DataContainer}
 import files.filetypes._
 import org.scalatest.FlatSpec
-import parser.implementations.stanford.TregexMatcher
+import parser.implementations.stanford.{Factored, PCFG, StanfordParser, TregexMatcher}
 import processing.OperationType._
 import files.DataContainerTypes._
 import processing.buffers.FileBuffer
@@ -45,6 +45,12 @@ class ParserTest extends FlatSpec {
     parser.matches(rowStr = "Parse", useGeneratedRow =  false)
     parser.exec(outputFile = "E:\\Allen\\NYTFuture\\NYT_sample\\experiment.txt",
       outputOverride = true)
+  }
+
+  it should "be able to run StanfordPCFGParser" in {
+    val doc = new DataContainer("E:\\Allen\\Tinker\\src\\test\\scala\\files\\testFiles\\NYTimes.tab", true) with Tab with Doc
+    val parser = new Parser(doc) with Tab with FileBuffer with StanfordParser
+    parser.parse(rowStr = "Sentence", useGeneratedRow = false) //no error at all
   }
 
   "combine" should "combine tow NormalRow on left" in {

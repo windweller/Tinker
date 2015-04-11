@@ -27,7 +27,7 @@ abstract class Parser(input: DataContainer,
   val dataContainer: DataContainer = input
   override val actionStream: ArrayBuffer[(IntermediateResult) => IntermediateResult] = ArrayBuffer.empty[(IntermediateResult) => IntermediateResult]
 
-  //prepare for tregex
+  //prepare for TregexMatcher
   val parsedRules: Option[Vector[TregexPattern]] = rules match {
     case Some(v) => Some(v.map(e => TregexPattern.compile(e)))
     case None => None

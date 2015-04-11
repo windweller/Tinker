@@ -26,6 +26,8 @@ abstract class DataContainer(val f: String, val header: Boolean,
                              val rawData: Option[Vector[Vector[String]]], val CSVformat: Option[CSVFormat])
                               extends FileTypes with FailureHandle with Operation {
 
+  //TODO: add a way to combine iterators
+
   val dataContainer = this
 
   //maybe remove this? Already pretty legacy code

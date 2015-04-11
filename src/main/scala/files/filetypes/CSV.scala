@@ -21,7 +21,7 @@ trait CSV extends FileTypes {
     data.foreach(d => output.write(d))}
   }
 
-  abstract override def parse: (String) => Vector[String] = CSVHandler.parseline
+  protected abstract override def parse: (String) => Vector[String] = CSVHandler.parseline
 
   import com.github.tototoshi.csv.CSVWriter
 

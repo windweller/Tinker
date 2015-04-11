@@ -21,7 +21,7 @@ trait Tab extends FileTypes {
 
   override val typesuffix: Vector[String] = Vector("tab", "txt")
 
-  abstract override def parse: (String) => Vector[String] = (line: String) => line.split("\t").toVector
+  protected abstract override def parse: (String) => Vector[String] = (line: String) => line.split("\t").toVector
 
   //Implements Java NIO MemoryMapper
   //forcefully writing to disk after data is done

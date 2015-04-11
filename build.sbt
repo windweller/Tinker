@@ -3,7 +3,7 @@ name := "Tinker"
 
 version := "0.1"
 
-scalaVersion := "2.11.5"
+scalaVersion := "2.11.6"
 
 resolvers ++= Seq(
   "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
@@ -31,7 +31,8 @@ libraryDependencies ++= {
     "edu.emory.clir" % "clearnlp-dictionary" % "3.0",
     "edu.emory.clir" % "clearnlp-general-en-dep" % "3.1",
     "edu.emory.clir" % "clearnlp-general-en-pos" % "3.1",
-    "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1"
+    "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1",
+    "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1" classifier "models"
   )
 }
 
