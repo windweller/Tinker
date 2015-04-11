@@ -2,7 +2,6 @@ package subtree
 
 import files.DataContainer
 import files.filetypes.SVM
-import files.structure.specifics.SVMFile
 import org.scalatest.FlatSpec
 import subtree.filetypes.VarroSubtreeXML
 

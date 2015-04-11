@@ -29,13 +29,19 @@ trait SVM extends FileTypes {
     val rafile = new RandomAccessFile(f, "rw")
     rafile.seek(f.length())
 
-    dt.foreach(dtv => dtv.right.foreach {e =>
-      val prefix = if (e.idValue.nonEmpty && e.labelValue.nonEmpty) e.idValue.get + "\t" + e.labelValue.get + "\t"
-                   else if (e.idValue.nonEmpty) e.idValue.get + "\t"
-                   else if (e.labelValue.nonEmpty) e.labelValue.get + "\t"
-                   else ""
-      rafile.write((prefix + row.concat("\r\n")).getBytes)
-    })
+    dt.foreach(dtv => {
+      dtv.right.foreach {e =>
+        val prefix = if (e.idValue.nonEmpty && e.labelValue.nonEmpty) e.idValue.get + "\t" + e.labelValue.get + "\t"
+                     else if (e.idValue.nonEmpty) e.idValue.get + "\t"
+                     else if (e.labelValue.nonEmpty) e.labelValue.get + "\t"
+                     else ""
+        rafile.write((prefix + row.concat("\r\n")).getBytes)
+      }
+      dtv.left.foreach { e =>
+
+      }
+    }
+    )
 
     if (dt.isEmpty) rafile.write((row + "\r\n").getBytes)
 
