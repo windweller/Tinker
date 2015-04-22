@@ -14,21 +14,22 @@ trait StanfordParser extends Parser with FailureHandle {
   val lp: LexicalizedParser
 
   def parse(rowNum: Option[Int] = None, rowStr: Option[String] = None,
-            useGeneratedRow: Boolean): Unit = {
+            useGeneratedRow: Boolean, nameForParsedColumn: Option[String] = None): Unit = {
+    val columnName = nameForParsedColumn.getOrElse("Parsed")
     if (parsedRules.isEmpty) fatal("Can't proceed if rules aren't specified")
     actionStream += (combinedRow => {
       val result: GeneratedRow = if (useGeneratedRow) {
         if (combinedRow._2.isEmpty) fatal("intermediate result is empty, cannot 'useGeneratedRow'.")
-        genResult(combinedRow._2.get, rowNum, rowStr)
+        genResult(combinedRow._2.get, rowNum, rowStr, columnName)
       }
-      else genResult(combinedRow._1, rowNum, rowStr)
+      else genResult(combinedRow._1, rowNum, rowStr, columnName)
       (combinedRow._1, Some(result))
     })
   }
 
-  private[this] def genResult(row: NormalRow, rowNum: Option[Int], rowStr: Option[String]): GeneratedRow = {
+  private[this] def genResult(row: NormalRow, rowNum: Option[Int], rowStr: Option[String], nameForGeneratedColumn: String): GeneratedRow = {
     row.left.map(e => parseWithOrdinal(rowNum, e))
-    row.right.map(e => parseWithNamed(rowStr, e))
+    row.right.map(e => parseWithNamed(rowStr, e, nameForGeneratedColumn))
   }
 
   private[this] def parseWithOrdinal(rowNum: Option[Int], row: OrdinalRow): OrdinalRow = {
@@ -36,9 +37,9 @@ trait StanfordParser extends Parser with FailureHandle {
     parseFunc()(row(rowNum.get))
   }
 
-  private[this] def parseWithNamed(rowStr: Option[String], namedRow: NamedRow): NamedRow = {
+  private[this] def parseWithNamed(rowStr: Option[String], namedRow: NamedRow, nameForGeneratedColumn: String): NamedRow = {
     if (namedRow.isEmpty) fatal("Can't proceed if row number is not specified with ordinal rows")
-    val mappedRulesWithResult = Map(rules.get.zip(parseFunc()(namedRow(rowStr.get))): _*)
+    val mappedRulesWithResult = Map(nameForGeneratedColumn -> parseFunc()(namedRow(rowStr.get)).head)
     mappedRulesWithResult
   }
 

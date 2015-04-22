@@ -44,6 +44,7 @@ trait TregexMatcher extends Parser with FailureHandle {
 
   private[this] def matchWithNamed(rowStr: Option[String], namedRow: NamedRow): NamedRow = {
     if (namedRow.isEmpty) fatal("Can't proceed if row number is not specified with ordinal rows")
+    println(namedRow)
     val mappedRulesWithResult = Map(rules.get.zip(matchesFunc(parsedRules.get)(namedRow(rowStr.get))): _*)
     mappedRulesWithResult
   }

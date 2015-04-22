@@ -49,8 +49,27 @@ class ParserTest extends FlatSpec {
 
   it should "be able to run StanfordPCFGParser" in {
     val doc = new DataContainer("E:\\Allen\\Tinker\\src\\test\\scala\\files\\testFiles\\NYTimes.tab", true) with Tab with Doc
-    val parser = new Parser(doc) with Tab with FileBuffer with StanfordParser
+    val parser = new Parser(doc) with Tab with FileBuffer with StanfordParser with PCFG with Parallel
     parser.parse(rowStr = "Sentence", useGeneratedRow = false) //no error at all
+  }
+
+  it should "be able to run parser then matcher" in {
+    val doc = new DataContainer("E:\\Allen\\Tinker\\src\\test\\scala\\files\\testFiles\\testText.txt", true) with Tab with Doc
+    val parser = new Parser(doc,
+      rules = Vector(
+        "(VP < (VBG < going) < (S < (VP < TO)))",
+        "(VP < (VBG < going) > (PP < TO))",
+        "MD < will",
+        "MD < ‘ll’",
+        "MD < shall",
+        "MD < would",
+        "MD < 'd’",
+        "VP < VBD << would",
+        "MD < may")) with Tab with FileBuffer with StanfordParser with PCFG with TregexMatcher with Parallel
+    parser.parse(rowStr = "Sentence", useGeneratedRow = false)
+    parser.matches(rowStr = "Parsed", useGeneratedRow = true)
+    parser.exec(outputFile = "E:\\Allen\\Tinker\\src\\test\\scala\\files\\testFiles\\result.txt",
+      outputOverride = true)
   }
 
   "combine" should "combine tow NormalRow on left" in {

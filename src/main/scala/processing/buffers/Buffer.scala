@@ -16,7 +16,6 @@ import scala.concurrent.Future
  * lower level implementation includes
  * FileBuffer, DBBuffer and so forth
  *
- * We di
  */
 trait Buffer extends Output with FailureHandle {
 

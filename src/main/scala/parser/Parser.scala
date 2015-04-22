@@ -1,11 +1,7 @@
 package parser
 
-import java.nio.file.{Files, Path, Paths}
 
-import akka.actor.ActorSystem
-import akka.stream.ActorFlowMaterializer
 import edu.stanford.nlp.trees.tregex.TregexPattern
-import files.filetypes.FileTypes
 import files.{DataContainer, Doc}
 import processing.OperationType._
 import utils.FailureHandle

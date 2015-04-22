@@ -5,6 +5,12 @@ Tinker is a parallel-by-default File/Directory Management System with additional
 
 We want to make standard large file ML/NLP processing as smooth as easy as possible, even for computers with less power/memory. We only keep operations within one module coherent. Operations between modules or involves several modules will be provided with files saving/reading as buffer. If no explicit location specified, Tinker will create temporary files that will be deleted after JVM exits.
 
+## Current State
+
+We are undergoing a redesign for the alpha release (finally not "pre-alpha" anymore). New design includes the elimination of module hiearchy (you can inherit them however you want), simplified linearization design, unified type system for `RowIterator`, and a new parallel by default design with Scala Future and Parallel Collection (getting rid of Akka Stream).
+
+We now define higher modules (you can extend them for customization), but when assemble the actual object, only use lower modules with actual implementations.
+
 ## Quick Start - Interactive (REPL)
 
 Start by typing `sbt console` from the root of the project. Currently the Unix/Linux Bash script is broken, but the Windows Batch file works, so if you use windows, you can go to `./dist` and use `tinker.bat` file to start.
@@ -13,7 +19,7 @@ Then you would see
 
 ```
 =======================================
-Welcome to Tinker 0.1 pre-alpha release
+Welcome to Tinker 0.1 alpha release
 =======================================
 >
 ```
@@ -94,13 +100,6 @@ You will only inherit base modules if you wish to customize and develop your own
 
 `Operation`: inherits `Buffer`. Inherits this class to add Tinker's processing framework to any base class.
 
-## Module Hierarchy
-
-Modules should be inserted as a given order. `/` means two modules overrides each other (you can only include one module). `|` means two modules are on the same level and will not override each other.
-
-**DataContainer**: `CSV / Tab > Doc > FileOp > Sequential`
-
-**Parser**: `ParserImpl (specific) > Processing`
 
 ## Advanced Usage
 
@@ -120,29 +119,6 @@ Here are a list of specialized modules and how to use them.
   }
 ```
 
-## Customization
-
-```
-trait Subtree extends DataContainer with FailureHandle {
-  lazy val data = //your way of obtaining data
-}
-
-trait VarroSubtreeXML extends FileTypes {
-  val headerMap: Option[Array[String]] = None
-}
-
-//Use these two modules by calling:
-
-val doc = new DataContainer("../varroXML.xml") with Subtree with VarroSubtreeXML
-```
-
-This is an example from `Subtree` folder. You can extend any trait to DataContainer, and start adding new modules and new functions to it.
 
 
-## Minor Improvements (current release)
 
-1. Now `DataContainer` can treat directory as a file, automatically selecting files with correct suffix names (`.csv` for CSV module, and `.txt` or `.tab` for Tab module)
-
-## Todo
-
-1. Does file output (save) function be asynchronous or synchronous?
