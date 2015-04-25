@@ -3,7 +3,7 @@ package newProcessing.buffers
 import utils.FailureHandle
 
 /**
- * Created by anie on 4/19/2015.
+ * Created by anie on 4/19/2015
  */
 trait Buffer {
 

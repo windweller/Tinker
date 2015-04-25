@@ -1,9 +1,6 @@
 package nlp.ngram
 
-import newFiles.filetypes.FileImplicits
-
 import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
 
 /**
  * Created by Aimingnie on 4/23/15
