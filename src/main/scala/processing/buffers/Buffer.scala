@@ -3,8 +3,7 @@ package processing.buffers
 import java.nio.file.Path
 
 import files.DataContainer
-import files.DataContainerTypes._
-import baseModules.Output
+import baseModules._
 import utils.FailureHandle
 
 import scala.concurrent.Future

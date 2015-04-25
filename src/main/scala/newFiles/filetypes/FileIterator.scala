@@ -17,10 +17,9 @@ class FileIterator(files: Array[File], val header: Boolean) extends Iterator[Str
   private[this] var currentFile = remainingFiles.next()
   private[this] var currentFileIterator = getIterator(currentFile)
   val headerRaw = getHeader //this is the header of the first file
-  val currentFileName = currentFile.getName
+  val peekHead = getIterator(currentFile).next() //this is a new iterator specifically for peeking the first row
 
-  def getHeader: Option[String] =
-    if (header && currentFileIterator.hasNext) Some(currentFileIterator.next()) else None
+  def getHeader: Option[String] = if (header && currentFileIterator.hasNext) Some(currentFileIterator.next()) else None
 
   def headerCheck(): Unit = {
     val result = if (header && currentFileIterator.hasNext) Some(currentFileIterator.next()) else None

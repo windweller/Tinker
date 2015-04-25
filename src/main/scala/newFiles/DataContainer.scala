@@ -1,7 +1,9 @@
 package newFiles
 
+import newFiles.filetypes.FileIterator
+
+import scala.collection.immutable.HashMap
 import scala.collection.mutable.ArrayBuffer
-import scala.collection.parallel.immutable.ParVector
 
 /**
  * Redesign of old DataContainer
@@ -11,18 +13,20 @@ import scala.collection.parallel.immutable.ParVector
  * Operation's exec() method. We do not offer
  * real save() method, but maybe an alias that maps
  * to exec()
+ *
+ * @param fuzzyMatch this gets passed to FileMapIterator, exclusive end
  */
-abstract class DataContainer(val f: Option[String] = None, val header: Option[Boolean] = Some(true)) {
+abstract class DataContainer(val f: Option[String] = None,
+                              val header: Option[Boolean] = Some(true),
+                              val fuzzyMatch: Option[Int] = None) {
 
   import rowTypes._
 
-  val iterators: ArrayBuffer[RowIterator] = ArrayBuffer.empty[RowIterator]
+  val iterators: ArrayBuffer[Map[String, RowIterator]] = ArrayBuffer.empty[Map[String, RowIterator]]
 
 }
 
 object rowTypes {
-  type Key = Option[String]
-  type Value = String
-  type NormalRow = ParVector[(Key, Value)] //key, value
+  type NormalRow = HashMap[String, String] //enforced HashMap for it's eC performance
   type RowIterator = Iterator[NormalRow]
 }

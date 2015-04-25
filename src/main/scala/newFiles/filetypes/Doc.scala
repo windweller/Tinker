@@ -3,10 +3,10 @@ package newFiles.filetypes
 
 import newFiles.DataContainer
 import newFiles.rowTypes._
-import utils.FailureHandle
+import utils._
 import utils.OptionToParameter.implicits._
 
-import scala.collection.parallel.immutable.ParVector
+import scala.collection.immutable.HashMap
 
 /**
  * Extends this means that
@@ -25,29 +25,27 @@ trait Doc extends DataContainer with FailureHandle {
 
   def typesuffix: Vector[String]
 
-  //a fresh iterator every time
-  def file = FileIterator(f, header)(typesuffix)
-
   //this method is being overriden by differnt types
   def parse: (String) => Vector[String]
 
   /**** Concrete implementations ****/
 
-  lazy val headerString: Option[ParVector[String]] = file.headerRaw.map(header => parse(header).par)
+  //get all files
+  def files: Map[String, FileIterator] = FileMapIterator.getFileMap(f, header, fuzzyMatch)(typesuffix)
+  //allow peaking, assuming all files share same structure
+  lazy private[this] val file = files.head._2
 
-  protected def readFileIterator[T](transform: (String) => T): Iterator[T] = file.map(l => transform(l))
+  /*this new method forces HashMap on header/nonHeader structure
+    only inefficient part is the toString, toInt conversion */
+  lazy val headerString: Vector[String] =
+    if (file.headerRaw.nonEmpty) parse(file.headerRaw.get)
+    else Vector.iterate("0", parse(file.peekHead).length)(pos => (pos.toInt + 1).toString)
 
-  def dataIterator: RowIterator = {
-    readFileIterator[NormalRow]((line) => {
-      if (header) headerString.get.map(e => Some(e)).zip(parse(line))
-      else parse(line).par.map(e => (None, e))
-    })
-  }
+  protected def readFileIterator[T](transform: (String) => T, file: FileIterator): Iterator[T] = file.map(l => transform(l))
 
-  iterators += dataIterator //add to the mix
+  def dataIterators: Map[String, RowIterator] =
+    files.map(e => e._1 -> readFileIterator[NormalRow]((line) => HashMap(headerString.zip(parse(line)): _*), e._2))
 
-  //you need to do benchmark to know if par collection would work better than seq collection
-  //it is necessary, because NLP columns have more than 1 million columns sometime
-
+  iterators += dataIterators //add to the mix
 
 }

@@ -13,7 +13,12 @@ import scala.util.{Failure, Success, Try}
 
 class CSVHandler(csvFormat: CSVFormat) extends FailureHandle {
 
-  //added error handling, will not parse the line if malformed
+  /**
+   * added error handling, will not parse the line if malformed
+   * this is almost like an emergency patch. Should be fixed the next update
+   * @param line
+   * @return
+   */
   def parseline(line: String): Vector[String] = {
 
     var result: Vector[String] = Vector.empty[String]
