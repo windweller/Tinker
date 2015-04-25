@@ -7,8 +7,8 @@ import newFiles.filetypes.Doc
  */
 trait CSV extends Doc {
 
-  override val typesuffix = Vector("csv")
+  def typesuffix = Vector("csv", "txt")
 
-  override def parse: (String) => Vector[String] = CSVHandler.parseline
+  def parse: (String) => Vector[String] = CSVHandler.parseline
 
 }

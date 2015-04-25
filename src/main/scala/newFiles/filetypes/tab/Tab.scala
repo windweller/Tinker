@@ -13,8 +13,8 @@ import scala.concurrent.Future
  */
 trait Tab extends Doc {
 
-  override val typesuffix: Vector[String] = Vector("tab", "txt")
+  def typesuffix: Vector[String] = Vector("tab", "txt")
 
-  override def parse: (String) => Vector[String] = (line: String) => line.split("\t").toVector
+  def parse: (String) => Vector[String] = (line: String) => line.split("\t").toVector
 
 }

@@ -2,6 +2,7 @@ package newFiles
 
 import newFiles.filetypes.csv.CSV
 import newFiles.operations.FileOp
+import newProcessing.buffers.FileBuffer
 import newProcessing.{Parallel, Operation}
 import org.scalatest.FlatSpec
 import utils.ParameterCallToOption.implicits._
@@ -12,7 +13,8 @@ import utils.ParameterCallToOption.implicits._
 class DataContainerTest extends FlatSpec {
 
   "assembled object" should "work" in {
-    val data = new DataContainer("") with CSV with FileOp with Operation with Parallel
+    val data = new DataContainer("") with CSV with FileOp with Operation with Parallel with FileBuffer
+
 
   }
 

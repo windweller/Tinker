@@ -7,7 +7,7 @@ import newFiles.filetypes.Doc
  */
 trait Space  extends Doc {
 
-  override val typesuffix: Vector[String] = Vector("txt", "prn")
+  def typesuffix: Vector[String] = Vector("txt", "prn")
 
-  override def parse: (String) => Vector[String] = (line: String) => line.split(" ").toVector
+  def parse: (String) => Vector[String] = (line: String) => line.split(" ").toVector
 }

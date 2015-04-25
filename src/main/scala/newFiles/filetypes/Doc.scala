@@ -23,7 +23,7 @@ trait Doc extends DataContainer with FailureHandle {
 
   /**** Abstract methods/variables ****/
 
-  val typesuffix: Vector[String]
+  def typesuffix: Vector[String]
 
   //a fresh iterator every time
   def file = FileIterator(f, header)(typesuffix)
@@ -35,23 +35,19 @@ trait Doc extends DataContainer with FailureHandle {
 
   lazy val headerString: Option[ParVector[String]] = file.headerRaw.map(header => parse(header).par)
 
-  def process(): Vector[Vector[String]] = {
-    readFileAll[Vector[String]]((line) => parse(line))
-  }
-
-  protected def readFileAll[T](transform: (String) => T): Vector[T] = {
-    file.map(l => transform(l)).toVector
-  }
-
   protected def readFileIterator[T](transform: (String) => T): Iterator[T] = file.map(l => transform(l))
 
   def dataIterator: RowIterator = {
     readFileIterator[NormalRow]((line) => {
-      if (header) headerString.get.map(e=>Some(e)).zip(parse(line))
+      if (header) headerString.get.map(e => Some(e)).zip(parse(line))
       else parse(line).par.map(e => (None, e))
     })
   }
 
+  iterators += dataIterator //add to the mix
+
   //you need to do benchmark to know if par collection would work better than seq collection
   //it is necessary, because NLP columns have more than 1 million columns sometime
+
+
 }

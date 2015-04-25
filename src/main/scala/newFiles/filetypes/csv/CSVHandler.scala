@@ -1,6 +1,6 @@
 package newFiles.filetypes.csv
 
-import org.apache.commons.csv.{CSVFormat, CSVParser}
+import org.apache.commons.csv.{CSVRecord, CSVFormat, CSVParser}
 import utils.FailureHandle
 
 import scala.annotation.tailrec
@@ -13,6 +13,7 @@ import scala.util.{Failure, Success, Try}
 
 class CSVHandler(csvFormat: CSVFormat) extends FailureHandle {
 
+  //added error handling, will not parse the line if malformed
   def parseline(line: String): Vector[String] = {
 
     var result: Vector[String] = Vector.empty[String]
@@ -20,9 +21,11 @@ class CSVHandler(csvFormat: CSVFormat) extends FailureHandle {
     Try(CSVParser.parse(line, csvFormat)) match {
       case Success(parser) =>
         val parserIt = parser.iterator()
-        while (parserIt.hasNext) {
-          val record = parserIt.next()
-          result = collectRow(Vector.empty[String], record.iterator())
+        Try(parserIt.hasNext).foreach { b =>
+          if (b) {
+            val record = parserIt.next()
+            result = collectRow(Vector.empty[String], record.iterator())
+          }
         }
         result
       case Failure(ex) =>
