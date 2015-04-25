@@ -12,7 +12,7 @@ import utils.ParameterCallToOption.implicits._
  */
 class RunAllTweets extends FlatSpec {
   "Combine tweets" should "work" in {
-    val data = new DataContainer("E:\\Allen\\R\\acl2015\\Tweets") with CSV
+    val data = new DataContainer("E:\\Allen\\R\\acl2015\\Tweets\\") with CSV
     val ngram = new Ngram(data) with Unigram
     val result = ngram.getTokenNumber
     val output: CSVWriter = CSVWriter.open("E:\\Allen\\R\\acl2015\\unigramToken.txt", append = true)

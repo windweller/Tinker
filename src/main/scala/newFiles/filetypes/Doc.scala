@@ -19,7 +19,7 @@ import scala.collection.immutable.HashMap
  * This is a downstream of DataContainer,
  * because it implements DataContainer's certain methods and types
  */
-trait Doc extends DataContainer with FailureHandle {
+trait Doc extends DataContainer {
 
   /**** Abstract methods/variables ****/
 
