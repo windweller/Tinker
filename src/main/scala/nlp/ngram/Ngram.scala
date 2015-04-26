@@ -1,6 +1,7 @@
 package nlp.ngram
 
 import newFiles.DataContainer
+import newFiles.structure.DataStructure
 
 import scala.collection.mutable
 
@@ -10,7 +11,7 @@ import scala.collection.mutable
  * All Ngram features/methods are implemented by subsequent
  * traits
  */
-abstract class Ngram(val data: DataContainer) {
+abstract class Ngram(val data: DataContainer, val struct: DataStructure) {
 
   def getTokenNumber: mutable.HashMap[String, Int]
 

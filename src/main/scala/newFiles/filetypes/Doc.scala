@@ -32,11 +32,12 @@ trait Doc extends DataContainer {
 
   //get all files
   def files: Map[String, FileIterator] = FileMapIterator.getFileMap(f, header, fuzzyMatch)(typesuffix)
+
   //allow peaking, assuming all files share same structure
   lazy private[this] val file = files.head._2
 
-  /*this new method forces HashMap on header/nonHeader structure
-    only inefficient part is the toString, toInt conversion */
+  /* this new method forces HashMap on header/nonHeader structure
+     only inefficient part is the toString, toInt conversion */
   lazy val headerString: Vector[String] =
     if (file.headerRaw.nonEmpty) parse(file.headerRaw.get)
     else Vector.iterate("0", parse(file.peekHead).length)(pos => (pos.toInt + 1).toString)

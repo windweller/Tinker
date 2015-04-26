@@ -18,9 +18,8 @@ trait Unigram extends Ngram {
       while (itr.hasNext) {
         val row = itr.next()
         if (row.nonEmpty) {
-          val nonemptyRowText = row.head //this is the not flexible part, you keep getting the first because
-          //tweets you are handlign has that!
-          unigramCount += nonemptyRowText._2.split(" ").length
+          val nonemptyRowText = row(struct.getTarget)
+          unigramCount += nonemptyRowText.split(" ").length
         }
       }
       result += (group._1 -> unigramCount)

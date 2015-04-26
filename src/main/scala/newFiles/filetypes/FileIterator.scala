@@ -15,9 +15,14 @@ import scala.annotation.tailrec
  */
 class FileIterator(files: Array[File], val header: Boolean) extends Iterator[String] with FailureHandle {
 
+  private[this] val defaultCodecs = Vector(
+    io.Codec("UTF-8"),
+    io.Codec("ISO-8859-1")
+  )
+
   private[this] var remainingFiles = files.iterator
   private[this] var currentFile = remainingFiles.next()
-  private[this] var currentFileIterator = getIterator(currentFile)
+  private[this] var currentFileIterator = getIterator(currentFile, defaultCodecs.iterator)
   val headerRaw = getHeader //this is the header of the first file
 
   //this is a costly. To get the string of the first row
@@ -26,7 +31,7 @@ class FileIterator(files: Array[File], val header: Boolean) extends Iterator[Str
     //reset everything
     remainingFiles = files.iterator
     currentFile = remainingFiles.next()
-    currentFileIterator = getIterator(currentFile)
+    currentFileIterator = getIterator(currentFile, defaultCodecs.iterator)
     peek
   }
 
@@ -43,7 +48,24 @@ class FileIterator(files: Array[File], val header: Boolean) extends Iterator[Str
     currentFileIterator.next()
   }
 
-  private[this] def getIterator(file: File): Iterator[String] = io.Source.fromFile(file).getLines()
+  //fixed the encoding problem
+  private[this] def getIterator(file: File, codecs:Iterator[io.Codec]): Iterator[String] = {
+    if (codecs.hasNext)
+      try {
+        val it = io.Source.fromFile(file)(codecs.next()).getLines()
+        it.next()
+        io.Source.fromFile(file)(codecs.next()).getLines()
+      }
+      catch {
+        case ex: Exception =>
+          getIterator(file, codecs)
+      }
+    else
+      io.Source.fromFile(file).getLines()  //all custom codecs have failed, switching to default
+
+  }
+
+//  private[this] def getIterator(file: File, codecs:Iterator[io.Codec]): Iterator[String] = io.Source.fromFile(file)(codecs.next()).getLines()
 
   override def hasNext: Boolean = checkEmpty(remainingFiles.hasNext || currentFileIterator.hasNext)
 
@@ -60,7 +82,7 @@ class FileIterator(files: Array[File], val header: Boolean) extends Iterator[Str
         true
       else if (remainingFiles.hasNext) {
         currentFile = remainingFiles.next()
-        currentFileIterator = getIterator(currentFile)
+        currentFileIterator = getIterator(currentFile, defaultCodecs.iterator)
         headerCheck()
         if (currentFileIterator.hasNext) true
         else checkEmpty(remainingFiles.hasNext || currentFileIterator.hasNext)
