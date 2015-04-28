@@ -5,6 +5,8 @@ version := "0.1"
 
 scalaVersion := "2.11.6"
 
+mainClass in (Compile, run) := Some("nlp.future.FutureOnTweets")
+
 resolvers ++= Seq(
   "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
   "IESL Release" at "http://dev-iesl.cs.umass.edu/nexus/content/groups/public"

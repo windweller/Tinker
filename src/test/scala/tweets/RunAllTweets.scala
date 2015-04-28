@@ -8,9 +8,10 @@ import newFiles.structure.predefined.BasicNLP
 import nlp.basic.Sentence
 import nlp.basic.sentence.Split
 import nlp.filters._
+import nlp.future.Future
 import nlp.ngram.{Unigram, Ngram}
 import nlp.sentiment.Sentiment
-import nlp.sentiment.implementations.Stanford
+import nlp.sentiment.impl.Stanford
 import org.scalatest.FlatSpec
 import utils.ParameterCallToOption.implicits._
 
@@ -55,9 +56,16 @@ class RunAllTweets extends FlatSpec {
 
   "sentiment analysis" should "work"  in {
     val struct = new DataStructure(idColumn = 0, targetColumn = 1) with BasicNLP
-    val data = new DataContainer("/Users/Aimingnie/Desktop/R/ACL2015/tweetsByStateSplitted.csv", header = false) with CSV
+    val data = new DataContainer("E:\\Allen\\R\\acl2015\\tweetsByStateSplitted.csv", header = false) with CSV
     val sentiment = new Sentiment(data, struct) with Stanford
-    sentiment.classify("/Users/Aimingnie/Desktop/R/ACL2015/twitterSentiment.csv")
+    sentiment.classify("E:\\Allen\\R\\acl2015\\twitterSentiment.csv")
+  }
+
+  "future classifier" should "work" in {
+    val struct = new DataStructure(idColumn = 0, targetColumn = 1) with BasicNLP
+    val data = new DataContainer("E:\\Allen\\R\\acl2015\\tweetsByStateSplitted2.csv", header = false) with CSV
+    val future = new Future(data, struct)
+    future.saveFutureMatching("E:\\Allen\\R\\acl2015\\twitterFuture.csv")
   }
 
 }

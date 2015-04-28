@@ -1,4 +1,4 @@
-package nlp.sentiment.implementations
+package nlp.sentiment.impl
 
 import java.text.{DecimalFormat, NumberFormat}
 import java.util.{Collections, Properties}
@@ -11,6 +11,7 @@ import edu.stanford.nlp.sentiment.SentimentCoreAnnotations
 import edu.stanford.nlp.trees.Tree
 import nlp.sentiment.Sentiment
 import org.ejml.simple.SimpleMatrix
+import utils.Timer
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -82,6 +83,7 @@ trait Stanford extends Sentiment{
 
             //fileName, rootLabel, prob score
             result += Seq(struct.getId(row).getOrElse(group._1), rootLabel, NF.format(highestScoreWithLabel))
+            Timer.completeOne() //add to timer
           }
 
         })
