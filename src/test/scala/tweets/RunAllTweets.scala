@@ -3,6 +3,7 @@ package tweets
 import com.github.tototoshi.csv.CSVWriter
 import newFiles.DataContainer
 import newFiles.filetypes.csv.CSV
+import newFiles.filetypes.tab.Tab
 import newFiles.structure.DataStructure
 import newFiles.structure.predefined.BasicNLP
 import nlp.basic.Sentence
@@ -47,6 +48,14 @@ class RunAllTweets extends FlatSpec {
     filter.preprocess("/Users/Aimingnie/Desktop/R/ACL2015/tweetsByState.csv")
   }
 
+  "further filter Tweets with Character" should "work" in {
+    val struct = new DataStructure(idColumn = 0, targetColumn = 1) with BasicNLP
+    val data = new DataContainer("E:\\Allen\\R\\acl2015\\tweetsByStateSplitted.csv", header = false) with CSV
+
+    val filter = new Filter(data, struct) with CharacterFilter
+    filter.preprocess("E:\\Allen\\R\\acl2015\\tweetsByStateSplittedCleaned.csv")
+  }
+
   "split tweets" should "work" in {
     val struct = new DataStructure(idColumn = 0, targetColumn = 1) with BasicNLP
     val data = new DataContainer("/Users/Aimingnie/Desktop/R/ACL2015/tweetsByState.csv", header = false) with CSV
@@ -55,15 +64,15 @@ class RunAllTweets extends FlatSpec {
   }
 
   "sentiment analysis" should "work"  in {
-    val struct = new DataStructure(idColumn = 0, targetColumn = 1) with BasicNLP
-    val data = new DataContainer("E:\\Allen\\R\\acl2015\\tweetsByStateSplitted.csv", header = false) with CSV
+    val struct = new DataStructure(idColumn = 0, targetColumn = 2) with BasicNLP
+    val data = new DataContainer("E:\\Allen\\R\\acl2015\\tweetsByStateSplittedCleaned.tab", header = false) with Tab
     val sentiment = new Sentiment(data, struct) with Stanford
-    sentiment.classify("E:\\Allen\\R\\acl2015\\twitterSentiment.csv")
+    sentiment.classify("E:\\Allen\\R\\acl2015\\twitterSentiment2.csv")
   }
 
   "future classifier" should "work" in {
     val struct = new DataStructure(idColumn = 0, targetColumn = 1) with BasicNLP
-    val data = new DataContainer("E:\\Allen\\R\\acl2015\\tweetsByStateSplitted2.csv", header = false) with CSV
+    val data = new DataContainer("E:\\Allen\\R\\acl2015\\tweetsByStateSplittedCleaned2.tab", header = false) with Tab
     val future = new Future(data, struct)
     future.saveFutureMatching("E:\\Allen\\R\\acl2015\\twitterFuture.csv")
   }

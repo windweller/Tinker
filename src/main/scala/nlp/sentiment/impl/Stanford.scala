@@ -75,14 +75,16 @@ trait Stanford extends Sentiment{
             setIndexLabels(copy, 0)
             val vector: SimpleMatrix = RNNCoreAnnotations.getPredictions(tree)
 
-            var highestScoreWithLabel: Double = 0
-            (0 to vector.getNumElements - 1).foreach { i =>
-              val score = vector.get(i)
-              if (score > highestScoreWithLabel) highestScoreWithLabel = score
-            }
+//            var highestScoreWithLabel: Double = 0
+//            (0 to vector.getNumElements - 1).foreach { i =>
+//              val score = vector.get(i)
+//              if (score > highestScoreWithLabel) highestScoreWithLabel = score
+//            }
+
+            val seq = (0 to vector.getNumElements - 1).map(i => NF.format(vector.get(i)))
 
             //fileName, rootLabel, prob score
-            result += Seq(struct.getId(row).getOrElse(group._1), rootLabel, NF.format(highestScoreWithLabel))
+            output.writeRow(Seq(struct.getId(row).getOrElse(group._1), rootLabel) ++ seq)
             Timer.completeOne() //add to timer
           }
 
@@ -91,7 +93,6 @@ trait Stanford extends Sentiment{
       }
     }
 
-    output.writeAll(result)
   }
 
   //eh, not sure if this is correct, it's used for traversal

@@ -34,23 +34,6 @@ class Future(val data: DataContainer, val struct: DataStructure) {
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
 
     val it = data.iterators.head
-//    val result = ArrayBuffer.empty[Seq[Any]]
-
-//    it.foreach { group =>
-//      val itr = group._2
-//      while (itr.hasNext) {
-//        val row = itr.next()
-//        val tree = parser.parse(row(struct.getTarget))
-//        tree
-//        val array =  matcher.search(tree, futureCompiledPattern) ++
-//          matcher.search(tree, pastCompiledPattern) ++
-//          matcher.search(tree, presentCompiledPattern)
-//        result += Seq(struct.getId(row).getOrElse(group._1), row(struct.getTarget)) ++ array.toSeq
-//      }
-//      Timer.completeOne() //add to timer
-//    }
-//
-//    output.writeAll(result)
 
     val conf: Config = ConfigFactory.load()
     implicit val system = ActorSystem("reactive-tweets", conf)
