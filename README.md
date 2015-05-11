@@ -64,15 +64,11 @@ Advanced File I/O is being developed.
 
 Interface to ML and NLP libraries are being developed.
 
+## Design Structure
+
+The `Operation` module is one of the base modules that faciliate processing. 
+
 ## Modules
-
-#### Global
-
-(those modules don't belong to a specific base class, yet most of them are associated with processing)
-
-`Parallel`: This module guarantees the processing done in parallel. It is one of the more universal modules that should be included whenever you are adding an action-related module to your base class.
-
-`Sequential`: similar to `Parallel` but not yet implemented
 
 #### DataContainer
 
