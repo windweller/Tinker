@@ -4,7 +4,7 @@ import newFiles.rowTypes.NormalRow
 import utils.FailureHandle
 
 /**
- * Created by Aimingnie on 4/25/15.
+ * Created by Aimingnie on 4/25/15
  */
 abstract class DataStructure(idColumn: Option[Int] = None,
                              idColumnWithName: Option[String] = None,
@@ -52,7 +52,7 @@ abstract class DataStructure(idColumn: Option[Int] = None,
 
   /*
    * Actual Value Getters (go with .getOrElse)
-  */
+   */
   def getIdValue(row: NormalRow): Option[String] = {
     getSingleIntStringOptionValue(idColumn, idColumnWithName, row)
   }
