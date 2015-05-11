@@ -1,9 +1,9 @@
 # Tinker
-Tinker is a parallel-by-default File/Directory Management System with additional interface to NLP and ML libraries. Tinker right now uses Scala's awesome Stackable Trait Pattern, and just finished it's asynchronous File I/O implementation.
+Tinker is a parallel-by-default File/Directory/Data Management System with additional interface to NLP and ML libraries. Tinker right now uses Scala's awesome Stackable Trait Pattern, and is tightly integrated with powerful Akka Stream to handle task parallelization and pipelining.
 
 ## Design Philosophy
 
-We want to make standard large file ML/NLP processing as smooth as easy as possible, even for computers with less power/memory. We only keep operations within one module coherent. Operations between modules or involves several modules will be provided with files saving/reading as buffer. If no explicit location specified, Tinker will create temporary files that will be deleted after JVM exits.
+We want to make standard large file ML/NLP processing as smooth as easy as possible, even for computers with less power/memory. We parallelize tasks whenever possible, and make most of the tasks asynchronous. Tinker has robust I/O interface that allows users to interact with files (of various format) and databases (PostgreSQL, MySQL...) without pain. It also uses buffering so lower memory computer can still function well with data multiple times larger than its capacity (speed being the drawback).
 
 ## Current State
 
