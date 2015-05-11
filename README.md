@@ -66,7 +66,7 @@ Interface to ML and NLP libraries are being developed.
 
 ## Design Structure
 
-The `Operation` module is one of the base modules that faciliate processing. 
+The `Operation` module is one of the base modules that faciliate processing. Add this trait to `DataContainer` if you want to conduct any operation on it. 
 
 ## Modules
 
