@@ -29,9 +29,9 @@ trait TwitterFilter extends Filter {
       while (itr.hasNext) {
         val row = itr.next()
         if (row.nonEmpty) {
-          val tweet = row(struct.getTarget).replaceAll(TwitterRegex.searchPattern.toString(), "")
+          val tweet = row(struct.getTarget.get).replaceAll(TwitterRegex.searchPattern.toString(), "")
           if (tweet.trim.nonEmpty && tweet.split(" ").length >= 2) {
-            result += Seq(struct.getId(row).getOrElse(group._1), tweet)
+            result += Seq(struct.getIdValue(row).getOrElse(group._1), tweet)
           }
         }
       }

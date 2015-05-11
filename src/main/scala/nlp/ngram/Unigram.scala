@@ -18,7 +18,7 @@ trait Unigram extends Ngram {
       while (itr.hasNext) {
         val row = itr.next()
         if (row.nonEmpty) {
-          val nonemptyRowText = row(struct.getTarget)
+          val nonemptyRowText = row(struct.getTarget.get)
           unigramCount += nonemptyRowText.split(" ").length
         }
       }

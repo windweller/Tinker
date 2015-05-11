@@ -22,9 +22,9 @@ trait CharacterFilter extends Filter{
       while (itr.hasNext) {
         val row = itr.next()
         if (row.nonEmpty) {
-          val tweet = row(struct.getTarget)
+          val tweet = row(struct.getTarget.get)
           if (tweet.trim.nonEmpty) {
-            printer.print(Seq(struct.getId(row).getOrElse(group._1), tweet))
+            printer.print(Seq(struct.getIdValue(row).getOrElse(group._1), tweet))
           }
         }
       }

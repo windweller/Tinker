@@ -4,8 +4,9 @@ import com.github.tototoshi.csv.CSVWriter
 import newFiles.DataContainer
 import newFiles.filetypes.csv.CSV
 import newFiles.filetypes.tab.Tab
+import newFiles.operations.FileOp
 import newFiles.structure.DataStructure
-import newFiles.structure.predefined.BasicNLP
+import newFiles.structure.predefined.{NoCheck, BasicNLP}
 import nlp.basic.Sentence
 import nlp.basic.sentence.Split
 import nlp.filters._
@@ -29,6 +30,11 @@ class RunAllTweets extends FlatSpec {
     val output: CSVWriter = CSVWriter.open("/Users/Aimingnie/Desktop/R/ACL2015/unigramToken.txt", append = true)
     println(result.size)
     output.writeRow(result.toSeq)
+  }
+
+  "count groups" should "work" in {
+    val data = new DataContainer("/Users/Aimingnie/Desktop/R/ACL2015/Tweets/", header = true, fuzzyMatch = 9) with CSV
+    println(data.iterators.head.size)
   }
 
   "count sentence #" should "work" in {
@@ -75,6 +81,18 @@ class RunAllTweets extends FlatSpec {
     val data = new DataContainer("E:\\Allen\\R\\acl2015\\tweetsByStateSplittedCleaned2.tab", header = false) with Tab
     val future = new Future(data, struct)
     future.saveFutureMatching("E:\\Allen\\R\\acl2015\\twitterFuture.csv")
+  }
+
+  "average by group" should "work" in {
+    val struct = new DataStructure(idColumn = 0, ignoreColumn = 1) with NoCheck
+    val data = new DataContainer("/Users/Aimingnie/Desktop/R/ACL2015/twitterSentiment2.csv", header = false) with CSV with FileOp
+    data.averageByGroup("/Users/Aimingnie/Desktop/R/ACL2015/twitterSentimentAvg.csv", struct)
+  }
+
+  "average by future" should "work" in {
+    val struct = new DataStructure(idColumn = 0, ignoreColumn = 1) with NoCheck
+    val data = new DataContainer("/Users/Aimingnie/Desktop/R/ACL2015/twitterFuture2.csv", header = false) with CSV with FileOp
+    data.averageByGroup("/Users/Aimingnie/Desktop/R/ACL2015/futureAvg.csv", struct)
   }
 
 }

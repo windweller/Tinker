@@ -43,8 +43,8 @@ class Future(val data: DataContainer, val struct: DataStructure) {
 
     val parseFlow: Flow[NormalRow, (String, String, Tree), Unit] =
         Flow[NormalRow].mapAsync[(String, String, Tree)](row => Future{
-          println("processing: " + row(struct.getTarget))
-          (struct.getId(row).get, row(struct.getTarget),parser.parse(row(struct.getTarget)))
+          println("processing: " + row(struct.getTarget.get))
+          (struct.getIdValue(row).get, row(struct.getTarget.get),parser.parse(row(struct.getTarget.get)))
         })
 
     val tregexMatchFlow: Flow[(String, String, Tree), Seq[Any], Unit] = Flow[(String, String, Tree)].mapAsync[Seq[Any]] { tuple =>

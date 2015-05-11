@@ -9,8 +9,11 @@ import utils.FailureHandle
 trait BasicNLP extends DataStructure with FailureHandle {
 
   override def predefinedCheck(): Unit = {
-    if (targetColumn.isEmpty && targetColumnWithName.isEmpty)
-      fatal("BasicNLP predefined check did not pass")
+
+    //this already covers most basic NLP tasks
+    if (targetColumns.isEmpty &&
+      targetColumn.isEmpty &&
+      targetColumnWithName.isEmpty) fatal("BasicNLP predefined check did not pass: target column cannot be empty.")
   }
 
 }

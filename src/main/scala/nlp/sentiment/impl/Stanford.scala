@@ -51,7 +51,7 @@ trait Stanford extends Sentiment{
       val itr = group._2
       while (itr.hasNext) {
         val row = itr.next()
-        val tweet = row(struct.getTarget)
+        val tweet = row(struct.getTarget.get)
 
         /* stanford code */
 
@@ -84,7 +84,7 @@ trait Stanford extends Sentiment{
             val seq = (0 to vector.getNumElements - 1).map(i => NF.format(vector.get(i)))
 
             //fileName, rootLabel, prob score
-            output.writeRow(Seq(struct.getId(row).getOrElse(group._1), rootLabel) ++ seq)
+            output.writeRow(Seq(struct.getIdValue(row).getOrElse(group._1), rootLabel) ++ seq)
             Timer.completeOne() //add to timer
           }
 
