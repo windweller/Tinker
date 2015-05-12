@@ -19,7 +19,7 @@ Then you would see
 
 ```
 =======================================
-Welcome to Tinker 0.1 alpha release
+Welcome to Tinker 0.2 beta release
 =======================================
 >
 ```
@@ -64,9 +64,17 @@ Advanced File I/O is being developed.
 
 Interface to ML and NLP libraries are being developed.
 
-## Design Structure
+## Design
 
-The `Operation` module is one of the base modules that faciliate processing. Add this trait to `DataContainer` if you want to conduct any operation on it. 
+Because we seek to optimize performance (and leverage memory use) to the maximum, we use scheduling as our processing concept. By `import utils.Global.Implicits.scheduler`, you get our default scheduler, that uses `Parallel` and `FileBuffer` module by default.
+
+All task-related operational modules such as `Parser` requires an implicit scheduler. You can import the global default, or use your own one, and make it implicit such as:
+
+```
+implicit val scheduler = new Scheduler with Parallel with FileBuffer
+```
+
+This is functionally equivalent to importing the global scheduler. You can create different or multiple schedulers and pass them explicitly to different classes, and this is shown at the advanced technique section.
 
 ## Modules
 
