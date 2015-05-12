@@ -66,12 +66,12 @@ Interface to ML and NLP libraries are being developed.
 
 ## Design
 
-Because we seek to optimize performance (and leverage memory use) to the maximum, we use scheduling as our processing concept. By `import utils.Global.Implicits.scheduler`, you get our default scheduler, that uses `Parallel` and `FileBuffer` module by default.
+Because we seek to optimize performance (and leverage memory use) to the maximum, we use scheduling as our processing concept. By `import utils.Global.Implicits.scheduler`, you get our default scheduler, that uses `Parallel` and `FileBuffer` module by default, and assumes a 4-core processor (4 workers running concurrently).
 
 All task-related operational modules such as `Parser` requires an implicit scheduler. You can import the global default, or use your own one, and make it implicit such as:
 
 ```
-implicit val scheduler = new Scheduler with Parallel with FileBuffer
+implicit val scheduler = new Scheduler(4) with Parallel with FileBuffer
 ```
 
 This is functionally equivalent to importing the global scheduler. You can create different or multiple schedulers and pass them explicitly to different classes, and this is shown at the advanced technique section.
