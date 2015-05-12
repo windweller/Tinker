@@ -2,8 +2,12 @@ package newProcessing.buffers
 
 import java.nio.file.{Files, Paths}
 
+import utils.Global
+
+import scala.util.Random
+
 /**
- * Created by anie on 4/19/2015.
+ * Created by anie on 4/19/2015
  */
 trait FileBuffer extends Buffer {
   //this is to shield away the saving method
@@ -14,9 +18,15 @@ trait FileBuffer extends Buffer {
       case None =>
         val tempFile = Paths.get(System.getProperty("user.home")).resolve(".Tinker")
         if (Files.notExists(tempFile)) Files.createDirectory(tempFile)
-        Files.createTempFile(tempFile, "parser", ".csv").toFile.deleteOnExit()
+        val random = Random.nextInt().toString
+        val name = random + tempFile + ".csv"
+        Files.createTempFile(tempFile, random, ".csv").toFile.deleteOnExit()
+        Global.tempFiles.enqueue(name)
         //not done, actually save stuff!
+
     }
 
   }
+
+
 }

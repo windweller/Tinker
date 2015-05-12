@@ -21,7 +21,7 @@ Then you would see
 =======================================
 Welcome to Tinker 0.1 alpha release
 =======================================
->
+
 ```
 
 Then you can use it like any other Scala REPL from the command line.
@@ -63,6 +63,10 @@ Basic File I/O has a nice high-level abstraction that treats a directory of file
 Advanced File I/O is being developed.
 
 Interface to ML and NLP libraries are being developed.
+
+## WorkFlow
+
+Use `DataContainer` to define the data source. It could be a directory, a file, or a database table.
 
 ## Modules
 

@@ -7,6 +7,8 @@ import newProcessing.buffers.BufferConfig
  */
 trait Parallel extends Operation {
 
-  override def exec()(implicit config: Option[BufferConfig]): Unit = ???
+  override def exec()(implicit config: Option[BufferConfig]): Unit = {
+
+  }
 
 }

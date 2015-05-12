@@ -13,7 +13,7 @@ import utils.ParameterCallToOption.implicits._
 class DataContainerTest extends FlatSpec {
 
   "assembled object" should "work" in {
-    val data = new DataContainer("") with CSV with FileOp with Operation with Parallel with FileBuffer
+    val data = new DataContainer("") with CSV with FileOp
 
 
   }

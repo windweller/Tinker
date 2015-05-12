@@ -8,7 +8,7 @@ import scala.collection.mutable.ArrayBuffer
 import files.DataContainerTypes._
 
 /**
- * Created by anie on 4/1/2015.
+ *
  */
 trait Operation extends Buffer {
 

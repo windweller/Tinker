@@ -5,13 +5,14 @@ import newProcessing.buffers.{BufferConfig, Buffer}
 import scala.collection.mutable.ArrayBuffer
 
 /**
- * Created by anie on 4/18/2015.
+ * All modules such as parser
  */
-trait Operation extends Buffer{
+trait Operation extends Buffer {
 
   //define what two files are being worked on
-  val opSequence: ArrayBuffer[(Int, Int)] = ArrayBuffer.empty[(Int, Int)]
+//  val opSequence: ArrayBuffer[(Int, Int)] = ArrayBuffer.empty[(Int, Int)]
 
   def exec()(implicit config: Option[BufferConfig] = None): Unit
   def save(config: BufferConfig): Unit = exec()(Some(config))
+
 }

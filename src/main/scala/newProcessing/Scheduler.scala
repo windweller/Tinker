@@ -1,8 +1,12 @@
 package newProcessing
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
- * This stores
+ * This stores sequence
  */
-class Scheduler {
+abstract class Scheduler extends Operation {
+
+  val opSequence: ArrayBuffer[(Int, Int)] = ArrayBuffer.empty[(Int, Int)]
 
 }

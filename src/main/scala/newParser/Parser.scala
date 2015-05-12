@@ -1,8 +1,11 @@
 package newParser
 
+import newProcessing.{Scheduler, Operation}
+
 /**
- * Created by Aimingnie on 5/11/15.
+ * All operation based class takes in implicit parameter scheduler
  */
-class Parser {
+abstract class Parser()(implicit val scheduler: Scheduler) {
+
 
 }

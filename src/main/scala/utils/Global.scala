@@ -1,5 +1,9 @@
 package utils
 
+import newProcessing.buffers.FileBuffer
+import newProcessing.{Parallel, Scheduler}
+
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -11,7 +15,9 @@ import scala.collection.mutable.ArrayBuffer
  */
 object Global {
 
-  //either ArrayBuffer, or HashMap
-  val tempFiles = ArrayBuffer.empty[String]
+  //tempFiles implemented as a queue, first in first out
+  object Implicits {
+    implicit val scheduler = new Scheduler with Parallel with FileBuffer
+  }
 
 }
