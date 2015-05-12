@@ -9,8 +9,7 @@ import scala.collection.mutable.ArrayBuffer
  */
 trait Operation extends Buffer {
 
-  //define what two files are being worked on
-//  val opSequence: ArrayBuffer[(Int, Int)] = ArrayBuffer.empty[(Int, Int)]
+  val opSequence: ArrayBuffer[(Int, Int)]
 
   def exec()(implicit config: Option[BufferConfig] = None): Unit
   def save(config: BufferConfig): Unit = exec()(Some(config))

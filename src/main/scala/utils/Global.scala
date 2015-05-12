@@ -4,7 +4,6 @@ import newProcessing.buffers.FileBuffer
 import newProcessing.{Parallel, Scheduler}
 
 import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
 
 /**
  * Created by anie on 4/22/2015
@@ -16,8 +15,10 @@ import scala.collection.mutable.ArrayBuffer
 object Global {
 
   //tempFiles implemented as a queue, first in first out
+  val tempFiles = mutable.Queue.empty[String]
+
   object Implicits {
-    implicit val scheduler = new Scheduler with Parallel with FileBuffer
+    implicit val scheduler = new Scheduler(4) with Parallel with FileBuffer
   }
 
 }

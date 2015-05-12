@@ -1,6 +1,5 @@
 package newProcessing
 
-import utils.Global.Implicits.scheduler
 import org.scalatest.FlatSpec
 
 /**
@@ -8,9 +7,7 @@ import org.scalatest.FlatSpec
  */
 class OperationTest extends FlatSpec {
 
-  "test if Operation" can "hold value" in {
-
-
+  "Stream processing" can "work" in {
 
 
   }
