@@ -1,9 +1,9 @@
 # Tinker
-Tinker is a parallel-by-default File/Directory Management System with additional interface to NLP and ML libraries. Tinker right now uses Scala's awesome Stackable Trait Pattern, and just finished it's asynchronous File I/O implementation.
+Tinker is a parallel-by-default File/Directory/Data Management System with additional interface to NLP and ML libraries. Tinker right now uses Scala's awesome Stackable Trait Pattern, and is tightly integrated with powerful Akka Stream to handle task parallelization and pipelining.
 
 ## Design Philosophy
 
-We want to make standard large file ML/NLP processing as smooth as easy as possible, even for computers with less power/memory. We only keep operations within one module coherent. Operations between modules or involves several modules will be provided with files saving/reading as buffer. If no explicit location specified, Tinker will create temporary files that will be deleted after JVM exits.
+We want to make standard large file ML/NLP processing as smooth as easy as possible, even for computers with less power/memory. We parallelize tasks whenever possible, and make most of the tasks asynchronous. Tinker has robust I/O interface that allows users to interact with files (of various format) and databases (PostgreSQL, MySQL...) without pain. It also uses buffering so lower memory computer can still function well with data multiple times larger than its capacity (speed being the drawback).
 
 ## Current State
 
@@ -19,9 +19,9 @@ Then you would see
 
 ```
 =======================================
-Welcome to Tinker 0.1 alpha release
+Welcome to Tinker 0.2 beta release
 =======================================
-
+>
 ```
 
 Then you can use it like any other Scala REPL from the command line.
@@ -64,19 +64,19 @@ Advanced File I/O is being developed.
 
 Interface to ML and NLP libraries are being developed.
 
-## WorkFlow
+## Design
 
-Use `DataContainer` to define the data source. It could be a directory, a file, or a database table.
+Because we seek to optimize performance (and leverage memory use) to the maximum, we use scheduling as our processing concept. By `import utils.Global.Implicits.scheduler`, you get our default scheduler, that uses `Parallel` and `FileBuffer` module by default.
+
+All task-related operational modules such as `Parser` requires an implicit scheduler. You can import the global default, or use your own one, and make it implicit such as:
+
+```
+implicit val scheduler = new Scheduler with Parallel with FileBuffer
+```
+
+This is functionally equivalent to importing the global scheduler. You can create different or multiple schedulers and pass them explicitly to different classes, and this is shown at the advanced technique section.
 
 ## Modules
-
-#### Global
-
-(those modules don't belong to a specific base class, yet most of them are associated with processing)
-
-`Parallel`: This module guarantees the processing done in parallel. It is one of the more universal modules that should be included whenever you are adding an action-related module to your base class.
-
-`Sequential`: similar to `Parallel` but not yet implemented
 
 #### DataContainer
 
