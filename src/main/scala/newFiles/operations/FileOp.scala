@@ -16,14 +16,13 @@ import utils.collections.ArrayUtil._
 trait FileOp extends DataContainer {   // with Operation
 
   def combine(data2: DataContainer): DataContainer with FileOp = {
-    iterators ++= data2.iterators
     this
   }
 
   def averageByGroup(saveLoc: String, struct: DataStructure): Unit = {
 
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
-    val it = iterators.head
+    val it = iterator
 
     val sumForGroup = mutable.HashMap.empty[String, ArrayBuffer[Double]]
 

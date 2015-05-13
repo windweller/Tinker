@@ -2,6 +2,8 @@ package newFiles
 
 import newFiles.filetypes.FileIterator
 
+import scala.annotation.tailrec
+import scala.collection.AbstractIterator
 import scala.collection.immutable.HashMap
 import scala.collection.mutable.ArrayBuffer
 
@@ -20,13 +22,32 @@ abstract class DataContainer(val f: Option[String] = None,
                               val header: Option[Boolean] = Some(true),
                               val fuzzyMatch: Option[Int] = None) {
 
-  import rowTypes._
+  import RowTypes._
 
-  val iterators: ArrayBuffer[Map[String, RowIterator]] = ArrayBuffer.empty[Map[String, RowIterator]]
+  //leave implementation details to Doc or other services
+  def iterator: Map[String, RowIterator]
+
+  //erases the signature of Map, and return a unified iterator
+  def unify: Iterator[NormalRow] = new AbstractIterator[NormalRow] {
+
+    var it = iterator.toIterator
+    var currentIt = it.next()._2
+
+    override def hasNext: Boolean = it.hasNext || currentIt.hasNext
+
+    @tailrec
+    override def next(): NormalRow = {
+      if (!currentIt.hasNext && it.hasNext) {
+        currentIt = it.next()._2
+        next()
+      }
+      else currentIt.next()
+    }
+  }
 
 }
 
-object rowTypes {
+object RowTypes {
   type NormalRow = HashMap[String, String] //enforced HashMap for it's eC performance
   type RowIterator = Iterator[NormalRow]
 }

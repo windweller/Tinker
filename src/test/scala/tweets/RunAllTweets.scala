@@ -34,7 +34,7 @@ class RunAllTweets extends FlatSpec {
 
   "count groups" should "work" in {
     val data = new DataContainer("/Users/Aimingnie/Desktop/R/ACL2015/Tweets/", header = true, fuzzyMatch = 9) with CSV
-    println(data.iterators.head.size)
+    println(data.iterator.size)
   }
 
   "count sentence #" should "work" in {

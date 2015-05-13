@@ -2,7 +2,7 @@ package newFiles.filetypes
 
 
 import newFiles.DataContainer
-import newFiles.rowTypes._
+import newFiles.RowTypes._
 import utils._
 import utils.OptionToParameter.implicits._
 
@@ -47,6 +47,6 @@ trait Doc extends DataContainer {
   def dataIterators: Map[String, RowIterator] =
     files.map(e => e._1 -> readFileIterator[NormalRow]((line) => HashMap(headerString.zip(parse(line)): _*), e._2))
 
-  iterators += dataIterators //add to the mix
+  def iterator = dataIterators
 
 }

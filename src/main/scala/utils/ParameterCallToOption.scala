@@ -3,7 +3,7 @@ package utils
 import scala.language.implicitConversions
 
 /**
- * Created by anie on 3/25/2015.
+ * Created by anie on 3/25/2015
  */
 object ParameterCallToOption {
 
@@ -11,8 +11,9 @@ object ParameterCallToOption {
     implicit def boolean2Option(b: Boolean): Option[Boolean] = Some(b)
     implicit def string2Option(s: String): Option[String] = Some(s)
     implicit def map2Option(map: Map[String, Int]): Option[Map[String, Int]] = Some(map)
-    implicit def indexedSeq2Option(indexedSeq: IndexedSeq[Int]): Option[IndexedSeq[Int]] = Some(indexedSeq)
+    implicit def indexedSeqInt2Option(indexedSeq: IndexedSeq[Int]): Option[IndexedSeq[Int]] = Some(indexedSeq)
     implicit def int2Option(i: Int):  Option[Int] = Some(i)
+    implicit def indexedSeqString2Option(indexedSeq: IndexedSeq[String]): Option[IndexedSeq[String]] = Some(indexedSeq)
   }
 }
 

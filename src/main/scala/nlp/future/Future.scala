@@ -8,7 +8,7 @@ import com.typesafe.config.{ConfigFactory, Config}
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import edu.stanford.nlp.trees.Tree
 import newFiles.DataContainer
-import newFiles.rowTypes.NormalRow
+import newFiles.RowTypes.NormalRow
 import newFiles.structure.DataStructure
 import nlp.matcher.Matcher
 import nlp.matcher.impl.Tregex
@@ -32,8 +32,6 @@ class Future(val data: DataContainer, val struct: DataStructure) {
 
   def saveFutureMatching(saveLoc: String): Unit = {
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
-
-    val it = data.iterators.head
 
     val conf: Config = ConfigFactory.load()
     implicit val system = ActorSystem("reactive-tweets", conf)
@@ -59,12 +57,10 @@ class Future(val data: DataContainer, val struct: DataStructure) {
 
     val printSink = Sink.foreach[Seq[Any]](line => output.writeRow(line))
 
-    it.foreach { group =>
-      println("in here!")
-      val tweets: Source[NormalRow, Unit] = Source(() => group._2)
-      val sourceReady = tweets.via(parseFlow).via(tregexMatchFlow)
-      val materialized = sourceReady.runWith(printSink)
-    }
+    val tweets: Source[NormalRow, Unit] = Source(() => data.unify)
+    val sourceReady = tweets.via(parseFlow).via(tregexMatchFlow)
+    val materialized = sourceReady.runWith(printSink)
+
   }
 
 }
