@@ -2,17 +2,21 @@ package newFiles.operations
 
 import com.github.tototoshi.csv.CSVWriter
 import newFiles.DataContainer
+import newFiles.RowTypes.NormalRow
 import newFiles.structure.{StructureUtils, DataStructure}
 import newProcessing.Operation
 
-import scala.collection.mutable
+import scala.collection.{AbstractIterator, mutable}
 import scala.collection.mutable.ArrayBuffer
 import utils.collections.ArrayUtil._
 
 /**
  * Created by anie on 4/18/2015
  *
- * Ask to pass in dataStructure
+ * Any FileOp will break the HashMap[String, RowIterator] down
+ * and unify them. The String provided by HashMap will become
+ * an extra field to iterator
+ *
  */
 trait FileOp extends DataContainer with StructureUtils {   // with Operation
 
@@ -32,15 +36,18 @@ trait FileOp extends DataContainer with StructureUtils {   // with Operation
    *  This does not compress, this compress by sliding window
    *  producing sequence from (1,2,3,4,5) to (1,2,3), (2,3,4), (3,4,5)
    */
-  def compressBySlidingWindow(target: Option[Int], targetWithName: Option[String]): Unit = {
+  def compressBySlidingWindow(target: Option[Int], targetWithName: Option[String]): Unit = new AbstractIterator[NormalRow] {
     val t = getSingleIntStringOption(target, targetWithName)
 
+    override def hasNext: Boolean = ???
+
+    override def next(): NormalRow = ???
   }
 
   def averageByGroup(saveLoc: String, struct: DataStructure): Unit = {
 
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
-    val it = iterator
+    val it = iteratorMap
 
     val sumForGroup = mutable.HashMap.empty[String, ArrayBuffer[Double]]
 
@@ -51,7 +58,7 @@ trait FileOp extends DataContainer with StructureUtils {   // with Operation
       itr.foreach {row =>
         val columnIt = row.iterator
         val columns = ArrayBuffer.empty[Double]
-        var pairId: Option[String] = struct.getIdValue(row)
+        val pairId: Option[String] = struct.getIdValue(row)
         columnIt.foreach { pair =>
           if (struct.getIgnore.get != pair._1 && struct.getId.get != pair._1)
             columns += pair._2.toDouble

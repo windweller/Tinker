@@ -47,6 +47,6 @@ trait Doc extends DataContainer {
   def dataIterators: Map[String, RowIterator] =
     files.map(e => e._1 -> readFileIterator[NormalRow]((line) => HashMap(headerString.zip(parse(line)): _*), e._2))
 
-  def iterator = dataIterators
+  def iteratorMap = dataIterators
 
 }

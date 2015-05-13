@@ -25,12 +25,12 @@ abstract class DataContainer(val f: Option[String] = None,
   import RowTypes._
 
   //leave implementation details to Doc or other services
-  def iterator: Map[String, RowIterator]
+  def iteratorMap: Map[String, RowIterator]
 
   //erases the signature of Map, and return a unified iterator
   def unify: Iterator[NormalRow] = new AbstractIterator[NormalRow] {
 
-    var it = iterator.toIterator
+    var it = iteratorMap.toIterator
     var currentIt = it.next()._2
 
     override def hasNext: Boolean = it.hasNext || currentIt.hasNext
