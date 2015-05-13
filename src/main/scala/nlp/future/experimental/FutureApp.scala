@@ -55,7 +55,7 @@ object FutureApp extends App {
       println(struct.getIdValue(row).get)
       val array = matcher.search(Tree.valueOf(struct.getTargetValue(row).get), patterns)
       Timer.completeOne()
-      Seq(struct.getIdValue(row)) ++ struct.getKeepColumnsValue(row).get ++ array.toSeq
+      Seq(struct.getIdValue(row).get) ++ struct.getKeepColumnsValue(row).get ++ array.toSeq
   }
 
   val printSink = Sink.foreach[Seq[Any]](line => output.writeRow(line))

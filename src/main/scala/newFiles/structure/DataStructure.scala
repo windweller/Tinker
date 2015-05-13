@@ -8,6 +8,9 @@ import utils.FailureHandle
  *
  * This could be optimized to do a upfront transformation
  * instead of transforming each time
+ *
+ * Right now it seems like DataStructure is not for
+ * DataContainers, but more for algorithms
  */
 abstract class DataStructure(idColumn: Option[Int] = None,
                              idColumnWithName: Option[String] = None,
@@ -22,7 +25,7 @@ abstract class DataStructure(idColumn: Option[Int] = None,
                              ignoreColumnWithName: Option[String] = None,
                              val ignoreColumns: Option[IndexedSeq[Int]] = None,
                              keepColumns: Option[IndexedSeq[Int]] = None,
-                             keepColumnsWithNames: Option[IndexedSeq[String]] = None) extends FailureHandle {
+                             keepColumnsWithNames: Option[IndexedSeq[String]] = None) extends FailureHandle with StructureUtils {
 
   def predefinedCheck(): Unit
 
@@ -77,26 +80,30 @@ abstract class DataStructure(idColumn: Option[Int] = None,
     getMultipleIntStringOptionValue(keepColumns, keepColumnsWithNames, row)
   }
 
-  /*
-   *  Util functions
-   */
+}
 
-  private[this] def getSingleIntStringOption(a1: Option[Int], a2: Option[String]): Option[String] = {
+trait StructureUtils {
+
+  /*
+  *  Util functions
+  */
+
+  protected def getSingleIntStringOption(a1: Option[Int], a2: Option[String]): Option[String] = {
     if (a1.nonEmpty) a1.map(f => f.toString)
     else a2
   }
 
-  private[this] def getSingleIntStringOptionValue(a1: Option[Int], a2: Option[String], row: NormalRow): Option[String] = {
+  protected def getSingleIntStringOptionValue(a1: Option[Int], a2: Option[String], row: NormalRow): Option[String] = {
     val key = getSingleIntStringOption(a1, a2)
     key.map(k => row(k))
   }
 
-  private[this] def getMultipleIntStringOption(a1: Option[IndexedSeq[Int]], a2: Option[IndexedSeq[String]]): Option[IndexedSeq[String]] = {
+  protected def getMultipleIntStringOption(a1: Option[IndexedSeq[Int]], a2: Option[IndexedSeq[String]]): Option[IndexedSeq[String]] = {
     if (a1.nonEmpty) Some(a1.get.map(e => e.toString))
     else a2
   }
 
-  private[this] def getMultipleIntStringOptionValue(a1: Option[IndexedSeq[Int]], a2: Option[IndexedSeq[String]], row: NormalRow): Option[IndexedSeq[String]] = {
+  protected def getMultipleIntStringOptionValue(a1: Option[IndexedSeq[Int]], a2: Option[IndexedSeq[String]], row: NormalRow): Option[IndexedSeq[String]] = {
     if (a1.nonEmpty) Some(a1.get.map(e => row(e.toString)))
     else if (a2.nonEmpty) Some(a2.get.map(e => row(e)))
     else None

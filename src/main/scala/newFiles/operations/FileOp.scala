@@ -2,21 +2,39 @@ package newFiles.operations
 
 import com.github.tototoshi.csv.CSVWriter
 import newFiles.DataContainer
-import newFiles.structure.DataStructure
+import newFiles.structure.{StructureUtils, DataStructure}
 import newProcessing.Operation
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import utils.collections.ArrayUtil._
 
-
 /**
- * Created by anie on 4/18/2015.
+ * Created by anie on 4/18/2015
+ *
+ * Ask to pass in dataStructure
  */
-trait FileOp extends DataContainer {   // with Operation
+trait FileOp extends DataContainer with StructureUtils {   // with Operation
 
   def combine(data2: DataContainer): DataContainer with FileOp = {
     this
+  }
+
+  /**
+   * This is groupBy
+   */
+  def compress(target: Option[Int], targetWithName: Option[String]): Unit = {
+    val t = getSingleIntStringOption(target, targetWithName)
+
+  }
+
+  /**
+   *  This does not compress, this compress by sliding window
+   *  producing sequence from (1,2,3,4,5) to (1,2,3), (2,3,4), (3,4,5)
+   */
+  def compressBySlidingWindow(target: Option[Int], targetWithName: Option[String]): Unit = {
+    val t = getSingleIntStringOption(target, targetWithName)
+
   }
 
   def averageByGroup(saveLoc: String, struct: DataStructure): Unit = {
@@ -43,20 +61,7 @@ trait FileOp extends DataContainer {   // with Operation
           sumForGroup += (pairId.get -> columns)
         else
           sumForGroup.update(pairId.get, arrayPlusArray(sumForGroup(pairId.get), columns))
-
-//        dataPoints += 1
-//        if (id.isEmpty)
-//          id = struct.getIdValue(row)
-//        else if (id.get != struct.getIdValue(row).get) {
-//          output.writeRow(Seq(id.get) ++ sumForGroup.values.toSeq.map(v => v/dataPoints))
-//          dataPoints = 0
-//          id = struct.getIdValue(row)
-//          sumForGroup.clear() //clean hashmap
-//        }
       }
-
-      //when over, do it again
-//      output.writeAll(sumForGroup.values.toSeq.map(v => v/dataPoints))
     }
     println(sumForGroup.size)
   }
