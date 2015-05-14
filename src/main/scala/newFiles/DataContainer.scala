@@ -26,21 +26,26 @@ abstract class DataContainer(val f: Option[String] = None,
   //leave implementation details to Doc or other services
   def iteratorMap: mutable.HashMap[String, RowIterator]
 
-  //incorporate
-  def flatten: Iterator[NormalRow] = new AbstractIterator[NormalRow] {
+  /**
+   * incorporate the file info into a column
+   * @param fileColName default value is "fileName"
+   * @return
+   */
+  def flatten(fileColName: Option[String] = None): Iterator[NormalRow] = new AbstractIterator[NormalRow] {
 
     val itm = iteratorMap.iterator
     var cit = itm.next()
 
     override def hasNext: Boolean = itm.hasNext || cit._2.hasNext
 
+    @tailrec
     override def next(): NormalRow = {
       if (!cit._2.hasNext && itm.hasNext) {
         cit = itm.next()
         next()
       }
       else {
-        cit._2.next()
+        cit._2.next() += (fileColName.getOrElse("fileName") -> cit._1)
       }
     }
   }

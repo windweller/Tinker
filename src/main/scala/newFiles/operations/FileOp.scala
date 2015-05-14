@@ -41,7 +41,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {   //
    */
   def compressBySlidingWindow(target: Option[Int], targetWithName: Option[String], windowSize: Int): Unit = new AbstractIterator[NormalRow] {
     val t = getSingleIntStringOption(target, targetWithName)
-    val itm = iteratorMap.iterator
+    val itm = flatten()
     var cit = itm.next()
     val window = mutable.Queue.empty[NormalRow]
 
@@ -50,8 +50,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {   //
 
     }
 
-
-    override def hasNext: Boolean = itm.hasNext || cit._2.hasNext
+    override def hasNext: Boolean = itm.hasNext || cit.hasNext
 
     override def next(): NormalRow = {
 

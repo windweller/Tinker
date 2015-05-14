@@ -7,6 +7,8 @@ scalaVersion := "2.11.6"
 
 mainClass in (Compile, run) := Some("nlp.future.FutureOnTweets")
 
+resolvers += Resolver.sonatypeRepo("snapshots")
+
 resolvers ++= Seq(
   "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
   "IESL Release" at "http://dev-iesl.cs.umass.edu/nexus/content/groups/public"
@@ -15,6 +17,8 @@ resolvers ++= Seq(
 libraryDependencies ++= {
   val akkaV = "2.3.9"
   Seq(
+    //compiler plug-in
+    "org.scala-miniboxing.plugins" %% "miniboxing-runtime" % "0.4-SNAPSHOT",
     //parallel-processing
     "com.typesafe.akka"   %%   "akka-actor"    % akkaV,
     "com.typesafe.akka"   %%   "akka-slf4j"    % akkaV,
@@ -38,11 +42,13 @@ libraryDependencies ++= {
   )
 }
 
+addCompilerPlugin("org.scala-miniboxing.plugins" %% "miniboxing-plugin" % "0.4-SNAPSHOT")
+
 initialCommands in console := """
 import files.filetypes._
 import utils.ParameterCallToOption.implicits._
 println("===============================")
-println("Welcome to Tinker 0.1 alpha release")
+println("Welcome to Tinker 0.2 beta release")
 println("===============================")
 """
 
