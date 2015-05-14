@@ -1,5 +1,6 @@
 package utils
 
+import newFiles.filetypes.tab.Tab
 import newProcessing.buffers.FileBuffer
 import newProcessing.{Parallel, Scheduler}
 
@@ -14,11 +15,11 @@ import scala.collection.mutable
  */
 object Global {
 
-  //tempFiles implemented as a queue, first in first out
-  val tempFiles = mutable.Queue.empty[String]
+  //tempFiles implemented as a stack, last in first out
+  val tempFiles: mutable.Stack[String] = mutable.Stack()
 
   object Implicits {
-    implicit val scheduler = new Scheduler(4) with Parallel with FileBuffer
+    implicit val scheduler = new Scheduler(4) with Parallel with FileBuffer with Tab
   }
 
 }

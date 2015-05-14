@@ -1,6 +1,6 @@
 package newFiles
 
-import newFiles.filetypes.FileIterator
+import newProcessing.Scheduler
 
 import scala.annotation.tailrec
 import scala.collection.AbstractIterator
@@ -16,12 +16,17 @@ import scala.collection.mutable
  * to exec()
  *
  * @param fuzzyMatch this gets passed to FileMapIterator, exclusive end
+ * @param scheduler this is not mandatory for normal DataContainer class
+ *                  but it is when you add FileOp module to it
  */
 abstract class DataContainer(val f: Option[String] = None,
                               val header: Option[Boolean] = Some(true),
-                              val fuzzyMatch: Option[Int] = None) {
+                              val fuzzyMatch: Option[Int] = None)(implicit val scheduler: Option[Scheduler] = None) {
 
   import RowTypes._
+
+  def exec(): Unit = scheduler.foreach(e => e.exec())
+  def save(): Unit = exec()
 
   //leave implementation details to Doc or other services
   def iteratorMap: mutable.HashMap[String, RowIterator]
@@ -44,9 +49,7 @@ abstract class DataContainer(val f: Option[String] = None,
         cit = itm.next()
         next()
       }
-      else {
-        cit._2.next() += (fileColName.getOrElse("fileName") -> cit._1)
-      }
+      else cit._2.next() += (fileColName.getOrElse("fileName") -> cit._1)
     }
   }
 

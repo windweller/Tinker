@@ -2,7 +2,7 @@ package newFiles.operations
 
 import com.github.tototoshi.csv.CSVWriter
 import newFiles.DataContainer
-import newFiles.RowTypes.NormalRow
+import newFiles.RowTypes.{RowIterator, NormalRow}
 import newFiles.structure.{StructureUtils, DataStructure}
 import newProcessing.Operation
 import utils.FailureHandle
@@ -19,7 +19,12 @@ import utils.collections.ArrayUtil._
  * an extra field to iterator
  *
  */
-trait FileOp extends DataContainer with StructureUtils with FailureHandle {   // with Operation
+trait FileOp extends DataContainer with StructureUtils with FailureHandle {
+
+  checkSchedulerStatus()
+
+  def checkSchedulerStatus(): Unit =
+    if (scheduler.isEmpty) fatal("Any FileOp activities must have scheduler")
 
   def combine(data2: DataContainer): DataContainer with FileOp = {
     this
@@ -33,16 +38,19 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {   //
 
   }
 
+  def compressBySlidingWindow(target: Option[Int], targetWithName: Option[String], windowSize: Int): DataContainer with FileOp = {
+    this
+  }
+
   /**
    *  This does not compress, this compress by sliding window
    *  producing sequence from (1,2,3,4,5) to (1,2,3), (2,3,4), (3,4,5)
    *
    *  This does summation
    */
-  def compressBySlidingWindow(target: Option[Int], targetWithName: Option[String], windowSize: Int): Unit = new AbstractIterator[NormalRow] {
+  private[this] def compressBySlidingWindowIt(target: Option[Int], targetWithName: Option[String], windowSize: Int): RowIterator = new AbstractIterator[NormalRow] {
     val t = getSingleIntStringOption(target, targetWithName)
-    val itm = flatten()
-    var cit = itm.next()
+    val it = flatten()
     val window = mutable.Queue.empty[NormalRow]
 
     //initialize by filling up the window
@@ -50,7 +58,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {   //
 
     }
 
-    override def hasNext: Boolean = itm.hasNext || cit.hasNext
+    override def hasNext: Boolean = it.hasNext
 
     override def next(): NormalRow = {
 

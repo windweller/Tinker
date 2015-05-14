@@ -2,6 +2,7 @@ package newProcessing.buffers
 
 import java.nio.file.{Files, Paths}
 
+import newFiles.RowTypes.NormalRow
 import utils.Global
 
 import scala.util.Random
@@ -10,6 +11,11 @@ import scala.util.Random
  * Created by anie on 4/19/2015
  */
 trait FileBuffer extends Buffer {
+
+  def encode(row: NormalRow): String
+
+  def outputSuffix: String
+
   //this is to shield away the saving method
   override def bufferSave()(implicit config: BufferConfig): Unit = {
     config.filePath match {
@@ -21,7 +27,7 @@ trait FileBuffer extends Buffer {
         val random = Random.nextInt().toString
         val name = random + tempFile + ".csv"
         Files.createTempFile(tempFile, random, ".csv").toFile.deleteOnExit()
-        Global.tempFiles.enqueue(name)
+        Global.tempFiles.push(name)
         //not done, actually save stuff!
 
     }

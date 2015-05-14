@@ -1,5 +1,7 @@
 package utils
 
+import newProcessing.Scheduler
+
 import scala.language.implicitConversions
 
 /**
@@ -14,6 +16,7 @@ object ParameterCallToOption {
     implicit def indexedSeqInt2Option(indexedSeq: IndexedSeq[Int]): Option[IndexedSeq[Int]] = Some(indexedSeq)
     implicit def int2Option(i: Int):  Option[Int] = Some(i)
     implicit def indexedSeqString2Option(indexedSeq: IndexedSeq[String]): Option[IndexedSeq[String]] = Some(indexedSeq)
+    implicit def scheduler2Option(scheduler: Scheduler): Option[Scheduler] = Some(scheduler)
   }
 }
 
