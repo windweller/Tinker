@@ -5,6 +5,7 @@ import newFiles.DataContainer
 import newFiles.RowTypes.NormalRow
 import newFiles.structure.{StructureUtils, DataStructure}
 import newProcessing.Operation
+import utils.FailureHandle
 
 import scala.collection.{AbstractIterator, mutable}
 import scala.collection.mutable.ArrayBuffer
@@ -18,7 +19,7 @@ import utils.collections.ArrayUtil._
  * an extra field to iterator
  *
  */
-trait FileOp extends DataContainer with StructureUtils {   // with Operation
+trait FileOp extends DataContainer with StructureUtils with FailureHandle {   // with Operation
 
   def combine(data2: DataContainer): DataContainer with FileOp = {
     this
@@ -35,13 +36,26 @@ trait FileOp extends DataContainer with StructureUtils {   // with Operation
   /**
    *  This does not compress, this compress by sliding window
    *  producing sequence from (1,2,3,4,5) to (1,2,3), (2,3,4), (3,4,5)
+   *
+   *  This does summation
    */
-  def compressBySlidingWindow(target: Option[Int], targetWithName: Option[String]): Unit = new AbstractIterator[NormalRow] {
+  def compressBySlidingWindow(target: Option[Int], targetWithName: Option[String], windowSize: Int): Unit = new AbstractIterator[NormalRow] {
     val t = getSingleIntStringOption(target, targetWithName)
+    val itm = iteratorMap.iterator
+    var cit = itm.next()
+    val window = mutable.Queue.empty[NormalRow]
 
-    override def hasNext: Boolean = ???
+    //initialize by filling up the window
+    while (window.size < windowSize) {
 
-    override def next(): NormalRow = ???
+    }
+
+
+    override def hasNext: Boolean = itm.hasNext || cit._2.hasNext
+
+    override def next(): NormalRow = {
+
+    }
   }
 
   def averageByGroup(saveLoc: String, struct: DataStructure): Unit = {
@@ -73,5 +87,8 @@ trait FileOp extends DataContainer with StructureUtils {   // with Operation
     println(sumForGroup.size)
   }
 
+  /**
+   * FileOp Utils
+   */
 
 }

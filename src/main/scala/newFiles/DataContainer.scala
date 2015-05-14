@@ -4,8 +4,7 @@ import newFiles.filetypes.FileIterator
 
 import scala.annotation.tailrec
 import scala.collection.AbstractIterator
-import scala.collection.immutable.HashMap
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable
 
 /**
  * Redesign of old DataContainer
@@ -25,9 +24,28 @@ abstract class DataContainer(val f: Option[String] = None,
   import RowTypes._
 
   //leave implementation details to Doc or other services
-  def iteratorMap: Map[String, RowIterator]
+  def iteratorMap: mutable.HashMap[String, RowIterator]
 
-  //erases the signature of Map, and return a unified iterator
+  //incorporate
+  def flatten: Iterator[NormalRow] = new AbstractIterator[NormalRow] {
+
+    val itm = iteratorMap.iterator
+    var cit = itm.next()
+
+    override def hasNext: Boolean = itm.hasNext || cit._2.hasNext
+
+    override def next(): NormalRow = {
+      if (!cit._2.hasNext && itm.hasNext) {
+        cit = itm.next()
+        next()
+      }
+      else {
+        cit._2.next()
+      }
+    }
+  }
+
+  //discard the file information
   def unify: Iterator[NormalRow] = new AbstractIterator[NormalRow] {
 
     var it = iteratorMap.toIterator
@@ -48,6 +66,6 @@ abstract class DataContainer(val f: Option[String] = None,
 }
 
 object RowTypes {
-  type NormalRow = HashMap[String, String] //enforced HashMap for it's eC performance
+  type NormalRow = mutable.HashMap[String, String] //enforced HashMap for it's eC performance
   type RowIterator = Iterator[NormalRow]
 }

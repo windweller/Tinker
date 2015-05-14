@@ -5,8 +5,7 @@ import newFiles.DataContainer
 import newFiles.RowTypes._
 import utils._
 import utils.OptionToParameter.implicits._
-
-import scala.collection.immutable.HashMap
+import scala.collection.mutable
 
 /**
  * Extends this means that
@@ -44,8 +43,16 @@ trait Doc extends DataContainer {
 
   protected def readFileIterator[T](transform: (String) => T, file: FileIterator): Iterator[T] = file.map(l => transform(l))
 
-  def dataIterators: Map[String, RowIterator] =
-    files.map(e => e._1 -> readFileIterator[NormalRow]((line) => HashMap(headerString.zip(parse(line)): _*), e._2))
+  /**
+   * For smaller memory footprint, and faster performance
+   * Scala mutable HashMap has proven to be the best collection (better than Java)
+   * @return
+   */
+  def dataIterators: mutable.HashMap[String, RowIterator] = {
+    val map = mutable.HashMap.empty[String, RowIterator]
+    files.foreach(e => map.put(e._1, readFileIterator[NormalRow]((line) => mutable.HashMap(headerString.zip(parse(line)): _*), e._2)))
+    map
+  }
 
   def iteratorMap = dataIterators
 
