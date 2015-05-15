@@ -18,7 +18,7 @@ import scala.collection.mutable
  * This is a downstream of DataContainer,
  * because it implements DataContainer's certain methods and types
  */
-trait Doc extends DataContainer {
+trait Doc extends DataContainer with FailureHandle {
 
   /**** Abstract methods/variables ****/
 
@@ -35,10 +35,25 @@ trait Doc extends DataContainer {
   //allow peaking, assuming all files share same structure
   lazy private[this] val file = files.head._2
 
-  /* this new method forces HashMap on header/nonHeader structure
-     only inefficient part is the toString, toInt conversion */
+
+  /**
+   * this new method forces HashMap on header/nonHeader structure
+   * only inefficient part is the toString, toInt conversion
+   *
+   * It has two behaviors, both of them greatly impact the whole data representation
+   * #1: If header.size > real column.size, it chops off header (because real data is more important)
+   * #2: If header.size < real column.size, it will make up the header as Integer index, starting from 0 as usual
+   */
   lazy val headerString: Vector[String] =
-    if (file.headerRaw.nonEmpty) parse(file.headerRaw.get)
+    if (file.headerRaw.nonEmpty) {
+      val vec = parse(file.headerRaw.get)
+      val vec2 = parse(file.firstColumn)
+      if (vec.size > vec2.size)
+        vec.take(vec2.size)
+      else if (vec.size < vec2.size)
+        vec ++ (vec.size to vec2.size).map(e => e.toString)
+      else vec
+    }
     else Vector.iterate("0", parse(file.peekHead).length)(pos => (pos.toInt + 1).toString)
 
   protected def readFileIterator[T](transform: (String) => T, file: FileIterator): Iterator[T] = file.map(l => transform(l))

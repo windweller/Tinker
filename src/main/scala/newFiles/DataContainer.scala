@@ -17,12 +17,14 @@ import utils.Global.Implicits._
  * to exec()
  *
  * @param fuzzyMatch this gets passed to FileMapIterator, exclusive end
- * @param pscheduler this is not mandatory for normal DataContainer class
- *                  but it is when you add FileOp module to it
+ * @param pscheduler If you import Global.Implicits._, you will share the states
+ *                   of all computations (which could be dangerous). Otherwise,
+ *                   every DataContainer will have its own scheduler
+ *
  */
 abstract class DataContainer(val f: Option[String] = None,
                               val header: Option[Boolean] = Some(true),
-                              val fuzzyMatch: Option[Int] = None)(val pscheduler: Option[Scheduler] = None) {
+                              val fuzzyMatch: Option[Int] = None)(implicit val pscheduler: Option[Scheduler] = None) {
 
   import RowTypes._
 
