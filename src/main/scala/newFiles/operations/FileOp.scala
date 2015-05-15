@@ -4,7 +4,6 @@ import com.github.tototoshi.csv.CSVWriter
 import newFiles.DataContainer
 import newFiles.RowTypes.{RowIterator, NormalRow}
 import newFiles.structure.{StructureUtils, DataStructure}
-import newProcessing.Operation
 import utils.FailureHandle
 
 import scala.collection.{AbstractIterator, mutable}
@@ -35,7 +34,6 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
    */
   def compress(target: Option[Int], targetWithName: Option[String]): Unit = {
     val t = getSingleIntStringOption(target, targetWithName)
-
   }
 
   def compressBySlidingWindow(target: Option[Int], targetWithName: Option[String], windowSize: Int): DataContainer with FileOp = {

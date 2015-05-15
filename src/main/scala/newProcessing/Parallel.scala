@@ -7,8 +7,10 @@ import newProcessing.buffers.BufferConfig
  */
 trait Parallel extends Operation {
 
+  //clean scheduler's opSequence once exec() is done
   override def exec()(implicit config: Option[BufferConfig]): Unit = {
 
+    opSequence.clear()
   }
 
 }

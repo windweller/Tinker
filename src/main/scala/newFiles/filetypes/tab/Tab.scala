@@ -15,8 +15,12 @@ import scala.concurrent.Future
  */
 trait Tab extends Doc with FileBuffer {
 
-  def encode(row: NormalRow): String = {
+  def encodeWithHeader(row: NormalRow): Array[String] = {
+    Array(row.keysIterator.mkString("\t"), row.valuesIterator.mkString("\t"))
+  }
 
+  def encode(row: NormalRow): String = {
+    row.valuesIterator.mkString("\t")
   }
 
   def outputSuffix: String = "tab"

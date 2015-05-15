@@ -12,6 +12,8 @@ import scala.util.Random
  */
 trait FileBuffer extends Buffer {
 
+  def encodeWithHeader(row: NormalRow): Array[String]
+
   def encode(row: NormalRow): String
 
   def outputSuffix: String
@@ -31,6 +33,10 @@ trait FileBuffer extends Buffer {
         //not done, actually save stuff!
 
     }
+
+  }
+
+  private[this] def saveToFile(): Unit = {
 
   }
 

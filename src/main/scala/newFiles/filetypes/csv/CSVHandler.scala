@@ -8,7 +8,7 @@ import scala.collection.JavaConversions._
 import scala.util.{Failure, Success, Try}
 
 /**
- * Created by anie on 3/20/2015.
+ * Created by anie on 3/20/2015
  */
 
 class CSVHandler(csvFormat: CSVFormat) extends FailureHandle {
@@ -35,6 +35,7 @@ class CSVHandler(csvFormat: CSVFormat) extends FailureHandle {
         result
       case Failure(ex) =>
         fatal(ex.getMessage)
+        ex.printStackTrace()
         throw ex
     }
   }
