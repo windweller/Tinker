@@ -5,6 +5,7 @@ import newProcessing.Scheduler
 import scala.annotation.tailrec
 import scala.collection.AbstractIterator
 import scala.collection.mutable
+import utils.Global.Implicits._
 
 /**
  * Redesign of old DataContainer
@@ -16,20 +17,23 @@ import scala.collection.mutable
  * to exec()
  *
  * @param fuzzyMatch this gets passed to FileMapIterator, exclusive end
- * @param scheduler this is not mandatory for normal DataContainer class
+ * @param pscheduler this is not mandatory for normal DataContainer class
  *                  but it is when you add FileOp module to it
  */
 abstract class DataContainer(val f: Option[String] = None,
                               val header: Option[Boolean] = Some(true),
-                              val fuzzyMatch: Option[Int] = None)(implicit val scheduler: Option[Scheduler] = None) {
+                              val fuzzyMatch: Option[Int] = None)(val pscheduler: Option[Scheduler] = None) {
 
   import RowTypes._
 
-  def exec(): Unit = scheduler.foreach(e => e.exec())
+  //constructor
+  val scheduler = pscheduler.getOrElse(defaultSchedulerConstructor())
+
+  def exec(): Unit = scheduler.exec()
   def save(): Unit = exec()
 
   //leave implementation details to Doc or other services
-  def iteratorMap: mutable.HashMap[String, RowIterator]
+  def iteratorMap: mutable.HashMap[String, RowIterator] = mutable.HashMap.empty[String, RowIterator]
 
   /**
    * incorporate the file info into a column

@@ -19,7 +19,7 @@ trait FileBuffer extends Buffer {
   def outputSuffix: String
 
   //this is to shield away the saving method
-  override def bufferSave()(implicit config: BufferConfig): Unit = {
+  override def bufferWrite()(implicit config: BufferConfig): Unit = {
     config.filePath match {
       case Some(file) =>
 

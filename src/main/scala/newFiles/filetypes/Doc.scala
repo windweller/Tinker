@@ -54,6 +54,6 @@ trait Doc extends DataContainer {
     map
   }
 
-  def iteratorMap = dataIterators
+  override def iteratorMap = dataIterators
 
 }

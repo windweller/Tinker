@@ -15,5 +15,4 @@ abstract class Scheduler(workerCount: Int) extends Operation {
 
   def clean(): Unit = opSequence.clear()
 
-
 }

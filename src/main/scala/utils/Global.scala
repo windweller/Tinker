@@ -19,7 +19,11 @@ object Global {
   val tempFiles: mutable.Stack[String] = mutable.Stack()
 
   object Implicits {
-    implicit val scheduler = new Scheduler(4) with Parallel with FileBuffer with Tab
+
+    //this might create a shared state mess
+    implicit val scheduler = defaultSchedulerConstructor()
+
+    def defaultSchedulerConstructor() = new Scheduler(4) with Parallel with FileBuffer with Tab
   }
 
 }

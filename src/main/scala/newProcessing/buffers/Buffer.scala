@@ -9,7 +9,7 @@ trait Buffer {
 
   //this is to shield away the saving method
   //no matter saving to a file, database, or something else
-  def bufferSave()(implicit config: BufferConfig): Unit
+  def bufferWrite()(implicit config: BufferConfig): Unit
 
 }
 

@@ -14,16 +14,13 @@ import utils.collections.ArrayUtil._
  * Created by anie on 4/18/2015
  *
  * Any FileOp will break the HashMap[String, RowIterator] down
- * and unify them. The String provided by HashMap will become
+ * and flatten them. The String provided by HashMap will become
  * an extra field to iterator
+ *
+ * Also every operation will return a new DataContainer
  *
  */
 trait FileOp extends DataContainer with StructureUtils with FailureHandle {
-
-  checkSchedulerStatus()
-
-  def checkSchedulerStatus(): Unit =
-    if (scheduler.isEmpty) fatal("Any FileOp activities must have scheduler")
 
   def combine(data2: DataContainer): DataContainer with FileOp = {
     this
@@ -37,7 +34,8 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
   }
 
   def compressBySlidingWindow(target: Option[Int], targetWithName: Option[String], windowSize: Int): DataContainer with FileOp = {
-    this
+
+    new DataContainer(this.f, this.header, this.fuzzyMatch)(scheduler) with FileOp
   }
 
   /**
