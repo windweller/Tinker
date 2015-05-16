@@ -47,6 +47,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
                               discardColsWithName: Option[IndexedSeq[String]] = None,
                               windowSize: Int): DataContainer with FileOp = {
     val it = compressBySlidingWindowIt(getMultipleIntStringOption(discardCols, discardColsWithName).get, windowSize)
+    scheduler.opSequence += it
     new DataContainer(this.f, this.header, this.fuzzyMatch)(scheduler) with FileOp
   }
 
@@ -57,7 +58,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
    */
   private[this] def compressBySlidingWindowIt(discardCols: IndexedSeq[String], windowSize: Int): RowIterator = new AbstractIterator[NormalRow] {
 
-    val it = flatten()
+    val it = data //this will retrieve the right data
     val window = mutable.Queue.empty[NormalRow]
 
     //initialize by filling up the window

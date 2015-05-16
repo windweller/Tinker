@@ -1,7 +1,8 @@
 package utils
 
 import newFiles.filetypes.tab.Tab
-import newProcessing.buffers.FileBuffer
+import newProcessing.buffers.BufferConfig
+import newProcessing.buffers.file.FileBuffer
 import newProcessing.{Parallel, Scheduler}
 
 import scala.collection.mutable
@@ -23,7 +24,7 @@ object Global {
     //this might create a shared state mess
     implicit val scheduler = defaultSchedulerConstructor()
 
-    def defaultSchedulerConstructor() = new Scheduler(4) with Parallel with FileBuffer with Tab
+    def defaultSchedulerConstructor() = new Scheduler(4)(BufferConfig()) with Parallel with FileBuffer with Tab
   }
 
 }

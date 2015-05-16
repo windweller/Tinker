@@ -3,7 +3,7 @@ package newFiles.filetypes.csv
 import com.github.tototoshi.csv._
 import newFiles.RowTypes._
 import newFiles.filetypes.Doc
-import newProcessing.buffers.FileBuffer
+import newProcessing.buffers.file.FileBuffer
 
 /**
  * Created by anie on 4/18/2015
@@ -13,7 +13,7 @@ import newProcessing.buffers.FileBuffer
  */
 trait CSV extends Doc with FileBuffer {
 
-  def encodeWithHeader(row: NormalRow): Array[String]
+  def encodeHeader(row: NormalRow): Array[String]
 
   def encode(row: NormalRow): String =
     generateString(row.valuesIterator.toSeq)

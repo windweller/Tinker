@@ -12,7 +12,7 @@ trait Operation extends Buffer {
 
   val opSequence: ArrayBuffer[RowIterator]
 
-  def exec()(implicit config: Option[BufferConfig] = None): Unit
-  def save(config: BufferConfig): Unit = exec()(Some(config))
+  def exec(): Unit
+  def save(): Unit = exec()
 
 }

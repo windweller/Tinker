@@ -2,7 +2,7 @@ package newFiles
 
 import newFiles.filetypes.csv.CSV
 import newFiles.operations.FileOp
-import newProcessing.buffers.FileBuffer
+import newProcessing.buffers.file.FileBuffer
 import newProcessing.{Parallel, Operation}
 import org.scalatest.FlatSpec
 import utils.ParameterCallToOption.implicits._

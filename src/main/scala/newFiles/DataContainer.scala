@@ -30,9 +30,18 @@ abstract class DataContainer(val f: Option[String] = None,
 
   //constructor
   val scheduler = pscheduler.getOrElse(defaultSchedulerConstructor())
+  lazy val data = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.last else flatten()
 
   def exec(): Unit = scheduler.exec()
   def save(): Unit = exec()
+
+  //shortcut for file save
+  def exec(filePath: Option[String], fileOverride: Option[Boolean] = None): Unit = {
+    scheduler.config.filePath = filePath
+    scheduler.config.fileOverride = fileOverride
+    exec()
+  }
+  def save(filePath: Option[String], fileOverride: Option[Boolean] = None) = exec(filePath, fileOverride)
 
   //leave implementation details to Doc or other services
   def iteratorMap: mutable.HashMap[String, RowIterator] = mutable.HashMap.empty[String, RowIterator]
