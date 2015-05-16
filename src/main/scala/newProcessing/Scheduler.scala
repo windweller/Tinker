@@ -11,10 +11,12 @@ import scala.collection.mutable.ArrayBuffer
  */
 abstract class Scheduler(workerCount: Int)(implicit val bufferConfig: BufferConfig) extends Operation {
 
+  val workerNum = workerCount
+
   val config = bufferConfig
 
   //this keeps a history of iterators
-  val opSequence: ArrayBuffer[RowIterator] = ArrayBuffer.empty[RowIterator]
+  val opSequence: mutable.Stack[RowIterator] = mutable.Stack()
 
   def clean(): Unit = opSequence.clear()
 

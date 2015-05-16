@@ -26,12 +26,22 @@ import utils.collections.ArrayUtil._
  */
 trait FileOp extends DataContainer with StructureUtils with FailureHandle {
 
+  /* Logistic method */
+
+  //remove previous action, can be chained
+  def rewind(): DataContainer with FileOp = {
+    scheduler.opSequence.pop()
+    new DataContainer(this.f, this.header, this.fuzzyMatch)(scheduler) with FileOp
+  }
+
+  /* Core methods */
+
   def combine(data2: DataContainer): DataContainer with FileOp = {
     this
   }
 
   /**
-   * This is groupBy
+   * Unfinished
    */
   def compress(target: Option[Int], targetWithName: Option[String]): Unit = {
     val t = getSingleIntStringOption(target, targetWithName)
@@ -47,7 +57,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
                               discardColsWithName: Option[IndexedSeq[String]] = None,
                               windowSize: Int): DataContainer with FileOp = {
     val it = compressBySlidingWindowIt(getMultipleIntStringOption(discardCols, discardColsWithName).get, windowSize)
-    scheduler.opSequence += it
+    scheduler.opSequence.push(it)
     new DataContainer(this.f, this.header, this.fuzzyMatch)(scheduler) with FileOp
   }
 

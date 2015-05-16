@@ -28,20 +28,26 @@ abstract class DataContainer(val f: Option[String] = None,
 
   import RowTypes._
 
-  //constructor
+  /* constructor */
   val scheduler = pscheduler.getOrElse(defaultSchedulerConstructor())
-  lazy val data = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.last else flatten()
+  lazy val data = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else flatten()
 
+
+  /* normal method (BufferConfig alreayd passed in from Scheduler) */
   def exec(): Unit = scheduler.exec()
   def save(): Unit = exec()
 
-  //shortcut for file save
-  def exec(filePath: Option[String], fileOverride: Option[Boolean] = None): Unit = {
+
+  /* shortcut for file save */
+  def exec(filePath: Option[String], fileAppend: Boolean = true): Unit = {
     scheduler.config.filePath = filePath
-    scheduler.config.fileOverride = fileOverride
+    scheduler.config.fileAppend = fileAppend
     exec()
   }
-  def save(filePath: Option[String], fileOverride: Option[Boolean] = None) = exec(filePath, fileOverride)
+  def save(filePath: Option[String], fileAppend: Boolean = true) = exec(filePath, fileAppend)
+
+
+  /* Core methods */
 
   //leave implementation details to Doc or other services
   def iteratorMap: mutable.HashMap[String, RowIterator] = mutable.HashMap.empty[String, RowIterator]

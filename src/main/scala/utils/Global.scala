@@ -16,14 +16,16 @@ import scala.collection.mutable
  */
 object Global {
 
-  //tempFiles implemented as a stack, last in first out
+  //tempFiles implemented as a List, last in (append) first out
   val tempFiles: mutable.Stack[String] = mutable.Stack()
+
 
   object Implicits {
 
     //this might create a shared state mess
     implicit val scheduler = defaultSchedulerConstructor()
 
+    //every time a DataContainer is constructed, this method is called
     def defaultSchedulerConstructor() = new Scheduler(4)(BufferConfig()) with Parallel with FileBuffer with Tab
   }
 

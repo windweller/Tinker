@@ -3,6 +3,7 @@ package newProcessing
 import newFiles.RowTypes.RowIterator
 import newProcessing.buffers.{BufferConfig, Buffer}
 
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -10,7 +11,9 @@ import scala.collection.mutable.ArrayBuffer
  */
 trait Operation extends Buffer {
 
-  val opSequence: ArrayBuffer[RowIterator]
+  val workerNum: Int  //for parallel only
+
+  val opSequence:  mutable.Stack[RowIterator]
 
   def exec(): Unit
   def save(): Unit = exec()

@@ -38,12 +38,12 @@ trait FileBuffer extends Buffer with FailureHandle {
 
     if (config.fileWithHeader && !headerPrinted) {
       val arr = encodeHeader(row)
-      printer.write(arr(0))
-      printer.write(arr(1))
+      printer.println(arr(0))
+      printer.println(arr(1))
       headerPrinted = true
     }
     else {
-      printer.write(encode(row))
+      printer.println(encode(row))
     }
   }
 
