@@ -58,7 +58,7 @@ import utils.ParameterCallToOption.implicits._
 
 Stackable trait pattern means you can swap in and out different modules, like playing Lego. If you are dealing with a tab file, you can choose to use `Tab` module instead of `CSV`.
 
-Basic File I/O has a nice high-level abstraction that treats a directory of files and a single file as the same entity, and allow `Iterator` access throught the whole data corpus. The orders of modules are important. General rule of thumb: more specific modules go first (such as `CSV` for `Tab`) before general module (such as `Doc`). They contain information later modules will invoke. Operation modules go last such as `FileOp`.
+Basic File I/O has a nice high-level abstraction that treats a directory of files and a single file as the same entity, and allow `Iterator` access throught the whole data corpus. 
 
 Advanced File I/O is being developed.
 
@@ -80,11 +80,21 @@ This is functionally equivalent to importing the global scheduler. You can creat
 
 #### DataContainer
 
-`Doc`: this module deals with files, but mostly provide type-agnostic reading functions.
+`f: String`: the location of the file, can be a directory or a single file
+
+`header: Boolean`: whether this corpus has header or not, do note that if selected as true, all files (under the directory) must contain headers and all headers must be the same. If there are more headers than columns, we will fill up headers using ordinal numbers such as `Name | Address | 2 | 3 | 4`
+
+`fuzzyMatch: Int`: we automatically put files under one directory into groups, and the integer number in fuzzyMatch determines how many characters of the files you want to match. For example: `twitter_AZ_2009_10_4` and `twitter_AZ_2009_10_5` can be put in one group if you set this value at `9`.
+
+`timerOn: Boolean`: if you want to set a timer on your task, you must turn this on. However, this will have a very small upfront processing time penalty, because DataContainer will go through your corpus to calculate the total amount of task (row) that will be processed.
+
+--Trait Modules--
 
 `CSV`: provide type and parsing information for .csv files.
 
 `Tab`: same above.
+
+`FileOp`: allow table-like operations (such as union, compression/groupBy) on data. All operations are lazy and are not executed/saved unless explicitly called upon.
 
 #### Parser
 
@@ -128,4 +138,3 @@ Here are a list of specialized modules and how to use them.
 1. Table columns are not typed (all represented as string), so we suffer minor performance penalty by converting them on spot.
 
 2. Tinker's column count starts at 0 (not 1)
-
