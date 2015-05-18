@@ -88,6 +88,8 @@ This is functionally equivalent to importing the global scheduler. You can creat
 
 `timerOn: Boolean`: if you want to set a timer on your task, you must turn this on. However, this will have a very small upfront processing time penalty, because DataContainer will go through your corpus to calculate the total amount of task (row) that will be processed.
 
+--Trait Modules--
+
 `CSV`: provide type and parsing information for .csv files.
 
 `Tab`: same above.
