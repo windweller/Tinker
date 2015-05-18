@@ -2,14 +2,13 @@ package newFiles.operations
 
 import com.github.tototoshi.csv.CSVWriter
 import newFiles.DataContainer
-import newFiles.RowTypes.{RowIterator, NormalRow}
-import newFiles.structure.{StructureUtils, DataStructure}
+import newFiles.RowTypes.{NormalRow, RowIterator}
+import newFiles.structure.{DataStructure, StructureUtils}
 import utils.FailureHandle
-
-import scala.collection.immutable.HashMap
-import scala.collection.{AbstractIterator, mutable}
-import scala.collection.mutable.ArrayBuffer
 import utils.collections.ArrayUtil._
+
+import scala.collection.mutable.ArrayBuffer
+import scala.collection.{AbstractIterator, mutable}
 
 /**
  * Created by anie on 4/18/2015
@@ -31,7 +30,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
   //remove previous action, can be chained
   def rewind(): DataContainer with FileOp = {
     scheduler.opSequence.pop()
-    new DataContainer(this.f, this.header, this.fuzzyMatch)(scheduler) with FileOp
+    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize)(scheduler) with FileOp
   }
 
   /* Core methods */
@@ -58,7 +57,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
                               windowSize: Int): DataContainer with FileOp = {
     val it = compressBySlidingWindowIt(getMultipleIntStringOption(discardCols, discardColsWithName).get, windowSize)
     scheduler.opSequence.push(it)
-    new DataContainer(this.f, this.header, this.fuzzyMatch)(scheduler) with FileOp
+    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize)(scheduler) with FileOp
   }
 
   /**

@@ -3,7 +3,7 @@ package newFiles.filetypes.csv
 import com.github.tototoshi.csv._
 import newFiles.RowTypes._
 import newFiles.filetypes.Doc
-import newProcessing.buffers.file.FileBuffer
+import newProcessing.buffers.file.FileOutputFormat
 
 /**
  * Created by anie on 4/18/2015
@@ -11,9 +11,11 @@ import newProcessing.buffers.file.FileBuffer
  * The CSV encoding was adopted from scala-csv by tototoshi
  * because the method is not available
  */
-trait CSV extends Doc with FileBuffer {
+trait CSV extends Doc with FileOutputFormat {
 
-  def encodeHeader(row: NormalRow): Array[String]
+  def encodeHeader(row: NormalRow): Array[String] = {
+    Array(generateString(row.keysIterator.toSeq), generateString(row.valuesIterator.toSeq))
+  }
 
   def encode(row: NormalRow): String =
     generateString(row.valuesIterator.toSeq)

@@ -5,9 +5,9 @@ import org.scalatest.FlatSpec
 /**
  * Created by Aimingnie on 5/11/15
  */
-class OperationTest extends FlatSpec {
+class SequentialTest extends FlatSpec {
 
-  "Stream processing" can "work" in {
+  "Sequential processing" can "work" in {
 
 
   }

@@ -1,10 +1,9 @@
 package newProcessing
 
 import newFiles.RowTypes.RowIterator
-import newProcessing.buffers.{BufferConfig, Buffer}
+import newProcessing.buffers.Buffer
 
 import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
 
 /**
  * All modules such as parser

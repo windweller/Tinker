@@ -6,14 +6,14 @@ import java.nio.channels.FileChannel
 
 import newFiles.RowTypes._
 import newFiles.filetypes.Doc
-import newProcessing.buffers.file.FileBuffer
+import newProcessing.buffers.file.{FileOutputFormat, FileBuffer}
 
 import scala.concurrent.Future
 
 /**
  * Created by anie on 4/18/2015
  */
-trait Tab extends Doc with FileBuffer {
+trait Tab extends Doc with FileOutputFormat {
 
   def encodeHeader(row: NormalRow): Array[String] = {
     Array(row.keysIterator.mkString("\t"), row.valuesIterator.mkString("\t"))

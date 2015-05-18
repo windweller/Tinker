@@ -7,6 +7,8 @@ import scala.collection.AbstractIterator
 import scala.collection.mutable
 import utils.Global.Implicits._
 
+import scala.collection.mutable.ArrayBuffer
+
 /**
  * Redesign of old DataContainer
  * emphasize on iterator operation
@@ -23,14 +25,22 @@ import utils.Global.Implicits._
  *
  */
 abstract class DataContainer(val f: Option[String] = None,
-                              val header: Option[Boolean] = Some(true),
-                              val fuzzyMatch: Option[Int] = None)(implicit val pscheduler: Option[Scheduler] = None) {
+                              val header: Boolean = true,
+                              val fuzzyMatch: Option[Int] = None,
+                              val rTaskSize: Option[Int] = None)(implicit val pscheduler: Option[Scheduler] = None) {
 
   import RowTypes._
+
 
   /* constructor */
   val scheduler = pscheduler.getOrElse(defaultSchedulerConstructor())
   lazy val data = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else flatten()
+
+  def taskSize: Option[Int] = if (rTaskSize.nonEmpty) rTaskSize
+                                   else Some(flatten().length)
+
+  //only used when timer is activated
+  val taskSizeActions: ArrayBuffer[(Int) => Int] = ArrayBuffer.empty[(Int) => Int]
 
 
   /* normal method (BufferConfig alreayd passed in from Scheduler) */

@@ -2,7 +2,7 @@ package newParser
 
 import files.structure.DataStructure
 import newFiles.DataContainer
-import newProcessing.{Action, Scheduler}
+import newProcessing.Scheduler
 
 /**
  * All operation based class takes in implicit parameter scheduler
@@ -13,4 +13,4 @@ import newProcessing.{Action, Scheduler}
  * so user can call and combine/use by themselves
  */
 abstract class Parser(data: DataContainer,
-                       struct: DataStructure)(implicit val scheduler: Scheduler) extends Action
+                       struct: DataStructure)(implicit val scheduler: Scheduler)

@@ -15,7 +15,7 @@ import scala.util.Random
  * Don't know if the writing efficiency is high enough
  * The module under Operation would close this
  */
-trait FileBuffer extends Buffer with FailureHandle {
+trait FileBuffer extends Buffer with FileOutputFormat with FailureHandle {
 
   lazy val printer: PrintWriter = new PrintWriter(new OutputStreamWriter(
                                                         new FileOutputStream(config.filePath.get,
@@ -23,13 +23,6 @@ trait FileBuffer extends Buffer with FailureHandle {
                                                           config.fileEncoding))
 
   var headerPrinted = false
-
-  //will get and encode header, Array(0) is key, Array(1) is value
-  def encodeHeader(row: NormalRow): Array[String]
-
-  def encode(row: NormalRow): String
-
-  def outputSuffix: String
 
   //this is to shield away the saving method
   def bufferWrite(row: NormalRow): Unit = {
