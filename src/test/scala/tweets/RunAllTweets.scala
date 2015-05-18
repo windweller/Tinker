@@ -34,7 +34,7 @@ class RunAllTweets extends FlatSpec {
 
   "count groups" should "work" in {
     val data = new DataContainer("/Users/Aimingnie/Desktop/R/ACL2015/Tweets/", header = true, fuzzyMatch = 9) with CSV
-    println(data.iterators.head.size)
+    println(data.iterator.size)
   }
 
   "count sentence #" should "work" in {
@@ -80,7 +80,7 @@ class RunAllTweets extends FlatSpec {
     val struct = new DataStructure(idColumn = 0, targetColumn = 1) with BasicNLP
     val data = new DataContainer("E:\\Allen\\R\\acl2015\\tweetsByStateSplittedCleaned2.tab", header = false) with Tab
     val future = new Future(data, struct)
-    future.saveFutureMatching("E:\\Allen\\R\\acl2015\\twitterFuture.csv")
+    future.saveFutureMatching("E:\\Allen\\R\\acl2015\\twitterFutureNewRules.csv")
   }
 
   "average by group" should "work" in {

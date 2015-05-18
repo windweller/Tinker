@@ -1,10 +1,12 @@
 package newProcessing
 
-/**
- * This is not really a true sequential implementation
- * because column processing is still parallelized
- * but the row processing is sequential.
- */
-trait Sequential {
 
+trait Sequential extends Operation {
+
+  //let's hope this works
+  def exec(): Unit = {
+    val rows = opSequence.pop()
+    rows.foreach(row => bufferWrite(row))
+    bufferClose()
+  }
 }

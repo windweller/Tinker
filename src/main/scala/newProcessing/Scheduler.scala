@@ -1,5 +1,9 @@
 package newProcessing
 
+import newFiles.RowTypes.{RowIterator, NormalRow}
+import newProcessing.buffers.BufferConfig
+
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -7,8 +11,15 @@ import scala.collection.mutable.ArrayBuffer
  *
  * It also provides customization to BufferConfig
  */
-abstract class Scheduler(workerCount: Int) extends Operation {
+abstract class Scheduler(workerCount: Int)(implicit val bufferConfig: BufferConfig) extends Operation {
 
-  val opSequence: ArrayBuffer[(Int, Int)] = ArrayBuffer.empty[(Int, Int)]
+  val workerNum = workerCount
+
+  val config = bufferConfig
+
+  //this keeps a history of iterators
+  val opSequence: mutable.Stack[RowIterator] = mutable.Stack()
+
+  def clean(): Unit = opSequence.clear()
 
 }

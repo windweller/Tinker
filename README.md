@@ -123,6 +123,9 @@ Here are a list of specialized modules and how to use them.
   }
 ```
 
+## Minor Issues
 
+1. Table columns are not typed (all represented as string), so we suffer minor performance penalty by converting them on spot.
 
+2. Tinker's column count starts at 0 (not 1)
 

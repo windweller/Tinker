@@ -25,19 +25,32 @@ class FileIterator(files: Array[File], val header: Boolean) extends Iterator[Str
   private[this] var currentFileIterator = getIterator(currentFile, defaultCodecs.iterator)
   val headerRaw = getHeader //this is the header of the first file
 
+  lazy val firstColumn = if (header && currentFileIterator.hasNext) {
+    next()
+    val col = next() //skip header and grab the first row
+    reset()
+    col
+  }
+  else peekHead
+
   //this is a costly. To get the string of the first row
   lazy val peekHead: String = {
     val peek = next()
+    reset()
+    peek
+  }
+
+  private[this] def reset(): Unit = {
     //reset everything
     remainingFiles = files.iterator
     currentFile = remainingFiles.next()
     currentFileIterator = getIterator(currentFile, defaultCodecs.iterator)
-    peek
   }
 
   def getHeader: Option[String] = if (header && currentFileIterator.hasNext) Some(currentFileIterator.next()) else None
 
-  def headerCheck(): Unit = {
+  //this checks header consistency across files
+  private[this] def headerCheck(): Unit = {
     val result = if (header && currentFileIterator.hasNext) Some(currentFileIterator.next()) else None
     result.map(e => e == headerRaw.get).foreach(e => if (!e) fatal("file: " + currentFile.getName + " does not have matching header"))
   }
@@ -62,7 +75,6 @@ class FileIterator(files: Array[File], val header: Boolean) extends Iterator[Str
       }
     else
       io.Source.fromFile(file).getLines()  //all custom codecs have failed, switching to default
-
   }
 
 //  private[this] def getIterator(file: File, codecs:Iterator[io.Codec]): Iterator[String] = io.Source.fromFile(file)(codecs.next()).getLines()

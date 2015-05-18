@@ -14,7 +14,7 @@ trait CharacterFilter extends Filter{
 
   override def preprocess(saveLoc: String): Unit = {
     val printer = TabPrinter(saveLoc)
-    val it = data.iterators.head
+    val it = data.iterator
     val result = ArrayBuffer.empty[Seq[String]]
 
     it.foreach { group =>

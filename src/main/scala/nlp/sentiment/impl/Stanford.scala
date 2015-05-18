@@ -44,7 +44,7 @@ trait Stanford extends Sentiment{
     val pipeline: StanfordCoreNLP = new StanfordCoreNLP(pipelineProps)
 
     /* my code */
-    val it = data.iterators.head
+    val it = data.iterator
     val result = ArrayBuffer.empty[Seq[String]]
 
     it.foreach { group =>
