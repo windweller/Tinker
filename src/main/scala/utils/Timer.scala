@@ -14,7 +14,7 @@ object Timer {
   var startTime: Long = System.currentTimeMillis()
   var currentTime: Long = 0
 
-  val taskTotal = 42833581
+  val taskTotal = 1504641
   var currentProgress = 0
 
   def completeOne(): Unit = {

@@ -21,14 +21,11 @@ import scala.concurrent.Future
 /**
  * Created by anie on 4/26/2015.
  */
-class Future(val data: DataContainer, val struct: DataStructure) {
+class Future(val data: DataContainer, val struct: DataStructure, val patternRaw: Iterator[String]) {
 
   val parser = new Parser with StanfordPCFG
   val matcher = new Matcher with Tregex
-
-  val futureCompiledPattern = for (pattern <- patternFuture) yield TregexPattern.compile(pattern)
-  val pastCompiledPattern = for (pattern <- patternsPast) yield TregexPattern.compile(pattern)
-  val presentCompiledPattern = for (pattern <- patternPresent) yield TregexPattern.compile(pattern)
+  val patterns = patternRaw.map(e => TregexPattern.compile(e)).toList
 
   def saveFutureMatching(saveLoc: String): Unit = {
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
@@ -47,9 +44,7 @@ class Future(val data: DataContainer, val struct: DataStructure) {
 
     val tregexMatchFlow: Flow[(String, String, Tree), Seq[Any], Unit] = Flow[(String, String, Tree)].mapAsync[Seq[Any]] { tuple =>
       Future {
-        val array = matcher.search(tuple._3, futureCompiledPattern) ++
-          matcher.search(tuple._3, pastCompiledPattern) ++
-          matcher.search(tuple._3, presentCompiledPattern)
+        val array = matcher.search(tuple._3, patterns)
         Timer.completeOne()
         Seq(tuple._1, tuple._2) ++ array.toSeq
       }
