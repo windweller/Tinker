@@ -35,6 +35,7 @@ abstract class DataContainer(val f: Option[String] = None,
   /* constructor */
   val scheduler = pscheduler.getOrElse(defaultSchedulerConstructor())
   lazy val data = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else flatten()
+  lazy val strippedData = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else unify
 
   def taskSize: Option[Int] = if (rTaskSize.nonEmpty) rTaskSize
                                    else Some(flatten().length)

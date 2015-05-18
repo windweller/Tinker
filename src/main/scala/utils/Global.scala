@@ -1,9 +1,9 @@
 package utils
 
-import newFiles.filetypes.tab.Tab
+import newFiles.filetypes.tab.{TabOutput, Tab}
 import newProcessing.buffers.BufferConfig
 import newProcessing.buffers.file.FileBuffer
-import newProcessing.{Parallel, Scheduler}
+import newProcessing.{Sequential, Parallel, Scheduler}
 
 import scala.collection.mutable
 
@@ -26,7 +26,8 @@ object Global {
     implicit val scheduler = defaultSchedulerConstructor()
 
     //every time a DataContainer is constructed, this method is called
-    def defaultSchedulerConstructor() = new Scheduler(4)(BufferConfig()) with Parallel with FileBuffer with Tab
+    def defaultSchedulerConstructor() = new Scheduler(4)(BufferConfig()) with Sequential with FileBuffer with TabOutput
+
   }
 
 }

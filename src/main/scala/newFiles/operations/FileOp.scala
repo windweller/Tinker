@@ -6,6 +6,7 @@ import newFiles.RowTypes.{NormalRow, RowIterator}
 import newFiles.structure.{DataStructure, StructureUtils}
 import utils.FailureHandle
 import utils.collections.ArrayUtil._
+import utils.ParameterCallToOption.implicits._
 
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.{AbstractIterator, mutable}
@@ -67,7 +68,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
    */
   private[this] def compressBySlidingWindowIt(discardCols: IndexedSeq[String], windowSize: Int): RowIterator = new AbstractIterator[NormalRow] {
 
-    val it = data //this will retrieve the right data
+    val it = strippedData //this will retrieve the right data, stripped because compression doesn't need more info
     val window = mutable.Queue.empty[NormalRow]
 
     //initialize by filling up the window

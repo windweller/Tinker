@@ -16,7 +16,7 @@ import scala.collection.mutable.ArrayBuffer
 trait Split extends Sentence {
 
   def countSentences(): mutable.HashMap[String, Int] = {
-    val it = data.iterator
+    val it = data.iteratorMap
     val result = mutable.HashMap.empty[String, Int]
 
     it.foreach { group =>
@@ -44,7 +44,7 @@ trait Split extends Sentence {
 
   def splitSentences(saveLoc: String): Unit = {
 
-    val it = data.iterator
+    val it = data.iteratorMap
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
 
     val result = ArrayBuffer.empty[Seq[String]]

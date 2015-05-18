@@ -13,17 +13,7 @@ import scala.concurrent.Future
 /**
  * Created by anie on 4/18/2015
  */
-trait Tab extends Doc with FileOutputFormat {
-
-  def encodeHeader(row: NormalRow): Array[String] = {
-    Array(row.keysIterator.mkString("\t"), row.valuesIterator.mkString("\t"))
-  }
-
-  def encode(row: NormalRow): String = {
-    row.valuesIterator.mkString("\t")
-  }
-
-  def outputSuffix: String = "tab"
+trait Tab extends Doc {
 
   def typesuffix: Vector[String] = Vector("tab", "txt")
 

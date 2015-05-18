@@ -12,7 +12,7 @@ trait Operation extends Buffer {
 
   val workerNum: Int  //for parallel only
 
-  val opSequence:  mutable.Stack[RowIterator]
+  val opSequence: mutable.Stack[RowIterator]
 
   def exec(): Unit
   def save(): Unit = exec()

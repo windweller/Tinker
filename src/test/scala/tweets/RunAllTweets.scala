@@ -76,13 +76,6 @@ class RunAllTweets extends FlatSpec {
     sentiment.classify("E:\\Allen\\R\\acl2015\\twitterSentiment2.csv")
   }
 
-  "future classifier" should "work" in {
-    val struct = new DataStructure(idColumn = 0, targetColumn = 1) with BasicNLP
-    val data = new DataContainer("E:\\Allen\\R\\acl2015\\tweetsByStateSplittedCleaned2.tab", header = false) with Tab
-    val future = new Future(data, struct)
-    future.saveFutureMatching("E:\\Allen\\R\\acl2015\\twitterFutureNewRules.csv")
-  }
-
   "average by group" should "work" in {
     val struct = new DataStructure(idColumn = 0, ignoreColumn = 1) with NoCheck
     val data = new DataContainer("/Users/Aimingnie/Desktop/R/ACL2015/twitterSentiment2.csv", header = false) with CSV with FileOp

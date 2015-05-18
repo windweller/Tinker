@@ -9,7 +9,7 @@ trait Unigram extends Ngram {
 
   //current implementation requires header
   def getTokenNumber: mutable.HashMap[String, Int] = {
-    val it = data.iterator
+    val it = data.iteratorMap
     val result = mutable.HashMap.empty[String, Int]
 
     it.foreach { group =>

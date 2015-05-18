@@ -21,7 +21,7 @@ trait TwitterFilter extends Filter {
   def preprocess(saveLoc: String): Unit = {
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
 
-    val it = data.iterator
+    val it = data.iteratorMap
     val result = ArrayBuffer.empty[Seq[String]]
 
     it.foreach { group =>
