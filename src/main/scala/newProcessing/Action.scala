@@ -1,8 +1,12 @@
 package newProcessing
 
 /**
- * Created by Aimingnie on 5/12/15.
+ * All Parser, Matcher class
+ * inherit from this class
  */
 trait Action {
 
+  def process()
+
 }
+
