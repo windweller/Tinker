@@ -78,15 +78,15 @@ This is functionally equivalent to importing the global scheduler. You can creat
 
 ## Modules
 
-#### DataContainer (f: String, header: Boolean, fuzzyMatch: Int, timerOn: Boolean)
+#### DataContainer
 
-f: the location of the file, can be a directory or a single file
+`f: String`: the location of the file, can be a directory or a single file
 
-header: whether this corpus has header or not, do note that if selected as true, all files (under the directory) must contain headers and all headers must be the same. If there are more headers than columns, we will fill up headers using ordinal numbers such as `Name | Address | 2 | 3 | 4`
+`header: Boolean`: whether this corpus has header or not, do note that if selected as true, all files (under the directory) must contain headers and all headers must be the same. If there are more headers than columns, we will fill up headers using ordinal numbers such as `Name | Address | 2 | 3 | 4`
 
-fuzzyMatch: we automatically put files under one directory into groups, and the integer number in fuzzyMatch determines how many characters of the files you want to match. For example: `twitter_AZ_2009_10_4` and `twitter_AZ_2009_10_5` can be put in one group if you set this value at `9`.
+`fuzzyMatch: Int`: we automatically put files under one directory into groups, and the integer number in fuzzyMatch determines how many characters of the files you want to match. For example: `twitter_AZ_2009_10_4` and `twitter_AZ_2009_10_5` can be put in one group if you set this value at `9`.
 
-timerOn: if you want to set a timer on your task, you must turn this on. However, this will have a very small upfront processing time penalty, because DataContainer will go through your corpus to calculate the total amount of task (row) that will be processed.
+`timerOn: Boolean`: if you want to set a timer on your task, you must turn this on. However, this will have a very small upfront processing time penalty, because DataContainer will go through your corpus to calculate the total amount of task (row) that will be processed.
 
 `CSV`: provide type and parsing information for .csv files.
 
