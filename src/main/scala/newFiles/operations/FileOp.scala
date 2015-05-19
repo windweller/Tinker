@@ -8,6 +8,7 @@ import utils.FailureHandle
 import utils.collections.ArrayUtil._
 import utils.ParameterCallToOption.implicits._
 
+import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.{AbstractIterator, mutable}
 
@@ -43,8 +44,61 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
   /**
    * Unfinished
    */
-  def compress(target: Option[Int], targetWithName: Option[String]): Unit = {
-    val t = getSingleIntStringOption(target, targetWithName)
+  def compressByAvg(groupByCol: Option[Int], groupByColWithName: Option[String],
+                    discardCols: Option[IndexedSeq[Int]] = None,
+                    discardColsWithName: Option[IndexedSeq[String]] = None): Unit = {
+    val it = compressByAvgIt(getSingleIntStringOption(groupByCol, groupByColWithName).get,
+                      getMultipleIntStringOption(discardCols, discardColsWithName))
+    scheduler.opSequence.push(it)
+    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize)(scheduler) with FileOp
+  }
+
+  private[this] def compressByAvgIt(g: String,
+                                    discardCols: Option[IndexedSeq[String]]): RowIterator = new AbstractIterator[NormalRow] {
+
+    val it = strippedData
+    var sizeOfGroup = 0
+    var previousGroupTag = ""
+    val group = ArrayBuffer.empty[NormalRow]
+    var endState = false
+
+    override def hasNext: Boolean = it.hasNext || !endState
+
+    @tailrec
+    override def next(): NormalRow = {
+
+      if (!it.hasNext) {
+        endState = true
+        sumRows(group, Vector(g, previousGroupTag), discardCols)
+      }
+      else {
+        val row = it.next()
+        //initialize
+        if (previousGroupTag == "") previousGroupTag = row(g)
+        //same group compress
+        if (row(g) == previousGroupTag) {
+          group += row
+          //recursively call
+          next()
+        }
+        else {
+          previousGroupTag = row(g)
+          sumRows(group, Vector(g, row(g)), discardCols)
+        }
+      }
+
+    }
+  }
+
+  private[this] def sumRows(rows: ArrayBuffer[NormalRow], idValue: Vector[String], discardCols: Option[IndexedSeq[String]]): NormalRow = {
+    val result = mutable.HashMap.empty[String, Int]
+    rows.foreach { row =>
+      row.foreach { col =>
+        if (!discardCols.exists(e => e.contains(col._1)))
+          result.put(col._1, result.getOrElse(col._1, 0) + col._2.toInt)
+      }
+    }
+    result.map(col => col._1 -> col._2.toString)
   }
 
   /**
