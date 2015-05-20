@@ -18,4 +18,8 @@ class SequentialTest extends FlatSpec {
       .exec(filePath = "E:\\Allen\\NYTFuture\\NYT_result_2.0b\\NYT_slidingWindow_size3.txt")
   }
 
+  "Sequential processing in compressing future" should "work" in {
+
+  }
+
 }

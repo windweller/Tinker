@@ -66,7 +66,6 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
 
     @tailrec
     override def next(): NormalRow = {
-
       if (!it.hasNext) {
         endState = true
         sumRows(group, Vector(g, previousGroupTag), discardCols)
@@ -82,8 +81,10 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
           next()
         }
         else {
+          val result = sumRows(group, Vector(g, previousGroupTag), discardCols)
           previousGroupTag = row(g)
-          sumRows(group, Vector(g, row(g)), discardCols)
+          group += row
+          result
         }
       }
 
@@ -144,15 +145,15 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
    * Helper function for compressBySlidingWindowIt
    */
   private[this] def sumQueue(window: mutable.Queue[NormalRow], discardCols: IndexedSeq[String]): NormalRow = {
-    val result = mutable.HashMap.empty[String, String]
+    val result = mutable.HashMap.empty[String, Int]
     window.foreach { item =>
       item.foreach(col => {
         if (!discardCols.contains(col._1))
-          result.put(col._1, (result.getOrElse(col._1, "0").toInt + col._2.toInt).toString)
+          result.put(col._1, result.getOrElse(col._1, 0) + col._2.toInt)
         }
       )
     }
-    result
+    result.map(e => e._1 -> e._2.toString)
   }
 
   def averageByGroup(saveLoc: String, struct: DataStructure): Unit = {
