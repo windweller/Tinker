@@ -44,9 +44,9 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
   /**
    * Unfinished
    */
-  def compressByAvg(groupByCol: Option[Int], groupByColWithName: Option[String],
+  def compressByAvg(groupByCol: Option[Int] = None, groupByColWithName: Option[String] = None,
                     discardCols: Option[IndexedSeq[Int]] = None,
-                    discardColsWithName: Option[IndexedSeq[String]] = None): Unit = {
+                    discardColsWithName: Option[IndexedSeq[String]] = None): DataContainer with FileOp = {
     val it = compressByAvgIt(getSingleIntStringOption(groupByCol, groupByColWithName).get,
                       getMultipleIntStringOption(discardCols, discardColsWithName))
     scheduler.opSequence.push(it)
@@ -68,7 +68,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
     override def next(): NormalRow = {
       if (!it.hasNext) {
         endState = true
-        sumRows(group, Vector(g, previousGroupTag), discardCols)
+        sumRows(group, Vector(g, previousGroupTag), discardCols, sizeOfGroup)
       }
       else {
         val row = it.next()
@@ -78,12 +78,15 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
         if (row(g) == previousGroupTag) {
           group += row
           //recursively call
+          sizeOfGroup += 1
           next()
         }
         else {
-          val result = sumRows(group, Vector(g, previousGroupTag), discardCols)
+          val result = sumRows(group, Vector(g, previousGroupTag), discardCols, sizeOfGroup)
           previousGroupTag = row(g)
+          group.clear()
           group += row
+          sizeOfGroup = 1
           result
         }
       }
@@ -91,15 +94,22 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
     }
   }
 
-  private[this] def sumRows(rows: ArrayBuffer[NormalRow], idValue: Vector[String], discardCols: Option[IndexedSeq[String]]): NormalRow = {
+  /**
+   * @param idValue stored as form of Vector, but just two values, first is the value of column ID,
+   *                second is the value of that column
+   * @return
+   */
+  private[this] def sumRows(rows: ArrayBuffer[NormalRow], idValue: Vector[String],
+                            discardCols: Option[IndexedSeq[String]], sizeOfGroup: Int): NormalRow = {
     val result = mutable.HashMap.empty[String, Int]
     rows.foreach { row =>
       row.foreach { col =>
-        if (!discardCols.exists(e => e.contains(col._1)))
+        if (!discardCols.exists(e => e.contains(col._1)) &&
+            idValue.head != col._1)
           result.put(col._1, result.getOrElse(col._1, 0) + col._2.toInt)
       }
     }
-    result.map(col => col._1 -> col._2.toString)
+    result.map(col => col._1 -> (col._2.toDouble / sizeOfGroup).toString) += idValue.head -> idValue(1)
   }
 
   /**
