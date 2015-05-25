@@ -24,7 +24,6 @@ trait Unigram extends Ngram {
       }
       result += (group._1 -> unigramCount)
     }
-
     result
   }
 
