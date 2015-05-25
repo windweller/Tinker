@@ -11,7 +11,7 @@ import scala.collection.mutable.ArrayBuffer
  *
  * It also provides customization to BufferConfig
  */
-abstract class Scheduler(workerCount: Int)(implicit val bufferConfig: BufferConfig) extends Operation {
+abstract class Scheduler(workerCount: Int)(implicit val bufferConfig: BufferConfig = BufferConfig()) extends Operation {
 
   val workerNum = workerCount
 

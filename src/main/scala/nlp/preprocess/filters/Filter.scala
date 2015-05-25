@@ -1,4 +1,4 @@
-package nlp.filters
+package nlp.preprocess.filters
 
 import newFiles.DataContainer
 import newFiles.structure.DataStructure

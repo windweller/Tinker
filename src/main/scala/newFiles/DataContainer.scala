@@ -1,5 +1,6 @@
 package newFiles
 
+import newFiles.structure.DataStructure
 import newProcessing.Scheduler
 
 import scala.annotation.tailrec
@@ -35,11 +36,11 @@ abstract class DataContainer(val f: Option[String] = None,
   /* constructor */
   val scheduler = pscheduler.getOrElse(defaultSchedulerConstructor())
 
-  lazy val data = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else flatten()
-  lazy val strippedData = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else unify
+  lazy val data = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else unify()
+  lazy val strippedData = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else strip
 
   def taskSize: Option[Int] = if (rTaskSize.nonEmpty) rTaskSize
-                                   else Some(flatten().length)
+                                   else Some(strip.length)
 
   //only used when timer is activated
   val taskSizeActions: ArrayBuffer[(Int) => Int] = ArrayBuffer.empty[(Int) => Int]
@@ -69,40 +70,64 @@ abstract class DataContainer(val f: Option[String] = None,
    * @param fileColName default value is "fileName"
    * @return
    */
-  def flatten(fileColName: Option[String] = None): Iterator[NormalRow] = new AbstractIterator[NormalRow] {
+  def unify(fileColName: Option[String] = None): Iterator[NormalRow] = new AbstractIterator[NormalRow] {
 
     val itm = iteratorMap.iterator
     var cit = itm.next()
 
-    override def hasNext: Boolean = itm.hasNext || cit._2.hasNext
+    override def hasNext: Boolean = checkEmpty(itm.hasNext || cit._2.hasNext)
+
+    override def next(): NormalRow = {
+      cit._2.next() += (fileColName.getOrElse("fileName") -> cit._1)
+    }
 
     @tailrec
-    override def next(): NormalRow = {
-      if (!cit._2.hasNext && itm.hasNext) {
-        cit = itm.next()
-        next()
+    private[this] def checkEmpty(status: Boolean): Boolean = {
+      if (!status)
+        false
+      else {
+        if (cit._2.hasNext)
+          true
+        else if (itm.hasNext) {
+          cit = itm.next()
+          if (cit._2.hasNext) true
+          else checkEmpty(itm.hasNext || cit._2.hasNext)
+        }
+        else false
       }
-      else cit._2.next() += (fileColName.getOrElse("fileName") -> cit._1)
     }
   }
 
   //discard the file information
-  def unify: Iterator[NormalRow] = new AbstractIterator[NormalRow] {
+  def strip: Iterator[NormalRow] = new AbstractIterator[NormalRow] {
 
     var it = iteratorMap.toIterator
     var currentIt = it.next()._2
 
-    override def hasNext: Boolean = it.hasNext || currentIt.hasNext
+    override def hasNext: Boolean = checkEmpty(it.hasNext || currentIt.hasNext)
+
+    override def next(): NormalRow = {
+      currentIt.next()
+    }
 
     @tailrec
-    override def next(): NormalRow = {
-      if (!currentIt.hasNext && it.hasNext) {
-        currentIt = it.next()._2
-        next()
+    private[this] def checkEmpty(status: Boolean): Boolean = {
+      if (!status)
+        false
+      else {
+        if (currentIt.hasNext)
+          true
+        else if (it.hasNext) {
+          currentIt = it.next()._2
+          if (currentIt.hasNext) true
+          else checkEmpty(it.hasNext)
+        }
+        else false
       }
-      else currentIt.next()
     }
   }
+
+
 
 }
 

@@ -12,7 +12,7 @@ trait BasicNLP extends DataStructure with FailureHandle {
 
     //this already covers most basic NLP tasks
     if (targetColumns.isEmpty &&
-      getTarget.isEmpty) fatal("BasicNLP predefined check did not pass: target column cannot be empty.")
+      target.isEmpty) fatal("BasicNLP predefined check did not pass: target column cannot be empty.")
   }
 
 }

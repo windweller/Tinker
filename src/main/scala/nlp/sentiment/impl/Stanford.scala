@@ -51,7 +51,7 @@ trait Stanford extends Sentiment{
       val itr = group._2
       while (itr.hasNext) {
         val row = itr.next()
-        val tweet = row(struct.getTarget.get)
+        val tweet = row(struct.target.get)
 
         /* stanford code */
 

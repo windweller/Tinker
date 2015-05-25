@@ -1,7 +1,8 @@
 package newParser
 
-import files.structure.DataStructure
+
 import newFiles.DataContainer
+import newFiles.structure.DataStructure
 import newProcessing.Scheduler
 
 /**

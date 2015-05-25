@@ -1,5 +1,6 @@
 package utils
 
+import newFiles.filetypes.csv.CSVOutput
 import newFiles.filetypes.tab.{TabOutput, Tab}
 import newProcessing.buffers.BufferConfig
 import newProcessing.buffers.file.FileBuffer
@@ -26,7 +27,7 @@ object Global {
     implicit val scheduler = defaultSchedulerConstructor()
 
     //every time a DataContainer is constructed, this method is called
-    def defaultSchedulerConstructor() = new Scheduler(4)(BufferConfig()) with Sequential with FileBuffer with TabOutput
+    def defaultSchedulerConstructor() = new Scheduler(4)(BufferConfig()) with Sequential with FileBuffer with CSVOutput
 
   }
 

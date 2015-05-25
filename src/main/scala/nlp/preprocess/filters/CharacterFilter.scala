@@ -1,4 +1,4 @@
-package nlp.filters
+package nlp.preprocess.filters
 
 import com.github.tototoshi.csv.CSVWriter
 import utils.TabPrinter
@@ -22,7 +22,7 @@ trait CharacterFilter extends Filter{
       while (itr.hasNext) {
         val row = itr.next()
         if (row.nonEmpty) {
-          val tweet = row(struct.getTarget.get)
+          val tweet = row(struct.target.get)
           if (tweet.trim.nonEmpty) {
             printer.print(Seq(struct.getIdValue(row).getOrElse(group._1), tweet))
           }

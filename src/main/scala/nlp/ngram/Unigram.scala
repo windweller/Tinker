@@ -8,7 +8,7 @@ import scala.collection.mutable
 trait Unigram extends Ngram {
 
   //current implementation requires header
-  def getTokenNumber: mutable.HashMap[String, Int] = {
+  def getUnigramTokenNumber: mutable.HashMap[String, Int] = {
     val it = data.iteratorMap
     val result = mutable.HashMap.empty[String, Int]
 
@@ -18,7 +18,7 @@ trait Unigram extends Ngram {
       while (itr.hasNext) {
         val row = itr.next()
         if (row.nonEmpty) {
-          val nonemptyRowText = row(struct.getTarget.get)
+          val nonemptyRowText = row(struct.target.get)
           unigramCount += nonemptyRowText.split(" ").length
         }
       }
@@ -27,4 +27,6 @@ trait Unigram extends Ngram {
 
     result
   }
+
+
 }

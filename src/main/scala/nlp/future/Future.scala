@@ -13,7 +13,6 @@ import newFiles.structure.DataStructure
 import nlp.matcher.Matcher
 import nlp.matcher.impl.Tregex
 import nlp.parser.Parser
-import nlp.parser.impl.StanfordPCFG
 import FutureRules._
 import utils.Timer
 import scala.concurrent.Future
@@ -23,7 +22,7 @@ import scala.concurrent.Future
  */
 class Future(val data: DataContainer, val struct: DataStructure, val patternRaw: Iterator[String]) {
 
-  val parser = new Parser with StanfordPCFG
+  val parser = new Parser
   val matcher = new Matcher with Tregex
   val patterns = patternRaw.map(e => TregexPattern.compile(e)).toList
 
@@ -38,8 +37,8 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
 
     val parseFlow: Flow[NormalRow, (String, String, Tree), Unit] =
         Flow[NormalRow].mapAsync[(String, String, Tree)](row => Future{
-          println("processing: " + row(struct.getTarget.get))
-          (struct.getIdValue(row).get, row(struct.getTarget.get),parser.parse(row(struct.getTarget.get)))
+          println("processing: " + row(struct.target.get))
+          (struct.getIdValue(row).get, row(struct.target.get),parser.parse(row(struct.target.get)))
         })
 
     val tregexMatchFlow: Flow[(String, String, Tree), Seq[Any], Unit] = Flow[(String, String, Tree)].mapAsync[Seq[Any]] { tuple =>
@@ -52,7 +51,7 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
 
     val printSink = Sink.foreach[Seq[Any]](line => output.writeRow(line))
 
-    val tweets: Source[NormalRow, Unit] = Source(() => data.unify)
+    val tweets: Source[NormalRow, Unit] = Source(() => data.strip)
     val sourceReady = tweets.via(parseFlow).via(tregexMatchFlow)
     val materialized = sourceReady.runWith(printSink)
 

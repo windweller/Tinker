@@ -1,7 +1,8 @@
 package newFiles.structure
 
-import newFiles.RowTypes.NormalRow
+import newFiles.RowTypes._
 import utils.FailureHandle
+import scala.collection.mutable
 
 /**
  * Created by Aimingnie on 4/25/15
@@ -37,47 +38,53 @@ abstract class DataStructure(idColumn: Option[Int] = None,
   //predefined check
   predefinedCheck()
 
+  lazy val target: Option[String] = getSingleIntStringOption(targetColumn, targetColumnWithName)
+  lazy val id: Option[String] = getSingleIntStringOption(idColumn, idColumnWithName)
+  lazy val ignore: Option[String] = getSingleIntStringOption(ignoreColumn, ignoreColumnWithName)
+  lazy val label: Option[String] = getSingleIntStringOption(labelColumn, labelColumnWithName)
+  lazy val keeps: Option[IndexedSeq[String]] = getMultipleIntStringOption(keepColumns, keepColumnsWithNames)
+
   /*
-   * Column Name Getters
+  * iterator
   */
 
-  def getTarget: Option[String] = {
-    getSingleIntStringOption(targetColumn, targetColumnWithName)
-  }
-
-  def getId: Option[String] = {
-    getSingleIntStringOption(idColumn, idColumnWithName)
-  }
-
-  def getIgnore: Option[String] = {
-    getSingleIntStringOption(ignoreColumn, ignoreColumnWithName)
-  }
-
-  def getLabel: Option[String] = {
-    getSingleIntStringOption(labelColumn, labelColumnWithName)
-  }
-
-  def getKeepColumns: Option[IndexedSeq[String]]  = {
-    getMultipleIntStringOption(keepColumns, keepColumnsWithNames)
-  }
+  //could be empty
+  lazy val values: Vector[Option[String]] = Vector(target, id, ignore, label)
+  lazy val multivalues: Vector[Option[IndexedSeq[String]]] = Vector(keeps)
 
   /*
    * Actual Value Getters (go with .getOrElse)
    */
   def getIdValue(row: NormalRow): Option[String] = {
-    getSingleIntStringOptionValue(idColumn, idColumnWithName, row)
+    getSingleIntStringOptionValue(id, row)
   }
 
   def getTargetValue(row: NormalRow): Option[String] = {
-    getSingleIntStringOptionValue(targetColumn, targetColumnWithName,row)
+    getSingleIntStringOptionValue(target, row)
   }
 
   def getLabelValue(row: NormalRow): Option[String] = {
-    getSingleIntStringOptionValue(labelColumn, labelColumnWithName, row)
+    getSingleIntStringOptionValue(label, row)
   }
 
   def getKeepColumnsValue(row: NormalRow): Option[IndexedSeq[String]] = {
     getMultipleIntStringOptionValue(keepColumns, keepColumnsWithNames, row)
+  }
+
+  /**
+   * Get Key, Value pairs
+   */
+
+  var keepColumnsKeyValuePairs: Option[mutable.HashMap[String, String]] = None
+
+  def getKeepColumnsKeyValuePairs(row: NormalRow): Option[mutable.HashMap[String, String]] = {
+    if (keepColumnsKeyValuePairs == None) {
+      val map = mutable.HashMap.empty[String, String]
+      if (keepColumns.nonEmpty) keepColumns.get.foreach(e => map.put(e.toString, row(e.toString)))
+      else if (keepColumnsWithNames.nonEmpty) keepColumnsWithNames.get.foreach(e => map.put(e, row(e)))
+      keepColumnsKeyValuePairs = if (map.isEmpty) None else Some(map)
+    }
+    keepColumnsKeyValuePairs
   }
 
 }
@@ -93,8 +100,7 @@ trait StructureUtils {
     else a2
   }
 
-  protected def getSingleIntStringOptionValue(a1: Option[Int], a2: Option[String], row: NormalRow): Option[String] = {
-    val key = getSingleIntStringOption(a1, a2)
+  protected def getSingleIntStringOptionValue(key: Option[String], row: NormalRow): Option[String] = {
     key.map(k => row(k))
   }
 

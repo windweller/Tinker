@@ -1,4 +1,4 @@
-package nlp.filters
+package nlp.preprocess.filters
 
 
 import com.github.tototoshi.csv.CSVWriter
@@ -21,18 +21,14 @@ trait TwitterFilter extends Filter {
   def preprocess(saveLoc: String): Unit = {
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
 
-    val it = data.iteratorMap
+    val it = data.data
     val result = ArrayBuffer.empty[Seq[String]]
 
-    it.foreach { group =>
-      val itr = group._2
-      while (itr.hasNext) {
-        val row = itr.next()
-        if (row.nonEmpty) {
-          val tweet = row(struct.getTarget.get).replaceAll(TwitterRegex.searchPattern.toString(), "")
-          if (tweet.trim.nonEmpty && tweet.split(" ").length >= 2) {
-            result += Seq(struct.getIdValue(row).getOrElse(group._1), tweet)
-          }
+    it.foreach { row =>
+      if (row.get(struct.target.get).nonEmpty) {
+        val tweet = row(struct.target.get).replaceAll(TwitterRegex.searchPattern.toString(), "")
+        if (tweet.trim.nonEmpty && tweet.split(" ").length >= 2) {
+          result += Seq(struct.getIdValue(row).getOrElse(row("fileName")), tweet)
         }
       }
     }

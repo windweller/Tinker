@@ -25,7 +25,7 @@ trait Split extends Sentence {
       while (itr.hasNext) {
         val row = itr.next()
         if (row.nonEmpty) {
-          val processorIterator = new DocumentPreprocessor(new StringReader(row(struct.getTarget.get)))
+          val processorIterator = new DocumentPreprocessor(new StringReader(row(struct.target.get)))
           val sentences = ArrayBuffer.empty[java.util.List[HasWord]]
 
           val it = processorIterator.iterator()
@@ -54,7 +54,7 @@ trait Split extends Sentence {
       while (itr.hasNext) {
         val row = itr.next()
         if (row.nonEmpty) {
-          val processorIterator = new DocumentPreprocessor(new StringReader(row(struct.getTarget.get)))
+          val processorIterator = new DocumentPreprocessor(new StringReader(row(struct.target.get)))
           val sentences = ArrayBuffer.empty[java.util.List[HasWord]]
 
           val it = processorIterator.iterator()

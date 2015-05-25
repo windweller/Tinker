@@ -182,7 +182,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
         val columns = ArrayBuffer.empty[Double]
         val pairId: Option[String] = struct.getIdValue(row)
         columnIt.foreach { pair =>
-          if (struct.getIgnore.get != pair._1 && struct.getId.get != pair._1)
+          if (struct.ignore.get != pair._1 && struct.id.get != pair._1)
             columns += pair._2.toDouble
         }
 

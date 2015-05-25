@@ -9,7 +9,7 @@ import newFiles.structure.DataStructure
 import newFiles.structure.predefined.{NoCheck, BasicNLP}
 import nlp.basic.Sentence
 import nlp.basic.sentence.Split
-import nlp.filters._
+import nlp.preprocess.filters._
 import nlp.future.Future
 import nlp.ngram.{Unigram, Ngram}
 import nlp.sentiment.Sentiment
@@ -37,14 +37,14 @@ class RunAllTweets extends FlatSpec {
     println(data.data.length)
   }
 
-  "count sentence #" should "work" in {
-    val struct = new DataStructure(targetColumnWithName = "MWand1") with BasicNLP
-    val data = new DataContainer("/Users/Aimingnie/Desktop/R/ACL2015/jason/", header = true) with CSV
-    val basic = new Sentence(data, struct) with Split
-    val result = basic.countSentences()
-    val output: CSVWriter = CSVWriter.open("/Users/Aimingnie/Desktop/R/ACL2015/sentenceCount.txt", append = true)
-    output.writeRow(result.toSeq)
-  }
+//  "count sentence #" should "work" in {
+//    val struct = new DataStructure(targetColumnWithName = "MWand1") with BasicNLP
+//    val data = new DataContainer("/Users/Aimingnie/Desktop/R/ACL2015/jason/", header = true) with CSV
+//    val basic = new Sentence(data, struct) with Split
+//    val result = basic.countSentences()
+//    val output: CSVWriter = CSVWriter.open("/Users/Aimingnie/Desktop/R/ACL2015/sentenceCount.txt", append = true)
+//    output.writeRow(result.toSeq)
+//  }
 
   "filtering Twitter with Emoticon" should "work" in {
     val data = new DataContainer("/Users/Aimingnie/Desktop/R/ACL2015/Tweets/", header = true, fuzzyMatch = 9) with CSV
@@ -62,12 +62,12 @@ class RunAllTweets extends FlatSpec {
     filter.preprocess("E:\\Allen\\R\\acl2015\\tweetsByStateSplittedCleaned.csv")
   }
 
-  "split tweets" should "work" in {
-    val struct = new DataStructure(idColumn = 0, targetColumn = 1) with BasicNLP
-    val data = new DataContainer("/Users/Aimingnie/Desktop/R/ACL2015/tweetsByState.csv", header = false) with CSV
-    val basic = new Sentence(data, struct) with Split
-    basic.splitSentences("/Users/Aimingnie/Desktop/R/ACL2015/tweetsByStateSplitted.csv")
-  }
+//  "split tweets" should "work" in {
+//    val struct = new DataStructure(idColumn = 0, targetColumn = 1) with BasicNLP
+//    val data = new DataContainer("/Users/Aimingnie/Desktop/R/ACL2015/tweetsByState.csv", header = false) with CSV
+//    val basic = new Sentence(data, struct) with Split
+//    basic.splitSentences("/Users/Aimingnie/Desktop/R/ACL2015/tweetsByStateSplitted.csv")
+//  }
 
   "sentiment analysis" should "work"  in {
     val struct = new DataStructure(idColumn = 0, targetColumn = 2) with BasicNLP

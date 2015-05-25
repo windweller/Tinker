@@ -34,7 +34,8 @@ object FileMapIterator {
   def getFileMap(folder: String, header: Boolean, fuzzyMatch: Option[Int])(suffix: Vector[String]): Map[String, FileIterator] = {
     val dir = new File(folder)
     if (!dir.isDirectory) {
-      HashMap(dir.getName -> new FileIterator(Array(dir), header))
+      //if just a simple file, we strip the suffix
+      HashMap(dir.getName.split("\\.")(0) -> new FileIterator(Array(dir), header))
     }
     else {
       val files = dir.listFiles().filter(f => !f.isDirectory).filter(f => suffix.contains(f.getName.split("\\.")(1)))

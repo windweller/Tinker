@@ -25,11 +25,11 @@ class FileIterator(files: Array[File], val header: Boolean) extends Iterator[Str
   private[this] var currentFileIterator = getIterator(currentFile, defaultCodecs.iterator)
   val headerRaw = getHeader //this is the header of the first file
 
-  lazy val firstColumn = if (header && currentFileIterator.hasNext) {
+  lazy val firstRow = if (header && currentFileIterator.hasNext) {
     next()
-    val col = next() //skip header and grab the first row
+    val row = next() //skip header and grab the first row
     reset()
-    col
+    row
   }
   else peekHead
 
@@ -77,8 +77,6 @@ class FileIterator(files: Array[File], val header: Boolean) extends Iterator[Str
       io.Source.fromFile(file).getLines()  //all custom codecs have failed, switching to default
   }
 
-//  private[this] def getIterator(file: File, codecs:Iterator[io.Codec]): Iterator[String] = io.Source.fromFile(file)(codecs.next()).getLines()
-
   override def hasNext: Boolean = checkEmpty(remainingFiles.hasNext || currentFileIterator.hasNext)
 
   //this function fast forward and skip through empty files
@@ -97,7 +95,7 @@ class FileIterator(files: Array[File], val header: Boolean) extends Iterator[Str
         currentFileIterator = getIterator(currentFile, defaultCodecs.iterator)
         headerCheck()
         if (currentFileIterator.hasNext) true
-        else checkEmpty(remainingFiles.hasNext || currentFileIterator.hasNext)
+        else checkEmpty(remainingFiles.hasNext)
       }
       else false
     }

@@ -14,7 +14,6 @@ import newFiles.structure.predefined.BasicNLP
 import nlp.matcher.Matcher
 import nlp.matcher.impl.Tregex
 import nlp.parser.Parser
-import nlp.parser.impl.StanfordPCFG
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import utils.Timer
 import utils.ParameterCallToOption.implicits._
@@ -29,7 +28,7 @@ import scala.util.{Failure, Success}
  */
 object FutureApp extends App {
 
-  val parser = new Parser with StanfordPCFG
+  val parser = new Parser
   val matcher = new Matcher with Tregex
 
   val patternRaw = io.Source.fromFile("E:\\Allen\\R\\acl2015\\FutureRules_2.0b.txt").getLines().filter(e => e != "").map(e => e.replaceFirst("\\s+$", ""))
@@ -61,7 +60,7 @@ object FutureApp extends App {
   val printSink = Sink.foreach[Seq[Any]](line => output.writeRow(line))
 
   //merging
-  val itr = data.unify
+  val itr = data.strip
 
     val tweets: Source[NormalRow, Unit] = Source(() => itr)
     val sourceReady = tweets.via(tregexMatchFlow)
