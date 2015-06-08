@@ -10,7 +10,7 @@ import scala.collection.mutable.ArrayBuffer
  */
 trait CharacterFilter extends Filter{
 
-  var character_limit = 2
+  var character_limit = 3
 
   override def preprocess(saveLoc: String): Unit = {
     val printer = TabPrinter(saveLoc)
@@ -22,8 +22,8 @@ trait CharacterFilter extends Filter{
       while (itr.hasNext) {
         val row = itr.next()
         if (row.nonEmpty) {
-          val tweet = row(struct.target.get)
-          if (tweet.trim.nonEmpty) {
+          val tweet = row(struct.target.get).replaceAll("\\W \\S", "") //replace non-English characters
+          if (tweet.split(" ").length >= character_limit) {
             printer.print(Seq(struct.getIdValue(row).getOrElse(group._1), tweet))
           }
         }

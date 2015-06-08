@@ -5,7 +5,7 @@ version := "0.1"
 
 scalaVersion := "2.11.6"
 
-mainClass in (Compile, run) := Some("nlp.future.FutureOnTweets")
+mainClass in (Compile, run) := Some("experiments.emnlp2015.Stream")
 
 resolvers += Resolver.sonatypeRepo("snapshots")
 
@@ -18,7 +18,7 @@ libraryDependencies ++= {
   val akkaV = "2.3.9"
   Seq(
     //compiler plug-in
-    "org.scala-miniboxing.plugins" %% "miniboxing-runtime" % "0.4-SNAPSHOT",
+//    "org.scala-miniboxing.plugins" %% "miniboxing-runtime" % "0.4-SNAPSHOT",
     //parallel-processing
     "com.typesafe.akka"   %%   "akka-actor"    % akkaV,
     "com.typesafe.akka"   %%   "akka-slf4j"    % akkaV,
@@ -42,7 +42,7 @@ libraryDependencies ++= {
   )
 }
 
-addCompilerPlugin("org.scala-miniboxing.plugins" %% "miniboxing-plugin" % "0.4-SNAPSHOT")
+//addCompilerPlugin("org.scala-miniboxing.plugins" %% "miniboxing-plugin" % "0.4-SNAPSHOT")
 
 initialCommands in console := """
 import files.filetypes._

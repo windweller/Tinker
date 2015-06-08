@@ -9,6 +9,7 @@ import utils.collections.ArrayUtil._
 import utils.ParameterCallToOption.implicits._
 
 import scala.annotation.tailrec
+import scala.collection.immutable.HashMap
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.{AbstractIterator, mutable}
 
@@ -36,10 +37,6 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
   }
 
   /* Core methods */
-
-  def combine(data2: DataContainer): DataContainer with FileOp = {
-    this
-  }
 
   /**
    * Unfinished
@@ -166,6 +163,55 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
     result.map(e => e._1 -> e._2.toString)
   }
 
+  def countByGroup(groupCol: Option[Int] = None,
+                   groupColWithName: Option[String] = None,
+                    isFileName: Boolean = false): DataContainer with FileOp = {
+    val colName: String = if (groupCol.nonEmpty || groupColWithName.nonEmpty) getSingleIntStringOption(groupCol, groupColWithName).get
+                  else if (isFileName) "fileName"
+                  else throw new Exception("You must specify how it's being grouped")
+
+    val it = countByGroupIt(colName)
+    scheduler.opSequence.push(it)
+    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize)(scheduler) with FileOp
+  }
+
+  //TODO: not entirely working, but it's probably printing's fault
+  //this algorithm works fine if you directly print here
+  private[this] def countByGroupIt(coln: String): RowIterator = new AbstractIterator[NormalRow] {
+
+    val it = unify()
+
+    var count = 0
+    var previousGroupTag = ""
+    var endState = false
+
+    override def hasNext: Boolean = it.hasNext || !endState
+
+    override def next(): NormalRow = {
+      if (!it.hasNext) {
+        endState = true
+        mutable.HashMap[String, String](previousGroupTag -> count.toString)
+      }
+      else {
+        val row = it.next()
+        //initialize
+        if (previousGroupTag == "") previousGroupTag = row(coln)
+        //same group compress
+        if (row(coln) == previousGroupTag) {
+          count += 1
+          next()
+        }
+        else {
+          val result = mutable.HashMap(previousGroupTag -> count.toString)
+          previousGroupTag = row(coln)
+          count = 1
+          result
+        }
+      }
+    }
+  }
+
+  //legacy method
   def averageByGroup(saveLoc: String, struct: DataStructure): Unit = {
 
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)

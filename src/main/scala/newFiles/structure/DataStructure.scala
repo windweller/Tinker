@@ -75,16 +75,12 @@ abstract class DataStructure(idColumn: Option[Int] = None,
    * Get Key, Value pairs
    */
 
-  var keepColumnsKeyValuePairs: Option[mutable.HashMap[String, String]] = None
-
   def getKeepColumnsKeyValuePairs(row: NormalRow): Option[mutable.HashMap[String, String]] = {
-    if (keepColumnsKeyValuePairs == None) {
       val map = mutable.HashMap.empty[String, String]
       if (keepColumns.nonEmpty) keepColumns.get.foreach(e => map.put(e.toString, row(e.toString)))
       else if (keepColumnsWithNames.nonEmpty) keepColumnsWithNames.get.foreach(e => map.put(e, row(e)))
-      keepColumnsKeyValuePairs = if (map.isEmpty) None else Some(map)
-    }
-    keepColumnsKeyValuePairs
+
+      if (map.nonEmpty) Some(map) else None
   }
 
 }

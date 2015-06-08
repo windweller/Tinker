@@ -15,4 +15,5 @@ abstract class Printer(filePath: Option[String], fileAppend: Boolean = true)(imp
   config.filePath = filePath
   config.fileAppend = fileAppend
 
+  override val config: BufferConfig = bufferConfig
 }

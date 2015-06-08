@@ -26,7 +26,7 @@ class RunAllTweets extends FlatSpec {
     val data = new DataContainer("/Users/Aimingnie/Desktop/R/ACL2015/Tweets/", header = true, fuzzyMatch = 9) with CSV
     val struct = new DataStructure(targetColumnWithName = "Text") with BasicNLP
     val ngram = new Ngram(data, struct) with Unigram
-    val result = ngram.getTokenNumber
+    val result = ngram.getUnigramTokenNumber
     val output: CSVWriter = CSVWriter.open("/Users/Aimingnie/Desktop/R/ACL2015/unigramToken.txt", append = true)
     println(result.size)
     output.writeRow(result.toSeq)

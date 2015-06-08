@@ -19,5 +19,8 @@ abstract class Ngram(val data: DataContainer, val struct: DataStructure, val ngr
 
   val hs = mutable.HashSet.empty[String]
 
-
 }
+
+case class BigramPair(w1: Option[String], w2: Option[String])
+case class TrigramPair(w0: Option[String], w1: Option[String], w2: Option[String])
+
