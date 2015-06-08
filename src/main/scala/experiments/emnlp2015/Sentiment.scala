@@ -105,7 +105,7 @@ class Sentiment(val data: DataContainer, val struct: DataStructure) {
 
         tweets ~> bcast.in
 
-        0 to 9 foreach  { i =>
+        0 to 14 foreach  { i =>
           bcast.out(i) ~> sentimentFlow ~> merge
         }
 
