@@ -41,14 +41,13 @@ class Sentiment(val data: DataContainer, val struct: DataStructure) {
   val tokenizer: StanfordCoreNLP = if (tokenizerProps == null) null else new StanfordCoreNLP(tokenizerProps)
   val pipeline: StanfordCoreNLP = new StanfordCoreNLP(pipelineProps)
 
-
   def saveSentimentMatching(saveLoc: String): Unit = {
 
     def extractSentiment(row: NormalRow): Seq[Seq[Any]] = {
       val tweet = row(struct.target.get)
       val annotations: ArrayBuffer[Annotation] = getAnnotations(tokenizer, tweet)
 
-      val result = ArrayBuffer.empty[Seq[String]]
+      val result = ArrayBuffer.empty[Seq[Any]]
 
       annotations.foreach(annotation => {
         pipeline.annotate(annotation)
@@ -71,7 +70,7 @@ class Sentiment(val data: DataContainer, val struct: DataStructure) {
           val seq = (0 to vector.getNumElements - 1).map(i => NF.format(vector.get(i)))
 
           //column name, rootLabel, prob score
-          result += Seq(struct.getIdValue(row).get, rootLabel) ++ seq
+          result += Seq(struct.getIdValue(row).get, tree.toString, rootLabel) ++ seq
           Timer.completeOne() //add to timer
         }
       })
@@ -100,12 +99,12 @@ class Sentiment(val data: DataContainer, val struct: DataStructure) {
 
         import FlowGraph.Implicits._
 
-        val bcast = builder.add(Broadcast[NormalRow](15))
-        val merge = builder.add(Merge[Seq[Seq[Any]]](15))
+        val bcast = builder.add(Balance[NormalRow](20))
+        val merge = builder.add(Merge[Seq[Seq[Any]]](20))
 
         tweets ~> bcast.in
 
-        0 to 14 foreach  { i =>
+        0 to 19 foreach  { i =>
           bcast.out(i) ~> sentimentFlow ~> merge
         }
 

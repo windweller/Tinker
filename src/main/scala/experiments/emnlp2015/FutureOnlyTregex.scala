@@ -18,10 +18,9 @@ import utils.Timer
 import scala.concurrent.Future
 
 /**
- * Created by anie on 6/7/2015.
+ * Created by anie on 6/8/2015.
  */
-class Future(val data: DataContainer, val struct: DataStructure, val patternRaw: Iterator[String]) {
-
+class FutureOnlyTregex(val data: DataContainer, val struct: DataStructure, val patternRaw: Iterator[String]) {
   val parser = new Parser
   val matcher = new Matcher with Tregex
   val patterns = patternRaw.map(e => TregexPattern.compile(e)).toList
@@ -35,17 +34,12 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
 
     import system.dispatcher
 
-    val parseFlow: Flow[NormalRow, (String, String, Tree), Unit] =
-      Flow[NormalRow].mapAsync[(String, String, Tree)](row => Future{
-//        println("processing: " + row(struct.target.get)) //no need to print
-        (struct.getIdValue(row).get, row(struct.target.get),parser.parse(row(struct.target.get)))
-      })
-
-    val tregexMatchFlow: Flow[(String, String, Tree), Seq[Any], Unit] = Flow[(String, String, Tree)].mapAsync[Seq[Any]] { tuple =>
+    //need to keep the id column and state label
+    val tregexMatchFlow: Flow[NormalRow, Seq[Any], Unit] = Flow[NormalRow].mapAsync[Seq[Any]] { row =>
       Future {
-        val array = matcher.search(tuple._3, patterns)
+        val array = matcher.search(Tree.valueOf(struct.getTargetValue(row).get), patterns)
         Timer.completeOne()
-        Seq(tuple._1, tuple._2) ++ array.toSeq
+        Seq(struct.getIdValue(row).get) ++ struct.getKeepColumnsValue(row).get ++ array.toSeq
       }
     }
 
@@ -57,23 +51,19 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
     val g = FlowGraph.closed(printSink) { implicit builder: FlowGraph.Builder =>
       printsink =>
 
-      import FlowGraph.Implicits._
+        import FlowGraph.Implicits._
 
-      val bcast = builder.add(Balance[NormalRow](10))
-        val merge = builder.add(Merge[Seq[Any]](10))
+        val bcast = builder.add(Balance[NormalRow](15))
+        val merge = builder.add(Merge[Seq[Any]](15))
 
-      tweets ~> bcast.in
+        tweets ~> bcast.in
 
-        0 to 9 foreach  { i =>
-          bcast.out(i) ~> parseFlow ~> tregexMatchFlow ~> merge
+        0 to 14 foreach { i =>
+          bcast.out(i) ~> tregexMatchFlow ~> merge
         }
 
         merge ~> printsink
     }.run()
-
-
-//    val sourceReady = tweets.via(parseFlow).via(tregexMatchFlow)
-//    val materialized = sourceReady.runWith(printSink)
-
   }
+
 }
