@@ -15,19 +15,50 @@ import nlp.matcher.impl.Tregex
 import nlp.parser.Parser
 import utils.Timer
 
-import scala.concurrent.Future
+import scala.collection.mutable.ListBuffer
 
 /**
  * Created by anie on 6/7/2015.
  */
-class Future(val data: DataContainer, val struct: DataStructure, val patternRaw: Iterator[String]) {
+class Future(val data: DataContainer, val struct: DataStructure, val patternRaw: List[String],
+             val tndoc: Option[String] = None, val tcdoc: Option[String] = None,
+              val mispelling: Boolean = false) {
+
+  import scala.concurrent.Future
 
   val parser = new Parser
   val matcher = new Matcher with Tregex
-  val patterns = patternRaw.map(e => TregexPattern.compile(e)).toList
+  //pre-processing patterns (replace TN|TC)
+  val tnterms = tndoc.map(doc => scala.io.Source.fromFile(doc).getLines().toList)
+  val tcterms = tcdoc.map(doc => scala.io.Source.fromFile(doc).getLines().toList)
+
+  val patterns = if (tndoc.nonEmpty && tcdoc.nonEmpty) preprocessTregex(patternRaw).map(e => TregexPattern.compile(e))
+                 else  patternRaw.map(e => TregexPattern.compile(e))
+
+  def preprocessTregex(patterns: List[String]): List[String] = {
+    val result = ListBuffer.empty[String]
+    patterns.foreach { p =>
+      if (p.contains("TN|TC")) {
+        //just replace all TN and TC
+        result ++= tnterms.get.map(tn => p.replace("TN|TC", tn))
+        result ++= tcterms.get.map(tc => p.replace("TN|TC", tc))
+      }
+      else if (p.contains("TN")) {
+        result ++= tnterms.get.map(tn => p.replace("TN", tn))
+      }
+      else if (p.contains("TC")) {
+        result ++= tcterms.get.map(tc => p.replace("TC", tc))
+      }
+      else result += p
+    }
+    result.toList
+  }
 
   def saveFutureMatching(saveLoc: String): Unit = {
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
+
+    //comment out during regular task
+    output.writeRow(Seq("sentence", "Allen", "Tim") ++ patternRaw)
 
     val conf: Config = ConfigFactory.load()
     implicit val system = ActorSystem("reactive-tweets", conf)
@@ -35,17 +66,17 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
 
     import system.dispatcher
 
-    val parseFlow: Flow[NormalRow, (String, String, Tree), Unit] =
-      Flow[NormalRow].mapAsync[(String, String, Tree)](row => Future{
+    val parseFlow: Flow[NormalRow, (NormalRow, Tree), Unit] =
+      Flow[NormalRow].mapAsync[(NormalRow, Tree)](row => scala.concurrent.Future {
 //        println("processing: " + row(struct.target.get)) //no need to print
-        (struct.getIdValue(row).get, row(struct.target.get),parser.parse(row(struct.target.get)))
+        (row, parser.parse(row(struct.target.get))) //struct.getIdValue(row).get,
       })
 
-    val tregexMatchFlow: Flow[(String, String, Tree), Seq[Any], Unit] = Flow[(String, String, Tree)].mapAsync[Seq[Any]] { tuple =>
-      Future {
-        val array = matcher.search(tuple._3, patterns)
+    val tregexMatchFlow: Flow[(NormalRow, Tree), Seq[Any], Unit] = Flow[(NormalRow, Tree)].mapAsync[Seq[Any]] { tuple =>
+      scala.concurrent.Future {
+        val array = matcher.search(tuple._2, patterns)
         Timer.completeOne()
-        Seq(tuple._1, tuple._2) ++ array.toSeq
+        Seq(struct.getTargetValue(tuple._1).get) ++ struct.getKeepColumnsValue(tuple._1).get ++ array.toSeq
       }
     }
 

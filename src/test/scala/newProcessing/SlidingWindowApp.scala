@@ -13,16 +13,21 @@ import scala.util.{Success, Failure}
  */
 object SlidingWindowApp extends App {
 
-  val i2 = run(2)
+//  val i2 = run(2)
 
-//  (4 to 9).par.foreach { i =>
+//  (2 to 7).par.foreach { i =>
 //    run(i)
 //    println(i + "th run is finished")
 //  }
 
   def run(i: Int): Unit = {
-    val dc = new DataContainer(f = "E:\\Allen\\NYTFuture\\NYT_result_2.0b\\nyt_by_sen.txt", header = true) with CSV with FileOp
-    dc.compressBySlidingWindow(discardColsWithName = Vector("id", "ParagraphID", "PageID"), windowSize = i)
-      .exec(filePath = "E:\\Allen\\NYTFuture\\NYT_result_2.0b\\NYT_slidingWindow_size" + i + ".txt")
+    val dc = new DataContainer(f = "E:\\Allen\\NYTFuture\\NYT_result_2.1\\nyt_by_sen2_1.txt", header = true) with CSV with FileOp
+    dc.compressBySlidingWindow(discardColsWithName = Vector("id", "ParagraphID", "PageID", "Parse", "SentenceID"), windowSize = i)
+      .exec(filePath = "E:\\Allen\\NYTFuture\\NYT_result_2.1\\NYT_slidingWindow_size" + i + ".txt")
   }
+
+  //compress by paragraph
+  val dc = new DataContainer(f = "E:\\Allen\\NYTFuture\\NYT_result_2.1\\nyt_by_sen2_1.txt", header = true) with CSV with FileOp
+  dc.compressBySum(groupByColWithName = "ParagraphID", discardColsWithName = Vector("id", "PageID", "Parse", "SentenceID"))
+    .exec(filePath = "E:\\Allen\\NYTFuture\\NYT_result_2.1\\NYT_byParagraph.txt")
 }

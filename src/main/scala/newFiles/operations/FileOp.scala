@@ -41,6 +41,55 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
   /**
    * Unfinished
    */
+
+  def compressBySum(groupByCol: Option[Int] = None, groupByColWithName: Option[String] = None,
+                    discardCols: Option[IndexedSeq[Int]] = None,
+                    discardColsWithName: Option[IndexedSeq[String]] = None): DataContainer with FileOp = {
+    val it = compressBySumIt(getSingleIntStringOption(groupByCol, groupByColWithName).get,
+      getMultipleIntStringOption(discardCols, discardColsWithName))
+    scheduler.opSequence.push(it)
+    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize)(scheduler) with FileOp
+  }
+
+  def compressBySumIt(g: String,
+                      discardCols: Option[IndexedSeq[String]]): RowIterator = new AbstractIterator[NormalRow] {
+    val it = strippedData
+    var sizeOfGroup = 0
+    var previousGroupTag = ""
+    val group = ArrayBuffer.empty[NormalRow]
+    var endState = false
+
+    override def hasNext: Boolean = it.hasNext || !endState
+
+    @tailrec
+    override def next(): NormalRow = {
+      if (!it.hasNext) {
+        endState = true
+        sumRows(group, Vector(g, previousGroupTag), discardCols, sizeOfGroup, avg = false)
+      }
+      else {
+        val row = it.next()
+        //initialize
+        if (previousGroupTag == "") previousGroupTag = row(g)
+        //same group compress
+        if (row(g) == previousGroupTag) {
+          group += row
+          //recursively call
+          sizeOfGroup += 1
+          next()
+        }
+        else {
+          val result = sumRows(group, Vector(g, previousGroupTag), discardCols, sizeOfGroup, avg = false)
+          previousGroupTag = row(g)
+          group.clear()
+          group += row
+          sizeOfGroup = 1
+          result
+        }
+      }
+    }
+  }
+
   def compressByAvg(groupByCol: Option[Int] = None, groupByColWithName: Option[String] = None,
                     discardCols: Option[IndexedSeq[Int]] = None,
                     discardColsWithName: Option[IndexedSeq[String]] = None): DataContainer with FileOp = {
@@ -65,7 +114,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
     override def next(): NormalRow = {
       if (!it.hasNext) {
         endState = true
-        sumRows(group, Vector(g, previousGroupTag), discardCols, sizeOfGroup)
+        sumRows(group, Vector(g, previousGroupTag), discardCols, sizeOfGroup, avg = true)
       }
       else {
         val row = it.next()
@@ -79,7 +128,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
           next()
         }
         else {
-          val result = sumRows(group, Vector(g, previousGroupTag), discardCols, sizeOfGroup)
+          val result = sumRows(group, Vector(g, previousGroupTag), discardCols, sizeOfGroup, avg = true)
           previousGroupTag = row(g)
           group.clear()
           group += row
@@ -94,10 +143,11 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
   /**
    * @param idValue stored as form of Vector, but just two values, first is the value of column ID,
    *                second is the value of that column
+   * @param avg true = average, false = sum
    * @return
    */
   private[this] def sumRows(rows: ArrayBuffer[NormalRow], idValue: Vector[String],
-                            discardCols: Option[IndexedSeq[String]], sizeOfGroup: Int): NormalRow = {
+                            discardCols: Option[IndexedSeq[String]], sizeOfGroup: Int, avg: Boolean): NormalRow = {
     val result = mutable.HashMap.empty[String, Int]
     rows.foreach { row =>
       row.foreach { col =>
@@ -106,7 +156,10 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
           result.put(col._1, result.getOrElse(col._1, 0) + col._2.toInt)
       }
     }
-    result.map(col => col._1 -> (col._2.toDouble / sizeOfGroup).toString) += idValue.head -> idValue(1)
+    if (avg)
+      result.map(col => col._1 -> (col._2.toDouble / sizeOfGroup).toString) += idValue.head -> idValue(1)
+    else
+      result.map(col => col._1 -> col._2.toString) += idValue.head -> idValue(1)
   }
 
   /**

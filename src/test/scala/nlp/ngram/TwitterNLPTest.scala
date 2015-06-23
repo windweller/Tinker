@@ -15,7 +15,7 @@ import newProcessing.Printer
 import newProcessing.buffers.BufferConfig
 import nlp.basic.Sentence
 import nlp.basic.sentence.Split
-import nlp.preprocess.filters.{CharacterFilter, TwitterFilter, Filter}
+import nlp.preprocess.filters.{TwitterMispellingFilter, CharacterFilter, TwitterFilter, Filter}
 import nlp.preprocess.tokenization.Tokenizer
 import nlp.preprocess.tokenization.impl.Stanford
 import nlp.preprocess.tokenization.impl.{ClearNLP, Stanford}
@@ -72,11 +72,25 @@ class TwitterNLPTest extends FlatSpec {
     filter.preprocess("E:\\Allen\\R\\emnlp2015\\tweetsTokenizedClean.csv")
   }
 
-  "sentiment analysis" should "work" in {
+  "replace mispelled word in tweets" should "work" in {
     val struct = new DataStructure(idColumnWithName = "state", targetColumnWithName = "sentence") with BasicNLP
     val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\tweetsTokenizedClean.csv", header = true) with Tab
+    val filter = new Filter(data, struct) with TwitterMispellingFilter
+    filter.preprocess("E:\\Allen\\R\\emnlp2015\\tweetsTokenizedCleanMispelledReplaced.csv")
+  }
+
+  "replcae mispelled words in twitter test file" should "work" in {
+    val struct = new DataStructure(keepColumnsWithNames = Vector("Gabby", "Denton"), targetColumnWithName = "Sentence") with BasicNLP
+    val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\GabbyDentonRatingOnTweets.csv", header = true) with CSV
+    val filter = new Filter(data, struct) with TwitterMispellingFilter
+    filter.preprocess("E:\\Allen\\R\\emnlp2015\\GabbyDentonRatingOnTweetsMispelledCleaned.csv")
+  }
+
+  "sentiment analysis" should "work" in {
+    val struct = new DataStructure(idColumnWithName = "state", targetColumnWithName = "sentence") with BasicNLP
+    val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\tweetsTokenizedCleanMispelledReplaced.csv", header = true) with CSV
     val sentiment = new Sentiment(data, struct) with nlp.sentiment.impl.Stanford
-    sentiment.classify("E:\\Allen\\R\\emnlp2015\\twitterSentiment2.csv")
+    sentiment.classify("E:\\Allen\\R\\emnlp2015\\twitterSentimentNoMispell.csv")
   }
 
   "uni-bi-trigram hashmap construction" should "work" in {
