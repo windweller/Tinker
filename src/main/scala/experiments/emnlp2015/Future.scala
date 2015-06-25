@@ -32,7 +32,7 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
   val tnterms = tndoc.map(doc => scala.io.Source.fromFile(doc).getLines().toList)
   val tcterms = tcdoc.map(doc => scala.io.Source.fromFile(doc).getLines().toList)
 
-  val patterns = if (tndoc.nonEmpty && tcdoc.nonEmpty) preprocessTregex(patternRaw).map(e => TregexPattern.compile(e))
+  val patterns = if (tndoc.nonEmpty || tcdoc.nonEmpty) preprocessTregex(patternRaw).map(e => TregexPattern.compile(e))
                  else  patternRaw.map(e => TregexPattern.compile(e))
 
   def preprocessTregex(patterns: List[String]): List[String] = {
@@ -40,7 +40,9 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
     patterns.foreach { p =>
       if (p.contains("TN|TC")) {
         //just replace all TN and TC
-        result ++= tnterms.get.map(tn => p.replace("TN|TC", tn))
+        //we are not replacing TN right now
+
+        //result ++= tnterms.get.map(tn => p.replace("TN|TC", tn))
         result ++= tcterms.get.map(tc => p.replace("TN|TC", tc))
       }
       else if (p.contains("TN")) {
@@ -58,7 +60,7 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
 
     //comment out during regular task
-    output.writeRow(Seq("sentence", "Allen", "Tim") ++ patternRaw)
+    output.writeRow(Seq("sentence", "Allen", "Tim") ++ preprocessTregex(patternRaw))
 
     val conf: Config = ConfigFactory.load()
     implicit val system = ActorSystem("reactive-tweets", conf)

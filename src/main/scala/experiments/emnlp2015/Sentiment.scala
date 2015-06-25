@@ -20,10 +20,9 @@ import org.ejml.simple.SimpleMatrix
 import utils.Timer
 
 import scala.collection.mutable.ArrayBuffer
-import scala.concurrent.Future
 
 /**
- * Created by anie on 6/7/2015.
+ * Created by anie on 6/7/2015
  */
 class Sentiment(val data: DataContainer, val struct: DataStructure) {
 
@@ -90,7 +89,7 @@ class Sentiment(val data: DataContainer, val struct: DataStructure) {
     val tweets: Source[NormalRow, Unit] = Source(() => data.strip)
     val printSink = Sink.foreach[Seq[Seq[Any]]](line => output.writeAll(line))
 
-    val sentimentFlow: Flow[NormalRow, Seq[Seq[Any]], Unit] = Flow[NormalRow].mapAsync[Seq[Seq[Any]]](row => Future {
+    val sentimentFlow: Flow[NormalRow, Seq[Seq[Any]], Unit] = Flow[NormalRow].mapAsync[Seq[Seq[Any]]](row => scala.concurrent.Future {
       extractSentiment(row)
     })
 
@@ -110,8 +109,6 @@ class Sentiment(val data: DataContainer, val struct: DataStructure) {
 
         merge ~> printsink
     }.run()
-
-
 
   }
 
