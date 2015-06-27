@@ -1,10 +1,9 @@
-package files.filetypes
+package files
 
-
-import files.DataContainer
 import files.RowTypes._
-import utils._
 import utils.OptionToParameter.implicits._
+import utils._
+
 import scala.collection.mutable
 
 /**

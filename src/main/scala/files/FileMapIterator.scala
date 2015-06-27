@@ -1,4 +1,4 @@
-package files.filetypes
+package files
 
 import java.io.File
 

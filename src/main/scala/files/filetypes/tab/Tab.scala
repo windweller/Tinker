@@ -4,8 +4,8 @@ import java.io.{File, RandomAccessFile}
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 
+import files.Doc
 import files.RowTypes._
-import files.filetypes.Doc
 import processing.buffers.file.{FileOutputFormat, FileBuffer}
 
 import scala.concurrent.Future
