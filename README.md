@@ -10,7 +10,9 @@ We want to make standard large file ML/NLP processing as smooth and as easy as p
 Tinker only release documentation for stable components, but its nightly built offers more. The next release will include a better API for NLP components (currently experimental and not very well-integrated into Tinker-processing). 
 
 - 0.12: Official alpha-release. Cleaned legacy code (version 0.10 old APIs). Added NLP components on top of Tinker-core. Slight performance increase. Documentation major update.
+
 - 0.11: Preparing for alpha-release, eliminate of module hiearchy (you can inherit them however you want), simplified inheritance/module linearization, unified type system for Tinker-core `RowIterator`, incorporating Akka-Stream 1.0M3 and Akka Stream-graph.
+
 - 0.10: first official pre-alpha release with workable APIs
 
 ## Quick Start - Interactive (REPL)
