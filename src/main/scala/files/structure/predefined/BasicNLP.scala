@@ -1,6 +1,6 @@
-package newFiles.structure.predefined
+package files.structure.predefined
 
-import newFiles.structure.DataStructure
+import files.structure.DataStructure
 import utils.FailureHandle
 
 /**

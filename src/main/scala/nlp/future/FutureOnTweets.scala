@@ -1,9 +1,9 @@
 package nlp.future
 
-import newFiles.DataContainer
-import newFiles.filetypes.tab.Tab
-import newFiles.structure.DataStructure
-import newFiles.structure.predefined.BasicNLP
+import files.DataContainer
+import files.filetypes.tab.Tab
+import files.structure.DataStructure
+import files.structure.predefined.BasicNLP
 import utils.ParameterCallToOption.implicits._
 import FutureRules._
 

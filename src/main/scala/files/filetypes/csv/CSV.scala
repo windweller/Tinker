@@ -1,8 +1,8 @@
-package newFiles.filetypes.csv
+package files.filetypes.csv
 
 import com.github.tototoshi.csv._
-import newFiles.RowTypes._
-import newFiles.filetypes.Doc
+import files.RowTypes._
+import files.filetypes.Doc
 import newProcessing.buffers.file.FileOutputFormat
 
 /**

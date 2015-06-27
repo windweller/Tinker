@@ -3,7 +3,7 @@ package newProcessing.buffers.file
 import java.io.{OutputStreamWriter, FileOutputStream, PrintWriter}
 import java.nio.file.{Files, Paths}
 
-import newFiles.RowTypes.NormalRow
+import files.RowTypes.NormalRow
 import newProcessing.buffers.Buffer
 import utils.{FailureHandle, Global}
 

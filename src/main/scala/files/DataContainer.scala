@@ -1,6 +1,6 @@
-package newFiles
+package files
 
-import newFiles.structure.DataStructure
+import files.structure.DataStructure
 import newProcessing.Scheduler
 
 import scala.annotation.tailrec

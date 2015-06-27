@@ -1,6 +1,6 @@
 package newProcessing
 
-import newFiles.RowTypes.{RowIterator, NormalRow}
+import files.RowTypes.{RowIterator, NormalRow}
 import newProcessing.buffers.BufferConfig
 
 import scala.collection.mutable

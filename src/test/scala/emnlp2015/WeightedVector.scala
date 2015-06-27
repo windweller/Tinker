@@ -3,11 +3,11 @@ package emnlp2015
 import java.io.{FileOutputStream, OutputStreamWriter, PrintWriter}
 
 import edu.emory.clir.clearnlp.tokenization.EnglishTokenizer
-import newFiles.DataContainer
-import newFiles.filetypes.csv.CSV
-import newFiles.filetypes.tab.Tab
-import newFiles.structure.DataStructure
-import newFiles.structure.predefined.BasicNLP
+import files.DataContainer
+import files.filetypes.csv.CSV
+import files.filetypes.tab.Tab
+import files.structure.DataStructure
+import files.structure.predefined.BasicNLP
 import utils.ParameterCallToOption.implicits._
 
 import scala.collection.mutable

@@ -1,6 +1,6 @@
-package newFiles.filetypes.tab
+package files.filetypes.tab
 
-import newFiles.RowTypes._
+import files.RowTypes._
 import newProcessing.buffers.file.FileOutputFormat
 
 /**

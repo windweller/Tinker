@@ -1,4 +1,4 @@
-package newFiles.filetypes
+package files.filetypes
 
 import java.io.File
 

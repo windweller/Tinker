@@ -1,6 +1,6 @@
-package newFiles.filetypes.space
+package files.filetypes.space
 
-import newFiles.filetypes.Doc
+import files.filetypes.Doc
 
 /**
  * Created by anie on 4/21/2015.

@@ -1,8 +1,8 @@
 package newProcessing
 
-import newFiles.DataContainer
-import newFiles.filetypes.csv.CSV
-import newFiles.operations.FileOp
+import files.DataContainer
+import files.filetypes.csv.CSV
+import files.operations.FileOp
 import utils.ParameterCallToOption.implicits._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

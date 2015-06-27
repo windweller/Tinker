@@ -4,13 +4,13 @@ import java.io.{FileOutputStream, OutputStreamWriter, PrintWriter}
 
 import com.github.tototoshi.csv.CSVWriter
 import edu.emory.clir.clearnlp.tokenization.EnglishTokenizer
-import newFiles.DataContainer
-import newFiles.RowTypes.NormalRow
-import newFiles.filetypes.csv.CSV
-import newFiles.filetypes.tab.{Tab, TabOutput}
-import newFiles.operations.FileOp
-import newFiles.structure.DataStructure
-import newFiles.structure.predefined.BasicNLP
+import files.DataContainer
+import files.RowTypes.NormalRow
+import files.filetypes.csv.CSV
+import files.filetypes.tab.{Tab, TabOutput}
+import files.operations.FileOp
+import files.structure.DataStructure
+import files.structure.predefined.BasicNLP
 import newProcessing.Printer
 import newProcessing.buffers.BufferConfig
 import nlp.basic.Sentence

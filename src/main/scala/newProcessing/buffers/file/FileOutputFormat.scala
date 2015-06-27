@@ -1,6 +1,6 @@
 package newProcessing.buffers.file
 
-import newFiles.RowTypes._
+import files.RowTypes._
 
 /**
  * Created by Aimingnie on 5/17/15.

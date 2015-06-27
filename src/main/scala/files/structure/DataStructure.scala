@@ -1,6 +1,6 @@
-package newFiles.structure
+package files.structure
 
-import newFiles.RowTypes._
+import files.RowTypes._
 import utils.FailureHandle
 import scala.collection.mutable
 

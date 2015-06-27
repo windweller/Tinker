@@ -1,4 +1,4 @@
-package newFiles.filetypes.svm
+package files.filetypes.svm
 
 import java.io.RandomAccessFile
 import java.nio.file.Path

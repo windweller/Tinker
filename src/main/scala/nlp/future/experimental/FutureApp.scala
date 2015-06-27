@@ -6,11 +6,11 @@ import akka.stream.scaladsl.{Source, Sink, Flow}
 import com.github.tototoshi.csv.CSVWriter
 import com.typesafe.config.{ConfigFactory, Config}
 import edu.stanford.nlp.trees.Tree
-import newFiles.DataContainer
-import newFiles.filetypes.tab.Tab
-import newFiles.RowTypes._
-import newFiles.structure.DataStructure
-import newFiles.structure.predefined.BasicNLP
+import files.DataContainer
+import files.filetypes.tab.Tab
+import files.RowTypes._
+import files.structure.DataStructure
+import files.structure.predefined.BasicNLP
 import nlp.matcher.Matcher
 import nlp.matcher.impl.Tregex
 import nlp.parser.Parser

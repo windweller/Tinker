@@ -7,9 +7,9 @@ import com.github.tototoshi.csv.CSVWriter
 import com.typesafe.config.{ConfigFactory, Config}
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import edu.stanford.nlp.trees.Tree
-import newFiles.DataContainer
-import newFiles.RowTypes.NormalRow
-import newFiles.structure.DataStructure
+import files.DataContainer
+import files.RowTypes.NormalRow
+import files.structure.DataStructure
 import nlp.matcher.Matcher
 import nlp.matcher.impl.Tregex
 import nlp.parser.Parser

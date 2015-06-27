@@ -1,6 +1,6 @@
 package newProcessing.buffers
 
-import newFiles.RowTypes.NormalRow
+import files.RowTypes.NormalRow
 import utils.FailureHandle
 
 /**

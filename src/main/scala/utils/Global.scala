@@ -1,7 +1,7 @@
 package utils
 
-import newFiles.filetypes.csv.CSVOutput
-import newFiles.filetypes.tab.{TabOutput, Tab}
+import files.filetypes.csv.CSVOutput
+import files.filetypes.tab.{TabOutput, Tab}
 import newProcessing.buffers.BufferConfig
 import newProcessing.buffers.file.FileBuffer
 import newProcessing.{Sequential, Parallel, Scheduler}

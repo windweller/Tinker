@@ -1,8 +1,8 @@
-package newFiles.filetypes
+package files.filetypes
 
 
-import newFiles.DataContainer
-import newFiles.RowTypes._
+import files.DataContainer
+import files.RowTypes._
 import utils._
 import utils.OptionToParameter.implicits._
 import scala.collection.mutable

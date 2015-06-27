@@ -1,7 +1,7 @@
 package nlp.preprocess.tokenization
 
-import newFiles.DataContainer
-import newFiles.structure.DataStructure
+import files.DataContainer
+import files.structure.DataStructure
 import newProcessing.Scheduler
 import utils.Global.Implicits._
 

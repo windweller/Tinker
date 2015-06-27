@@ -1,9 +1,9 @@
-package newFiles.operations
+package files.operations
 
 import com.github.tototoshi.csv.CSVWriter
-import newFiles.DataContainer
-import newFiles.RowTypes.{NormalRow, RowIterator}
-import newFiles.structure.{DataStructure, StructureUtils}
+import files.DataContainer
+import files.RowTypes.{NormalRow, RowIterator}
+import files.structure.{DataStructure, StructureUtils}
 import utils.FailureHandle
 import utils.collections.ArrayUtil._
 import utils.ParameterCallToOption.implicits._

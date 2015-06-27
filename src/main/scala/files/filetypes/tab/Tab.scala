@@ -1,11 +1,11 @@
-package newFiles.filetypes.tab
+package files.filetypes.tab
 
 import java.io.{File, RandomAccessFile}
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 
-import newFiles.RowTypes._
-import newFiles.filetypes.Doc
+import files.RowTypes._
+import files.filetypes.Doc
 import newProcessing.buffers.file.{FileOutputFormat, FileBuffer}
 
 import scala.concurrent.Future

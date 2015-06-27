@@ -1,7 +1,7 @@
 package nlp.preprocess.filters
 
-import newFiles.DataContainer
-import newFiles.structure.DataStructure
+import files.DataContainer
+import files.structure.DataStructure
 
 /**
  * Created by Aimingnie on 4/26/15

@@ -1,10 +1,10 @@
 package newProcessing
 
-import newFiles.DataContainer
-import newFiles.RowTypes.NormalRow
-import newFiles.filetypes.csv.{CSVOutput, CSV}
-import newFiles.filetypes.tab.TabOutput
-import newFiles.operations.FileOp
+import files.DataContainer
+import files.RowTypes.NormalRow
+import files.filetypes.csv.{CSVOutput, CSV}
+import files.filetypes.tab.TabOutput
+import files.operations.FileOp
 import newProcessing.buffers.BufferConfig
 import newProcessing.buffers.file.FileBuffer
 import org.scalatest.FlatSpec

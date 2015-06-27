@@ -13,9 +13,9 @@ import edu.stanford.nlp.neural.rnn.RNNCoreAnnotations
 import edu.stanford.nlp.pipeline.{Annotation, StanfordCoreNLP}
 import edu.stanford.nlp.sentiment.SentimentCoreAnnotations
 import edu.stanford.nlp.trees.Tree
-import newFiles.DataContainer
-import newFiles.RowTypes.NormalRow
-import newFiles.structure.DataStructure
+import files.DataContainer
+import files.RowTypes.NormalRow
+import files.structure.DataStructure
 import org.ejml.simple.SimpleMatrix
 import utils.Timer
 

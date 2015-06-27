@@ -1,7 +1,7 @@
-package newFiles
+package files
 
-import newFiles.filetypes.csv.CSV
-import newFiles.operations.FileOp
+import files.filetypes.csv.CSV
+import files.operations.FileOp
 import newProcessing.buffers.file.FileBuffer
 import newProcessing.{Parallel, Operation}
 import org.scalatest.FlatSpec

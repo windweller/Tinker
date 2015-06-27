@@ -3,7 +3,7 @@ package nlp.preprocess.tokenization.impl
 import java.io.StringReader
 import edu.stanford.nlp.ling.HasWord
 import edu.stanford.nlp.process.DocumentPreprocessor
-import newFiles.RowTypes._
+import files.RowTypes._
 import nlp.preprocess.tokenization.Tokenizer
 import scala.collection.{mutable, AbstractIterator}
 import utils.ParameterCallToOption.implicits._

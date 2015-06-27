@@ -1,12 +1,12 @@
 package tweets
 
 import com.github.tototoshi.csv.CSVWriter
-import newFiles.DataContainer
-import newFiles.filetypes.csv.CSV
-import newFiles.filetypes.tab.Tab
-import newFiles.operations.FileOp
-import newFiles.structure.DataStructure
-import newFiles.structure.predefined.{NoCheck, BasicNLP}
+import files.DataContainer
+import files.filetypes.csv.CSV
+import files.filetypes.tab.Tab
+import files.operations.FileOp
+import files.structure.DataStructure
+import files.structure.predefined.{NoCheck, BasicNLP}
 import nlp.basic.Sentence
 import nlp.basic.sentence.Split
 import nlp.preprocess.filters._
