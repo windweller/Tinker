@@ -1,7 +1,7 @@
 package files
 
 import files.RowTypes._
-import utils.OptionToParameter.implicits._
+import utils.OptionToParameter.Implicits._
 import utils._
 
 import scala.collection.mutable

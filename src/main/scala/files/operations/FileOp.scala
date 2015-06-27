@@ -6,7 +6,7 @@ import files.RowTypes.{NormalRow, RowIterator}
 import files.structure.{DataStructure, StructureUtils}
 import utils.FailureHandle
 import utils.collections.ArrayUtil._
-import utils.ParameterCallToOption.implicits._
+import utils.ParameterCallToOption.Implicits._
 
 import scala.annotation.tailrec
 import scala.collection.immutable.HashMap

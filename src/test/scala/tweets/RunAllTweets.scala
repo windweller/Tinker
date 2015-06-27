@@ -14,7 +14,7 @@ import nlp.ngram.{Unigram, Ngram}
 import nlp.sentiment.Sentiment
 import nlp.sentiment.impl.Stanford
 import org.scalatest.FlatSpec
-import utils.ParameterCallToOption.implicits._
+import utils.ParameterCallToOption.Implicits._
 
 /**
  * Created by Aimingnie on 4/23/15

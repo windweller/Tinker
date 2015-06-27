@@ -8,7 +8,7 @@ import files.operations.FileOp
 import processing.buffers.BufferConfig
 import processing.buffers.file.FileBuffer
 import org.scalatest.FlatSpec
-import utils.ParameterCallToOption.implicits._
+import utils.ParameterCallToOption.Implicits._
 
 /**
  * Created by Aimingnie on 5/11/15

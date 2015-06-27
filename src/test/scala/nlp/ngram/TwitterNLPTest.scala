@@ -20,7 +20,7 @@ import nlp.preprocess.tokenization.impl.Stanford
 import nlp.preprocess.tokenization.impl.{ClearNLP, Stanford}
 import nlp.sentiment.Sentiment
 import org.scalatest.FlatSpec
-import utils.ParameterCallToOption.implicits._
+import utils.ParameterCallToOption.Implicits._
 
 import scala.collection.mutable
 

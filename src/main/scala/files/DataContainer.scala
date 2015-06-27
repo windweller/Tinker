@@ -128,8 +128,6 @@ abstract class DataContainer(val f: Option[String] = None,
     }
   }
 
-
-
 }
 
 object RowTypes {

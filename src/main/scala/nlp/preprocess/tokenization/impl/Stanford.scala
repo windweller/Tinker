@@ -6,7 +6,7 @@ import edu.stanford.nlp.process.DocumentPreprocessor
 import files.RowTypes._
 import nlp.preprocess.tokenization.Tokenizer
 import scala.collection.{mutable, AbstractIterator}
-import utils.ParameterCallToOption.implicits._
+import utils.ParameterCallToOption.Implicits._
 /**
  * Created by anie on 5/22/2015
  *

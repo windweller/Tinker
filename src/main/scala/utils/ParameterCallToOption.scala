@@ -9,7 +9,7 @@ import scala.language.implicitConversions
  */
 object ParameterCallToOption {
 
-  object implicits {
+  object Implicits {
     implicit def boolean2Option(b: Boolean): Option[Boolean] = Some(b)
     implicit def string2Option(s: String): Option[String] = Some(s)
     implicit def map2Option(map: Map[String, Int]): Option[Map[String, Int]] = Some(map)
@@ -22,7 +22,7 @@ object ParameterCallToOption {
 
 object OptionToParameter {
 
-  object implicits{
+  object Implicits {
     implicit def option2Boolean(b: Option[Boolean]): Boolean = b.get
     implicit def option2String(b: Option[String]): String = b.get
   }

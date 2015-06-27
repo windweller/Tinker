@@ -27,7 +27,7 @@ object FileMapIterator {
    *                   For example "Tweets_AK2015_04_17.txt" and "Tweets_AK.txt" are the same file if the
    *                   param is set at 9 (it matches first 9 letters). The ending index is exclusive, and counts
    *                   start from 0.
-   * @param suffix
+   * @param suffix     specify the file suffix that will be included
    * @return a HashMap (or Map) of grouped iterators. If fuzzyMatch is set, it returns the matched string as map name
    *         if not, it returns file name (with suffix, unfortunately)
    */
