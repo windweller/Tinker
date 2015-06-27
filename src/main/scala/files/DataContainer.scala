@@ -1,7 +1,7 @@
 package files
 
 import files.structure.DataStructure
-import newProcessing.Scheduler
+import processing.Scheduler
 
 import scala.annotation.tailrec
 import scala.collection.AbstractIterator

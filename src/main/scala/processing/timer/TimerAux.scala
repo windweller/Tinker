@@ -1,4 +1,4 @@
-package newProcessing.timer
+package processing.timer
 
 /**
  * Inherited by Scheduler

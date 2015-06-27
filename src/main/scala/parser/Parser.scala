@@ -1,9 +1,9 @@
-package newParser
+package parser
 
 
 import files.DataContainer
 import files.structure.DataStructure
-import newProcessing.Scheduler
+import processing.Scheduler
 
 /**
  * All operation based class takes in implicit parameter scheduler

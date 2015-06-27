@@ -6,7 +6,7 @@ import java.nio.channels.FileChannel
 
 import files.RowTypes._
 import files.filetypes.Doc
-import newProcessing.buffers.file.{FileOutputFormat, FileBuffer}
+import processing.buffers.file.{FileOutputFormat, FileBuffer}
 
 import scala.concurrent.Future
 

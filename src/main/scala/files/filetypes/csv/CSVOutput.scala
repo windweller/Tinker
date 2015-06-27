@@ -2,7 +2,7 @@ package files.filetypes.csv
 
 import com.github.tototoshi.csv._
 import files.RowTypes._
-import newProcessing.buffers.file.FileOutputFormat
+import processing.buffers.file.FileOutputFormat
 
 /**
  * Created by anie on 5/18/2015

@@ -1,7 +1,7 @@
-package newProcessing
+package processing
 
-import newProcessing.buffers.BufferConfig
-import newProcessing.buffers.file.FileBuffer
+import processing.buffers.BufferConfig
+import processing.buffers.file.FileBuffer
 
 /**
  * Created by anie on 5/23/2015

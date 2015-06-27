@@ -2,9 +2,9 @@ package utils
 
 import files.filetypes.csv.CSVOutput
 import files.filetypes.tab.{TabOutput, Tab}
-import newProcessing.buffers.BufferConfig
-import newProcessing.buffers.file.FileBuffer
-import newProcessing.{Sequential, Parallel, Scheduler}
+import processing.buffers.BufferConfig
+import processing.buffers.file.FileBuffer
+import processing.{Sequential, Parallel, Scheduler}
 
 import scala.collection.mutable
 

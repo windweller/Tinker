@@ -1,12 +1,12 @@
-package newProcessing
+package processing
 
 import files.DataContainer
 import files.RowTypes.NormalRow
 import files.filetypes.csv.{CSVOutput, CSV}
 import files.filetypes.tab.TabOutput
 import files.operations.FileOp
-import newProcessing.buffers.BufferConfig
-import newProcessing.buffers.file.FileBuffer
+import processing.buffers.BufferConfig
+import processing.buffers.file.FileBuffer
 import org.scalatest.FlatSpec
 import utils.ParameterCallToOption.implicits._
 

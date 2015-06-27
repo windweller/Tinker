@@ -1,6 +1,6 @@
-package newParser.implementations.stanfordNLP
+package parser.implementations.stanfordNLP
 
-import newParser.Parser
+import parser.Parser
 
 /**
  * Created by Aimingnie on 5/12/15.

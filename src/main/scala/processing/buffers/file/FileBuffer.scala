@@ -1,10 +1,10 @@
-package newProcessing.buffers.file
+package processing.buffers.file
 
 import java.io.{OutputStreamWriter, FileOutputStream, PrintWriter}
 import java.nio.file.{Files, Paths}
 
 import files.RowTypes.NormalRow
-import newProcessing.buffers.Buffer
+import processing.buffers.Buffer
 import utils.{FailureHandle, Global}
 
 import scala.util.Random

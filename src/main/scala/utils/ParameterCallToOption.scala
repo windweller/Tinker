@@ -1,6 +1,6 @@
 package utils
 
-import newProcessing.Scheduler
+import processing.Scheduler
 
 import scala.language.implicitConversions
 

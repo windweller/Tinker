@@ -11,8 +11,8 @@ import files.filetypes.tab.{Tab, TabOutput}
 import files.operations.FileOp
 import files.structure.DataStructure
 import files.structure.predefined.BasicNLP
-import newProcessing.Printer
-import newProcessing.buffers.BufferConfig
+import processing.Printer
+import processing.buffers.BufferConfig
 import nlp.basic.Sentence
 import nlp.basic.sentence.Split
 import nlp.preprocess.filters.{TwitterMispellingFilter, CharacterFilter, TwitterFilter, Filter}

@@ -1,4 +1,4 @@
-package newProcessing.timer
+package processing.timer
 
 /**
  * Created by Aimingnie on 5/17/15.

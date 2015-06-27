@@ -1,7 +1,7 @@
-package newProcessing
+package processing
 
 import files.RowTypes.{RowIterator, NormalRow}
-import newProcessing.buffers.BufferConfig
+import processing.buffers.BufferConfig
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
