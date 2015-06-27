@@ -1,5 +1,7 @@
 # Tinker
-Tinker is a parallel-by-default File/Directory/Data Management System with additional interface to NLP and ML libraries. Tinker right now uses Scala's awesome Stackable Trait Pattern, and is tightly integrated with powerful Akka Stream to handle task parallelization and pipelining.
+Tinker is a parallel-by-default File/Multi-File/Data Management System with additional interface to NLP and ML libraries. Tinker right now uses Scala's awesome Stackable Trait Pattern, and is tightly integrated with powerful Akka Stream to handle task parallelization and pipelining.
+
+It offers the ease of reading multiple formated files and merge/process as one, parallelize normal file operations (some of them NLP related) such as filtering, tokenization, compressing/aggregating rows, and so on.
 
 ## Design Philosophy
 
@@ -23,7 +25,7 @@ Then you would see
 
 ```
 =======================================
-Welcome to Tinker 0.2 beta release
+Welcome to Tinker 0.12 alpha release
 =======================================
 >
 ```
@@ -33,32 +35,17 @@ Then you can use it like any other Scala REPL from the command line.
 ## Quick Start - Library
 
 ```
-import files.filetypes._
-
-  val csv = new DataContainer("././testCSV.csv", header = true) with CSV with Doc
-  val tab = new DataContainer("././testTab.tab", header = true) with Tab with Doc
-  println(csv.dataIteratorPure.next().mkString("\t"))
-```
-
-```
-import files._
-import parser._
-import processing.buffers.FileBuffer
+import files.DataContainer
+import files.filetypes.format._
 import utils.ParameterCallToOption.implicits._
 
- val doc = new DataContainer("../testFiles/NYTimes.tab", true) with Tab with Doc
-  val parser = new Parser(doc,
-    rules = Vector(
-      "(VP < (VBG < going) < (S < (VP < TO)))",
-      "(VP < (VBG < going) > (PP < TO))",
-      "MD < will",
-      "MD < ‘ll’"
-      )) with Tab with FileBuffer with TregexMatcher with Parallel
+val workerBook = new DataContainer("./src/test/scala/tutorial/tabFile.tab", header = true) with Tab
+val workerBook2 = new DataContainer("./src/test/scala/tutorial/csvFile.csv", header = true) with CSV
 
-  parser.matches(rowStr = "Parse", useGeneratedRow = false)
-  parser.exec(outputFile = "E:\\Allen\\NYTFuture\\NYT_sample\\experiment.txt",
-    outputOverride = true)
+workerBook.data.foreach(e => println(e))
+workerBook2.data.foreach(e => println(e))
 ```
+
 
 Stackable trait pattern means you can swap in and out different modules, like playing Lego. If you are dealing with a tab file, you can choose to use `Tab` module instead of `CSV`.
 
