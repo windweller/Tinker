@@ -7,7 +7,7 @@ import com.github.tototoshi.csv.CSVWriter
 import com.typesafe.config.{ConfigFactory, Config}
 import edu.stanford.nlp.trees.Tree
 import files.DataContainer
-import files.filetypes.tab.Tab
+import files.filetypes.format._
 import files.RowTypes._
 import files.structure.DataStructure
 import files.structure.predefined.BasicNLP
