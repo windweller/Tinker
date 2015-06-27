@@ -48,7 +48,7 @@ initialCommands in console := """
 import files.filetypes._
 import utils.ParameterCallToOption.implicits._
 println("===============================")
-println("Welcome to Tinker 0.2 beta release")
+println("Welcome to Tinker 0.12 alpha release")
 println("===============================")
 """
 
