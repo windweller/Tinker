@@ -1,7 +1,6 @@
 package subtree
 
-import files.DataContainer
-import files.filetypes.SVM
+import newFiles.filetypes.svm.SVM
 import org.scalatest.FlatSpec
 import subtree.filetypes.VarroSubtreeXML
 
@@ -21,7 +20,7 @@ class SubtreeTest extends FlatSpec {
 //    doc.saveSubtreeWithSerialNumber("E:\\Allen\\R\\naacl2015\\subtree\\TinkerSubtreeList.txt")
 
     doc.generateSentenceSubtrees()
-    doc.saveSentenceSubtrees("E:\\\\Allen\\\\R\\\\naacl2015\\\\subtree\\\\TinkerSentenceSubtree.txt")
+//    doc.saveSentenceSubtrees("E:\\\\Allen\\\\R\\\\naacl2015\\\\subtree\\\\TinkerSentenceSubtree.txt")
 
   }
 }

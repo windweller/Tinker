@@ -3,14 +3,10 @@ package subtree.filetypes
 import java.io.{File, FileInputStream, InputStreamReader}
 import java.nio.file.Paths
 import javax.xml.parsers.SAXParserFactory
-
-import files.filetypes.FileTypes
-import files.structure.DataStructureValue
 import org.xml.sax.InputSource
 import subtree.filetypes.VarroXMLSAXComponent.VarroXMLSAXHandler
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
-import files.structure.specifics.{NoCheck, FormatChecks, SVMFile}
 import utils.ParameterCallToOption.implicits._
 
 /**
@@ -22,9 +18,9 @@ import utils.ParameterCallToOption.implicits._
  * FileIterator to read in files but SAX's own file
  * reading functionality
  */
-trait VarroSubtreeXML extends FileTypes {
+trait VarroSubtreeXML {
 
-  override val typesuffix: Vector[String] = Vector("xml")
+  val typesuffix: Vector[String] = Vector("xml")
 
   val headerString: Option[Vector[String]] = None
   val headerMap = None
@@ -97,36 +93,38 @@ trait VarroSubtreeXML extends FileTypes {
     }
   }
 
-  def saveSentenceFeatures(loc: String): Unit = {
-    implicit val path = Some(Paths.get(loc))
-    sentenceVector.foreach{e =>
-      val pairs = e._1.split(":")
-      println(e._1)
-      val dsv = new DataStructureValue(idValue = pairs(0), labelValue = pairs(1)) with SVMFile
-      save(compressInt[ArrayBuffer[Int]](e._2))(file = path, struct = Some(Right(dsv)))
-    }
-  }
+  //TODO: those methods correspond to the old things, need to be re-written
 
-  def saveSentenceSubtrees(loc: String): Unit = {
-    implicit val path = Some(Paths.get(loc))
-    sentenceSubtrees.foreach {e =>
-      val pairs = e._1.split(":")
-      println(e._1)
-      val dsv = new DataStructureValue(idValue = pairs(0), labelValue = pairs(1)) with SVMFile
-      save(compressString[ArrayBuffer[String]](e._2))(file = path, struct = Some(Right(dsv)))
-    }
-  }
-
-  //this saves subtree as a seperate file
-  def saveSubtreeWithSerialNumber(loc: String): Unit = {
-    implicit val path = Some(Paths.get(loc))
-    var count = 0
-    handler.subtreeList.foreach{e =>
-      val dsv = new DataStructureValue(idValue = count.toString) with NoCheck
-      save(e._1 + "\t" + e._2)(path, Some(Right(dsv)))
-      count += 1
-    }
-  }
+//  def saveSentenceFeatures(loc: String): Unit = {
+//    implicit val path = Some(Paths.get(loc))
+//    sentenceVector.foreach{e =>
+//      val pairs = e._1.split(":")
+//      println(e._1)
+//      val dsv = new DataStructureValue(idValue = pairs(0), labelValue = pairs(1)) with SVMFile
+//      save(compressInt[ArrayBuffer[Int]](e._2))(file = path, struct = Some(Right(dsv)))
+//    }
+//  }
+//
+//  def saveSentenceSubtrees(loc: String): Unit = {
+//    implicit val path = Some(Paths.get(loc))
+//    sentenceSubtrees.foreach {e =>
+//      val pairs = e._1.split(":")
+//      println(e._1)
+//      val dsv = new DataStructureValue(idValue = pairs(0), labelValue = pairs(1)) with SVMFile
+//      save(compressString[ArrayBuffer[String]](e._2))(file = path, struct = Some(Right(dsv)))
+//    }
+//  }
+//
+//  //this saves subtree as a seperate file
+//  def saveSubtreeWithSerialNumber(loc: String): Unit = {
+//    implicit val path = Some(Paths.get(loc))
+//    var count = 0
+//    handler.subtreeList.foreach{e =>
+//      val dsv = new DataStructureValue(idValue = count.toString) with NoCheck
+//      save(e._1 + "\t" + e._2)(path, Some(Right(dsv)))
+//      count += 1
+//    }
+//  }
 
   private[this] def unsmoothedfeatureUpdate(a: Int): Int = a + 1
   private[this] def ignoreMagnitudeFeatureUpdate(a: Int): Int = 1
