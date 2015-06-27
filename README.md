@@ -23,7 +23,7 @@ Then you would see
 
 ```
 =======================================
-Welcome to Tinker 0.2 beta release
+Welcome to Tinker 0.12 alpha release
 =======================================
 >
 ```
@@ -34,10 +34,11 @@ Then you can use it like any other Scala REPL from the command line.
 
 ```
 import files.filetypes._
+import files.filetypes.tab.Tab
+import utils.ParameterCallToOption.implicits._
 
-  val csv = new DataContainer("././testCSV.csv", header = true) with CSV with Doc
-  val tab = new DataContainer("././testTab.tab", header = true) with Tab with Doc
-  println(csv.dataIteratorPure.next().mkString("\t"))
+  val workerBook = new DataContainer("./src/test/scala/tutorial/tabFile.tab", header = true) with Tab
+  workerBook.data.foreach(e => println(e))
 ```
 
 ```
