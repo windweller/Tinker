@@ -3,13 +3,17 @@ Tinker is a parallel-by-default File/Directory/Data Management System with addit
 
 ## Design Philosophy
 
-We want to make standard large file ML/NLP processing as smooth as easy as possible, even for computers with less power/memory. We parallelize tasks whenever possible, and make most of the tasks asynchronous. Tinker has robust I/O interface that allows users to interact with files (of various format) and databases (PostgreSQL, MySQL...) without pain. It also uses buffering so lower memory computer can still function well with data multiple times larger than its capacity (speed being the drawback).
+We want to make standard large file ML/NLP processing as smooth and as easy as possible, regardless of the computer's power/memory. We parallelize tasks whenever possible, and make most of the tasks asynchronous. Tinker has robust I/O interface that allows users to interact with files (of various format) and databases (PostgreSQL, MySQL...) without pain. It also uses buffering so lower memory computer can still function well with data multiple times larger than its capacity (speed being the drawback).
 
 ## Current State
 
-We are undergoing a redesign for the alpha release (finally not "pre-alpha" anymore). New design includes the elimination of module hiearchy (you can inherit them however you want), simplified linearization design, unified type system for `RowIterator`, and a new parallel by default design with Scala Future and Parallel Collection (getting rid of Akka Stream).
+Tinker only release documentation for stable components, but its nightly built offers more. The next release will include a better API for NLP components (currently experimental and not very well-integrated into Tinker-processing). 
 
-We now define higher modules (you can extend them for customization), but when assemble the actual object, only use lower modules with actual implementations.
+- 0.12: Official alpha-release. Cleaned legacy code (version 0.10 old APIs). Added NLP components on top of Tinker-core. Slight performance increase. Documentation major update.
+
+- 0.11: Preparing for alpha-release, eliminate of module hiearchy (you can inherit them however you want), simplified inheritance/module linearization, unified type system for Tinker-core `RowIterator`, incorporating Akka-Stream 1.0M3 and Akka Stream-graph.
+
+- 0.10: first official pre-alpha release with workable APIs
 
 ## Quick Start - Interactive (REPL)
 
