@@ -32,7 +32,7 @@ class FutureOnlyTregex(val data: DataContainer, val struct: DataStructure, val p
   val tnterms = tndoc.map(doc => scala.io.Source.fromFile(doc).getLines().toList)
   val tcterms = tcdoc.map(doc => scala.io.Source.fromFile(doc).getLines().toList)
 
-  val patterns = if (tndoc.nonEmpty && tcdoc.nonEmpty)
+  val patterns = if (tndoc.nonEmpty || tcdoc.nonEmpty)
                     preprocessTregex(patternRaw).map(e => TregexPattern.compile(e))
                  else  patternRaw.map(e => TregexPattern.compile(e))
 
@@ -41,7 +41,7 @@ class FutureOnlyTregex(val data: DataContainer, val struct: DataStructure, val p
     patterns.foreach { p =>
       if (p.contains("TN|TC")) {
         //just replace all TN and TC
-        result ++= tnterms.get.map(tn => p.replace("TN|TC", tn))
+//        result ++= tnterms.get.map(tn => p.replace("TN|TC", tn))
         result ++= tcterms.get.map(tc => p.replace("TN|TC", tc))
       }
       else if (p.contains("TN")) {
@@ -59,7 +59,7 @@ class FutureOnlyTregex(val data: DataContainer, val struct: DataStructure, val p
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
 
     //comment out during regular task
-    output.writeRow(Seq("sentence", "label") ++ patternRaw)
+    output.writeRow(Seq("SentenceID", "Parse", "ParagraphID", "PageID") ++ preprocessTregex(patternRaw))
 
     val conf: Config = ConfigFactory.load()
     implicit val system = ActorSystem("reactive-tweets", conf)
@@ -80,7 +80,7 @@ class FutureOnlyTregex(val data: DataContainer, val struct: DataStructure, val p
         }
         Timer.completeOne()
 
-        Seq(result) ++ struct.getKeepColumnsValue(row).get ++ array.toSeq
+        Seq(struct.getIdValue(row).get, result) ++ struct.getKeepColumnsValue(row).get ++ array.toSeq
       }
     }
 

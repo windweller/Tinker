@@ -41,10 +41,10 @@ object Stream extends App {
 //    future.saveFutureMatching("E:\\Allen\\R\\emnlp2015\\fixedOpenClassifier\\topic10_futureRules2.0.csv")
 
     // ========== Match NYT times tregex =========== //
-//    val struct = new DataStructure(idColumnWithName = "SentenceID", targetColumnWithName = "Parse", keepColumnsWithNames = Vector("ParagraphID", "PageID")) with BasicNLP
-//    val data = new DataContainer("E:\\Allen\\NYTFuture\\NYT", header = true) with Tab
-//    val future = new FutureOnlyTregex(data, struct, patternFuture2_1 ++ patternPresent ++ patternsPast)
-//    future.saveFutureMatching("E:\\Allen\\NYTFuture\\NYT_result_2.1\\nyt_by_sen2_1.txt")
+    val struct = new DataStructure(idColumnWithName = "SentenceID", targetColumnWithName = "Parse", keepColumnsWithNames = Vector("ParagraphID", "PageID")) with BasicNLP
+    val data = new DataContainer("E:\\Allen\\NYTFuture\\NYT", header = true) with Tab
+    val future = new FutureOnlyTregex(data, struct, futureRulesComplete ++ patternPresent ++ patternsPast,  tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTerms.txt")
+    future.saveFutureMatching("E:\\Allen\\NYTFuture\\NYT_result_2.2\\nyt_by_sen2_2.txt")
 
     // =========== Match New MTurk result =========== //
 //      val struct = new DataStructure(idColumnWithName = "id", targetColumnWithName = "sentence") with BasicNLP
@@ -59,10 +59,10 @@ object Stream extends App {
 //          future.saveFutureMatching("E:\\Allen\\R\\emnlp2015\\training\\RatingOnTweetsFixedOpenRule2_1.csv")
 
     // =========== MTurk Data Fixed Vs. Open ======== //
-          val struct = new DataStructure(targetColumnWithName = "sentence", keepColumnsWithNames = Vector("Allen", "Tim")) with BasicNLP
-          val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\AllenFixedVsOpen.csv", header = true) with CSV
-          val future = new Future(data, struct, futureRulesComplete ++ patternPresent ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTerms.txt")
-          future.saveFutureMatching("E:\\Allen\\R\\emnlp2015\\training\\AllenFixedVsOpenFutureRule2_2.csv")
+//          val struct = new DataStructure(targetColumnWithName = "sentence", keepColumnsWithNames = Vector("Allen", "Tim")) with BasicNLP
+//          val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\AllenFixedVsOpen.csv", header = true) with CSV
+//          val future = new Future(data, struct, futureRulesComplete ++ patternPresent ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTerms.txt")
+//          future.saveFutureMatching("E:\\Allen\\R\\emnlp2015\\training\\AllenFixedVsOpenFutureRule2_2.csv")
 
     // =========== 4M Tweets (with mispelling) ========= //
 
