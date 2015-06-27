@@ -1,8 +1,4 @@
-package files.filetypes.svm
-
-import java.io.RandomAccessFile
-import java.nio.file.Path
-import scala.annotation.tailrec
+package files.filetypes.format
 
 /**
  * This is tricky class because SVM
