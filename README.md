@@ -39,10 +39,11 @@ import files.DataContainer
 import files.filetypes.format._
 import utils.ParameterCallToOption.implicits._
 
-    val workerBook = new DataContainer("./src/test/scala/tutorial/tabFile.tab", header = true) with Tab
-    val workerBook2 = new DataContainer("./src/test/scala/tutorial/csvFile.csv", header = true) with CSV
-    workerBook.data.foreach(e => println(e))
-    workerBook2.data.foreach(e => println(e))
+val workerBook = new DataContainer("./src/test/scala/tutorial/tabFile.tab", header = true) with Tab
+val workerBook2 = new DataContainer("./src/test/scala/tutorial/csvFile.csv", header = true) with CSV
+
+workerBook.data.foreach(e => println(e))
+workerBook2.data.foreach(e => println(e))
 ```
 
 
