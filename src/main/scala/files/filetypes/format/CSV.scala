@@ -1,9 +1,7 @@
-package files.filetypes.csv
+package files.filetypes.format
 
-import com.github.tototoshi.csv._
-import files.RowTypes._
 import files.filetypes.Doc
-import processing.buffers.file.FileOutputFormat
+import files.filetypes.format.csv.CSVHandler
 
 /**
  * Created by anie on 4/18/2015

@@ -1,4 +1,4 @@
-package files.filetypes.csv
+package files.filetypes.format.csv
 
 import com.github.tototoshi.csv._
 import files.RowTypes._

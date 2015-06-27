@@ -1,4 +1,4 @@
-package files.filetypes.csv
+package files.filetypes.format.csv
 
 import org.apache.commons.csv.{CSVRecord, CSVFormat, CSVParser}
 import utils.FailureHandle
