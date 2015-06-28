@@ -4,9 +4,9 @@ import akka.actor.ActorSystem
 import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl.{Source, Sink, Flow}
 import com.github.tototoshi.csv.CSVWriter
-import com.typesafe.config.{ConfigFactory, Config}
 import edu.stanford.nlp.trees.Tree
 import files.DataContainer
+import files.filetypes.format._
 import files.RowTypes._
 import files.filetypes.format.Tab
 import files.structure.DataStructure
@@ -16,11 +16,7 @@ import nlp.matcher.impl.Tregex
 import nlp.parser.Parser
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import utils.Timer
-import utils.ParameterCallToOption.implicits._
-
-import scala.annotation.tailrec
-import scala.collection.AbstractIterator
-import scala.concurrent.Future
+import utils.ParameterCallToOption.Implicits._
 import scala.util.{Failure, Success}
 
 /**

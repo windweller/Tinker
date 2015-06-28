@@ -1,7 +1,8 @@
 package files.filetypes.format
 
-import files.filetypes.Doc
+import files.Doc
 import files.filetypes.format.csv.CSVHandler
+
 
 /**
  * Created by anie on 4/18/2015

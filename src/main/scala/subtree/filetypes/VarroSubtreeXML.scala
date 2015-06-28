@@ -7,7 +7,7 @@ import org.xml.sax.InputSource
 import subtree.filetypes.VarroXMLSAXComponent.VarroXMLSAXHandler
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
-import utils.ParameterCallToOption.implicits._
+import utils.ParameterCallToOption.Implicits._
 
 /**
  * Created by anie on 3/23/2015

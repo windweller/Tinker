@@ -1,9 +1,9 @@
 package processing
 
 import files.DataContainer
-import files.filetypes.format.CSV
+import files.filetypes.format._
 import files.operations.FileOp
-import utils.ParameterCallToOption.implicits._
+import utils.ParameterCallToOption.Implicits._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Success, Failure}

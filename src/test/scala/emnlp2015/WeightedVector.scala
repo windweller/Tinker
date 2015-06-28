@@ -4,10 +4,10 @@ import java.io.{FileOutputStream, OutputStreamWriter, PrintWriter}
 
 import edu.emory.clir.clearnlp.tokenization.EnglishTokenizer
 import files.DataContainer
-import files.filetypes.format.Tab
+import files.filetypes.format._
 import files.structure.DataStructure
 import files.structure.predefined.BasicNLP
-import utils.ParameterCallToOption.implicits._
+import utils.ParameterCallToOption.Implicits._
 
 import scala.collection.mutable
 

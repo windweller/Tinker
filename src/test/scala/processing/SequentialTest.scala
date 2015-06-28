@@ -1,15 +1,13 @@
 package processing
 
 import files.DataContainer
-import files.RowTypes.NormalRow
-import files.filetypes.format.CSV
-import files.filetypes.format.csv.CSVOutput
-import files.filetypes.format.tab.TabOutput
+import files.filetypes.format._
+import files.filetypes.format.csv._
 import files.operations.FileOp
 import processing.buffers.BufferConfig
 import processing.buffers.file.FileBuffer
 import org.scalatest.FlatSpec
-import utils.ParameterCallToOption.implicits._
+import utils.ParameterCallToOption.Implicits._
 
 /**
  * Created by Aimingnie on 5/11/15

@@ -2,7 +2,7 @@ package tweets
 
 import com.github.tototoshi.csv.CSVWriter
 import files.DataContainer
-import files.filetypes.format.{Tab, CSV}
+import files.filetypes.format._
 import files.operations.FileOp
 import files.structure.DataStructure
 import files.structure.predefined.{NoCheck, BasicNLP}
@@ -14,7 +14,7 @@ import nlp.ngram.{Unigram, Ngram}
 import nlp.sentiment.Sentiment
 import nlp.sentiment.impl.Stanford
 import org.scalatest.FlatSpec
-import utils.ParameterCallToOption.implicits._
+import utils.ParameterCallToOption.Implicits._
 
 /**
  * Created by Aimingnie on 4/23/15

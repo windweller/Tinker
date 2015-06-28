@@ -1,13 +1,13 @@
 package experiments.emnlp2015
 
 import files.DataContainer
-import files.filetypes.format.{Tab, CSV}
+import files.filetypes.format._
 import files.structure.DataStructure
 import files.structure.predefined.BasicNLP
 import nlp.future.FutureRules._
 import nlp.preprocess.tokenization.Tokenizer
 import nlp.preprocess.tokenization.impl.Stanford
-import utils.ParameterCallToOption.implicits._
+import utils.ParameterCallToOption.Implicits._
 
 /**
  * Created by anie on 6/7/2015

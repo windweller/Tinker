@@ -2,7 +2,7 @@ package nlp.preprocess.tokenization.impl
 
 import edu.emory.clir.clearnlp.tokenization.EnglishTokenizer
 import nlp.preprocess.tokenization.Tokenizer
-import utils.ParameterCallToOption.implicits._
+import utils.ParameterCallToOption.Implicits._
 
 /**
  * Created by anie on 5/22/2015

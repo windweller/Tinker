@@ -1,6 +1,7 @@
 package subtree
 
-import files.filetypes.format.SVM
+
+import files.filetypes.format._
 import org.scalatest.FlatSpec
 import subtree.filetypes.VarroSubtreeXML
 

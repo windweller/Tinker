@@ -23,6 +23,7 @@ import scala.collection.mutable.ArrayBuffer
  * @param pscheduler If you import Global.Implicits._, you will share the states
  *                   of all computations (which could be dangerous). Otherwise,
  *                   every DataContainer will have its own scheduler
+ * @param rTaskSize Right task size (how many rows), for timer
  *
  */
 abstract class DataContainer(val f: Option[String] = None,
@@ -126,8 +127,6 @@ abstract class DataContainer(val f: Option[String] = None,
       }
     }
   }
-
-
 
 }
 
