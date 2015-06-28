@@ -1,8 +1,7 @@
 package experiments.emnlp2015
 
 import files.DataContainer
-import files.filetypes.csv.CSV
-import files.filetypes.tab.Tab
+import files.filetypes.format.{Tab, CSV}
 import files.structure.DataStructure
 import files.structure.predefined.BasicNLP
 import nlp.future.FutureRules._

@@ -2,8 +2,9 @@ package processing
 
 import files.DataContainer
 import files.RowTypes.NormalRow
-import files.filetypes.csv.{CSVOutput, CSV}
-import files.filetypes.tab.TabOutput
+import files.filetypes.format.CSV
+import files.filetypes.format.csv.CSVOutput
+import files.filetypes.format.tab.TabOutput
 import files.operations.FileOp
 import processing.buffers.BufferConfig
 import processing.buffers.file.FileBuffer

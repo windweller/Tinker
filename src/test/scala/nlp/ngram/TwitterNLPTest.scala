@@ -6,8 +6,8 @@ import com.github.tototoshi.csv.CSVWriter
 import edu.emory.clir.clearnlp.tokenization.EnglishTokenizer
 import files.DataContainer
 import files.RowTypes.NormalRow
-import files.filetypes.csv.CSV
-import files.filetypes.tab.{Tab, TabOutput}
+import files.filetypes.format.{Tab, CSV}
+import files.filetypes.format.tab.TabOutput
 import files.operations.FileOp
 import files.structure.DataStructure
 import files.structure.predefined.BasicNLP

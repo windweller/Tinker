@@ -12,8 +12,8 @@ import processing.buffers.file.FileBuffer
  */
 abstract class Printer(filePath: Option[String], fileAppend: Boolean = true)(implicit val bufferConfig: BufferConfig = BufferConfig()) extends FileBuffer{
 
+  override val config: BufferConfig = bufferConfig
+
   config.filePath = filePath
   config.fileAppend = fileAppend
-
-  override val config: BufferConfig = bufferConfig
 }

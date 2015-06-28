@@ -1,6 +1,6 @@
 package files
 
-import files.filetypes.csv.CSV
+import files.filetypes.format.CSV
 import files.operations.FileOp
 import processing.buffers.file.FileBuffer
 import processing.{Parallel, Operation}

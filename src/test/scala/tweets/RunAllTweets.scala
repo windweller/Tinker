@@ -2,8 +2,7 @@ package tweets
 
 import com.github.tototoshi.csv.CSVWriter
 import files.DataContainer
-import files.filetypes.csv.CSV
-import files.filetypes.tab.Tab
+import files.filetypes.format.{Tab, CSV}
 import files.operations.FileOp
 import files.structure.DataStructure
 import files.structure.predefined.{NoCheck, BasicNLP}
