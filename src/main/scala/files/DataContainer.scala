@@ -33,7 +33,6 @@ abstract class DataContainer(val f: Option[String] = None,
 
   import RowTypes._
 
-
   /* constructor */
   val scheduler = pscheduler.getOrElse(defaultSchedulerConstructor())
 

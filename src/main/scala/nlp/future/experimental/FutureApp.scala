@@ -24,6 +24,8 @@ import scala.util.{Failure, Success}
  */
 object FutureApp extends App {
 
+  import scala.io
+
   val parser = new Parser
   val matcher = new Matcher with Tregex
 

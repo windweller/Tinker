@@ -16,8 +16,8 @@ import scala.annotation.tailrec
 class FileIterator(files: Array[File], val header: Boolean) extends Iterator[String] with FailureHandle {
 
   private[this] val defaultCodecs = Vector(
-    io.Codec("UTF-8"),
-    io.Codec("ISO-8859-1")
+    scala.io.Codec("UTF-8"),
+    scala.io.Codec("ISO-8859-1")
   )
 
   private[this] var remainingFiles = files.iterator
@@ -61,6 +61,7 @@ class FileIterator(files: Array[File], val header: Boolean) extends Iterator[Str
     currentFileIterator.next()
   }
 
+  import scala._
   //fixed the encoding problem
   private[this] def getIterator(file: File, codecs:Iterator[io.Codec]): Iterator[String] = {
     if (codecs.hasNext)

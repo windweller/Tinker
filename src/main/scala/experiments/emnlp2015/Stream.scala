@@ -87,6 +87,6 @@ object Stream extends App {
   }
 
   //load future rules from file
-  def futureRulesComplete: List[String] = io.Source.fromFile("E:\\Allen\\R\\emnlp2015\\theRules.txt").getLines().toList
+  def futureRulesComplete: List[String] = scala.io.Source.fromFile("E:\\Allen\\R\\emnlp2015\\theRules.txt").getLines().toList
 
 }
