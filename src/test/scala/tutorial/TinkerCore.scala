@@ -2,7 +2,7 @@ package tutorial
 
 import files.DataContainer
 import files.filetypes.format._
-import utils.ParameterCallToOption.implicits._
+import utils.ParameterCallToOption.Implicits._
 
 
 import org.scalatest.FlatSpec
