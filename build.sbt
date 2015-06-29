@@ -38,7 +38,9 @@ libraryDependencies ++= {
     "edu.emory.clir" % "clearnlp-general-en-dep" % "3.1",
     "edu.emory.clir" % "clearnlp-general-en-pos" % "3.1",
     "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1",
-    "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1" classifier "models"
+    "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1" classifier "models",
+    //ML-components
+    "tw.edu.ntu.csie" % "libsvm" % "3.17"
   )
 }
 
