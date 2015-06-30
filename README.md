@@ -11,6 +11,8 @@ We want to make standard large file ML/NLP processing as smooth and as easy as p
 
 Tinker only release documentation for stable components, but its nightly built offers more. The next release will include a better API for NLP components (currently experimental and not very well-integrated into Tinker-processing). 
 
+- 0.13 (not yet released): added testing for parallel module.
+
 - 0.12: Official alpha-release. Cleaned legacy code (version 0.10 old APIs). Added NLP components on top of Tinker-core. Slight performance increase. Documentation major update.
 
 - 0.11: Preparing for alpha-release, eliminate of module hiearchy (you can inherit them however you want), simplified inheritance/module linearization, unified type system for Tinker-core `RowIterator`, incorporating Akka-Stream 1.0M3 and Akka Stream-graph.
@@ -66,7 +68,19 @@ This is functionally equivalent to importing the global scheduler. You can creat
 
 ## Modules
 
+#### Implicit Parameter
+
+All the parameters in all classes are defined as option parameters. It is a Scala-unique concept that may not require your understanding. Add `import utils.ParameterCallToOption.Implicits._` at the beginning of your file to use. If you are using the commandline interface, this is already imported for your convenience.
+
 #### DataContainer
+
+```
+class DataContainer(val f: Option[String] = None,
+                              val header: Boolean = true,
+                              val fuzzyMatch: Option[Int] = None,
+                              val rTaskSize: Option[Int] = None)
+                              (implicit val pscheduler: Option[Scheduler] = None)
+```
 
 `f: String`: the location of the file, can be a directory or a single file
 
@@ -74,7 +88,7 @@ This is functionally equivalent to importing the global scheduler. You can creat
 
 `fuzzyMatch: Int`: we automatically put files under one directory into groups, and the integer number in fuzzyMatch determines how many characters of the files you want to match. For example: `twitter_AZ_2009_10_4` and `twitter_AZ_2009_10_5` can be put in one group if you set this value at `9`.
 
-`timerOn: Boolean`: if you want to set a timer on your task, you must turn this on. However, this will have a very small upfront processing time penalty, because DataContainer will go through your corpus to calculate the total amount of task (row) that will be processed.
+`rTaskSize: Int`: 
 
 --Trait Modules--
 
