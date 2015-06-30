@@ -1,4 +1,4 @@
-package files.filetypes.format.tab
+package files.filetypes.output
 
 import files.RowTypes._
 import processing.buffers.file.FileOutputFormat

@@ -1,19 +1,17 @@
 package nlp.future
 
 import files.DataContainer
-import files.filetypes.format._
+import files.filetypes.input.Tab
 import files.structure.DataStructure
 import files.structure.predefined.BasicNLP
+import nlp.future.FutureRules._
 import utils.ParameterCallToOption.Implicits._
-import FutureRules._
 
 
 /**
  * Created by anie on 4/26/2015.
  */
 object FutureOnTweets extends App {
-
-  import scala.io
 
   val struct = new DataStructure(idColumn = 0, targetColumn = 2) with BasicNLP
   val data = new DataContainer("E:\\Allen\\R\\acl2015\\tweetsByStateSplittedCleaned2.tab", header = false) with Tab

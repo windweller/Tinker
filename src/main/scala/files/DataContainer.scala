@@ -1,13 +1,10 @@
 package files
 
-import files.structure.DataStructure
 import processing.Scheduler
-
-import scala.annotation.tailrec
-import scala.collection.AbstractIterator
-import scala.collection.mutable
 import utils.Global.Implicits._
 
+import scala.annotation.tailrec
+import scala.collection.{AbstractIterator, mutable}
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -47,7 +44,10 @@ abstract class DataContainer(val f: Option[String] = None,
 
 
   /* normal method (BufferConfig alreayd passed in from Scheduler) */
-  def exec(): Unit = scheduler.exec()
+  def exec(): Unit = {
+    if (scheduler.opSequence.isEmpty) scheduler.opSequence.push(strippedData)
+    scheduler.exec()
+  }
   def save(): Unit = exec()
 
 
@@ -55,6 +55,7 @@ abstract class DataContainer(val f: Option[String] = None,
   def exec(filePath: Option[String], fileAppend: Boolean = true): Unit = {
     scheduler.config.filePath = filePath
     scheduler.config.fileAppend = fileAppend
+    if (scheduler.opSequence.isEmpty) scheduler.opSequence.push(strippedData)
     exec()
   }
   def save(filePath: Option[String], fileAppend: Boolean = true) = exec(filePath, fileAppend)

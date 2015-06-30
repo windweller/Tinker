@@ -1,17 +1,16 @@
 package processing
 
-import files.RowTypes.{RowIterator, NormalRow}
+import files.RowTypes.RowIterator
 import processing.buffers.BufferConfig
 
 import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
 
 /**
  * This stores sequence of Iterators
  *
  * It also provides customization to BufferConfig
  */
-abstract class Scheduler(workerCount: Int)(implicit val bufferConfig: BufferConfig = BufferConfig()) extends Operation {
+abstract class Scheduler(workerCount: Option[Int] = None)(implicit val bufferConfig: BufferConfig = BufferConfig()) extends Operation {
 
   val workerNum = workerCount
 

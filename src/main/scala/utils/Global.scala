@@ -1,10 +1,10 @@
 package utils
 
-import files.filetypes.format.csv.CSVOutput
-import files.filetypes.format.tab.TabOutput
+import files.filetypes.output.CSVOutput
 import processing.buffers.BufferConfig
 import processing.buffers.file.FileBuffer
-import processing.{Sequential, Parallel, Scheduler}
+import processing.{Scheduler, Sequential}
+import utils.ParameterCallToOption.Implicits._
 
 import scala.collection.mutable
 
@@ -27,7 +27,8 @@ object Global {
     implicit val scheduler = defaultSchedulerConstructor()
 
     //every time a DataContainer is constructed, this method is called
-    def defaultSchedulerConstructor() = new Scheduler(4)(BufferConfig()) with Sequential with FileBuffer with CSVOutput
+    def defaultSchedulerConstructor(): Scheduler =
+          new Scheduler(4)(BufferConfig()) with Sequential with FileBuffer with CSVOutput
 
   }
 

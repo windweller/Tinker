@@ -6,9 +6,9 @@ import akka.stream.scaladsl.{Source, Sink, Flow}
 import com.github.tototoshi.csv.CSVWriter
 import edu.stanford.nlp.trees.Tree
 import files.DataContainer
-import files.filetypes.format._
+import files.filetypes.input._
 import files.RowTypes._
-import files.filetypes.format.Tab
+import files.filetypes.input.Tab
 import files.structure.DataStructure
 import files.structure.predefined.BasicNLP
 import nlp.matcher.Matcher

@@ -1,12 +1,11 @@
 package processing
 
 import files.DataContainer
-import files.filetypes.format._
-import files.filetypes.format.csv._
+import files.filetypes.input.CSV
+import files.filetypes.output.CSVOutput
 import files.operations.FileOp
-import processing.buffers.BufferConfig
-import processing.buffers.file.FileBuffer
 import org.scalatest.FlatSpec
+import processing.buffers.file.FileBuffer
 import utils.ParameterCallToOption.Implicits._
 
 /**

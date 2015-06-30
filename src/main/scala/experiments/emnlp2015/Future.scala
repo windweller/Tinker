@@ -4,7 +4,7 @@ import akka.actor.ActorSystem
 import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
 import com.github.tototoshi.csv.CSVWriter
-import com.typesafe.config.{ConfigFactory, Config}
+import com.typesafe.config.{Config, ConfigFactory}
 import edu.stanford.nlp.trees.Tree
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.DataContainer
@@ -23,8 +23,6 @@ import scala.collection.mutable.ListBuffer
 class Future(val data: DataContainer, val struct: DataStructure, val patternRaw: List[String],
              val tndoc: Option[String] = None, val tcdoc: Option[String] = None,
               val mispelling: Boolean = false) {
-
-  import scala.concurrent.Future
 
   val parser = new Parser
   val matcher = new Matcher with Tregex
@@ -103,7 +101,6 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
 
         merge ~> printsink
     }.run()
-
 
 //    val sourceReady = tweets.via(parseFlow).via(tregexMatchFlow)
 //    val materialized = sourceReady.runWith(printSink)

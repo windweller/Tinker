@@ -2,7 +2,6 @@ package nlp.matcher.impl
 
 import edu.stanford.nlp.trees.Tree
 import edu.stanford.nlp.trees.tregex.TregexPattern
-import nlp.future.FutureRules
 import nlp.matcher.Matcher
 
 /**
@@ -13,7 +12,7 @@ trait Tregex extends Matcher {
   def search(tree: Tree, patterns: List[TregexPattern]): Array[Int] = {
     val stats =  Array.fill[Int](patterns.size)(0)
 
-    (0 to patterns.size - 1).foreach { i =>
+    patterns.indices.foreach { i =>
 
       try {
         val matcher = patterns(i).matcher(tree)
@@ -28,6 +27,13 @@ trait Tregex extends Matcher {
       }
     }
     stats
+  }
+
+  def trackProgress(tree: Tree, patterns: List[TregexPattern]): Unit = {
+    patterns.indices.foreach { i =>
+      val matcher = patterns(i).matcher(tree)
+      matcher.getMatch
+    }
   }
 
 }

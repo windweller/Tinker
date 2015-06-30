@@ -10,7 +10,7 @@ import scala.collection.mutable
  */
 trait Operation extends Buffer {
 
-  val workerNum: Int  //for parallel only
+  val workerNum: Option[Int]  //for parallel only
 
   val opSequence: mutable.Stack[RowIterator]
 

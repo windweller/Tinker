@@ -1,4 +1,4 @@
-package files.filetypes.format
+package files.filetypes.input
 
 import files.Doc
 

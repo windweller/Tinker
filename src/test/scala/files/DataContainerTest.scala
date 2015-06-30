@@ -1,9 +1,7 @@
 package files
 
-import files.filetypes.format._
+import files.filetypes.input.CSV
 import files.operations.FileOp
-import processing.buffers.file.FileBuffer
-import processing.{Parallel, Operation}
 import org.scalatest.FlatSpec
 import utils.ParameterCallToOption.Implicits._
 

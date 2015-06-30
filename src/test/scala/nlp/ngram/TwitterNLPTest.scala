@@ -1,22 +1,15 @@
 package nlp.ngram
 
-import java.io.{FileOutputStream, OutputStreamWriter, PrintWriter}
-
 import com.github.tototoshi.csv.CSVWriter
 import edu.emory.clir.clearnlp.tokenization.EnglishTokenizer
 import files.DataContainer
-import files.filetypes.format._
+import files.filetypes.input.{CSV, Tab}
 import files.operations.FileOp
 import files.structure.DataStructure
 import files.structure.predefined.BasicNLP
-import processing.Printer
-import processing.buffers.BufferConfig
-import nlp.basic.Sentence
-import nlp.basic.sentence.Split
-import nlp.preprocess.filters.{TwitterMispellingFilter, CharacterFilter, TwitterFilter, Filter}
+import nlp.preprocess.filters.{CharacterFilter, Filter, TwitterFilter, TwitterMispellingFilter}
 import nlp.preprocess.tokenization.Tokenizer
 import nlp.preprocess.tokenization.impl.Stanford
-import nlp.preprocess.tokenization.impl.{ClearNLP, Stanford}
 import nlp.sentiment.Sentiment
 import org.scalatest.FlatSpec
 import utils.ParameterCallToOption.Implicits._
@@ -96,7 +89,6 @@ class TwitterNLPTest extends FlatSpec {
     val tokenizer = new EnglishTokenizer
 
     //Some preparations
-    import nlp.ngram._
 
     //1st Traversal: dictionary construction
 
@@ -116,7 +108,7 @@ class TwitterNLPTest extends FlatSpec {
       //word level
 
       val w0 = previousWord
-      val w1 = if (nextWord == None) Some(tokenit.next()) else nextWord
+      val w1 = if (nextWord.isEmpty) Some(tokenit.next()) else nextWord
       previousWord = w1
 
       val w2 = if (tokenit.hasNext) {

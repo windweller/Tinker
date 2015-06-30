@@ -16,7 +16,7 @@ import nlp.parser.Parser
 import utils.Timer
 
 /**
- * Created by anie on 4/26/2015.
+ * Created by anie on 4/26/2015
  */
 class Future(val data: DataContainer, val struct: DataStructure, val patternRaw: Iterator[String]) {
 

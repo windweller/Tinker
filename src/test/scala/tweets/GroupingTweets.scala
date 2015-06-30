@@ -1,7 +1,7 @@
 package tweets
 
 import files.DataContainer
-import files.filetypes.format._
+import files.filetypes.input.CSV
 import utils.ParameterCallToOption.Implicits._
 import org.scalatest.FlatSpec
 import scala.collection.JavaConversions._
