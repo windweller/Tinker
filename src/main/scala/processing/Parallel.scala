@@ -4,10 +4,11 @@ import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
 import files.RowTypes._
 import utils.ActorSys
+import scala.concurrent.ExecutionContext.Implicits.global
 
 
 /**
- * Created by anie on 4/21/2015.
+ * Created by anie on 4/21/2015
  */
 trait Parallel extends Operation with ActorSys {
 
@@ -17,8 +18,6 @@ trait Parallel extends Operation with ActorSys {
 
     val rows = opSequence.pop()
     implicit val materializer = ActorFlowMaterializer()
-
-    import system.dispatcher
 
     val source: Source[NormalRow, Unit] = Source(() => rows)
     val sink = Sink.foreach[NormalRow](row => bufferWrite(row))
@@ -33,7 +32,7 @@ trait Parallel extends Operation with ActorSys {
 
         source ~> bcast.in
 
-        0 to workerNum.get foreach  { i =>
+        0 to workerNum.get - 1 foreach  { i =>
           bcast.out(i) ~> merge
         }
 
@@ -41,7 +40,12 @@ trait Parallel extends Operation with ActorSys {
     }
 
     val materialized = g.run()
-    materialized.onComplete(e => system.shutdown())
+
+    materialized.onComplete{ e =>
+      bufferClose()
+      system.shutdown()
+    }
+
   }
 
 }
