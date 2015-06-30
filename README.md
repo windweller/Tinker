@@ -98,17 +98,23 @@ class DataContainer(val f: Option[String] = None,
 
 `FileOp`: allow table-like operations (such as union, compression/groupBy) on data. All operations are lazy and are not executed/saved unless explicitly called upon.
 
-Examples:
+Examples Usage:
+
+1. Use Sequential processing to convert Tab-delimited file to CSV file.
 
 ```
-import akka.actor.ActorSystem
-import akka.testkit.TestKit
-import files.DataContainer
-import files.filetypes.input.CSV
-import files.filetypes.output.TabOutput
-import org.scalatest.{BeforeAndAfterAll, FlatSpecLike}
-import processing.buffers.file.FileBuffer
-import processing.{Parallel, Scheduler}
+  "sequential processing" can "transform tab file into csv format" in {
+
+    val scheduler = new Scheduler with FileBuffer with Sequential with CSVOutput
+    val data = new DataContainer("./src/test/scala/tutorial/data/tabFile.tab", header = true)(scheduler) with Tab
+
+    data.save("./src/test/scala/tutorial/data/generatedCSV.csv")
+  }
+```
+
+2. The same task can be done through parallel processing: using 4 threads to convert CSV file to a Tab-delimited file.
+```
+//other imports are omitted
 import utils.ParameterCallToOption.Implicits._
 
 class TinkerParallel extends TestKit(ActorSystem("testsystem"))
@@ -123,6 +129,8 @@ class TinkerParallel extends TestKit(ActorSystem("testsystem"))
 
 }
 ```
+
+
 
 #### Parser
 
