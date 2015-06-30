@@ -90,13 +90,39 @@ class DataContainer(val f: Option[String] = None,
 
 `rTaskSize: Int`: 
 
---Trait Modules--
+--Extension Modules--
 
 `CSV`: provide type and parsing information for .csv files.
 
 `Tab`: same above.
 
 `FileOp`: allow table-like operations (such as union, compression/groupBy) on data. All operations are lazy and are not executed/saved unless explicitly called upon.
+
+Examples:
+
+```
+import akka.actor.ActorSystem
+import akka.testkit.TestKit
+import files.DataContainer
+import files.filetypes.input.CSV
+import files.filetypes.output.TabOutput
+import org.scalatest.{BeforeAndAfterAll, FlatSpecLike}
+import processing.buffers.file.FileBuffer
+import processing.{Parallel, Scheduler}
+import utils.ParameterCallToOption.Implicits._
+
+class TinkerParallel extends TestKit(ActorSystem("testsystem"))
+                          with FlatSpecLike with BeforeAndAfterAll {
+
+  "parallel processing" can "transform csv file into tab format" in {
+    val scheduler = new Scheduler(4) with FileBuffer with Parallel with TabOutput
+    val data = new DataContainer("./src/test/scala/tutorial/data/csvFile.csv", header = true)(scheduler) with CSV
+
+    data.save("./src/test/scala/tutorial/data/generatedTab.tab")
+  }
+
+}
+```
 
 #### Parser
 
