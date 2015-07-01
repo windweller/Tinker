@@ -25,7 +25,7 @@ Start by typing `sbt console` from the root of the project. Currently the Unix/L
 
 Then you would see
 
-```
+```scala
 =======================================
 Welcome to Tinker 0.12 alpha release
 =======================================
@@ -36,7 +36,7 @@ Then you can use it like any other Scala REPL from the command line.
 
 ## Quick Start - Library
 
-```
+```scala
 import files.DataContainer
 import files.filetypes.format._
 import utils.ParameterCallToOption.implicits._
@@ -58,7 +58,7 @@ Because we seek to optimize performance (and leverage memory use) to the maximum
 
 All task-related operational modules such as `Parser` requires an implicit scheduler. You can import the global default, or use your own one, and make it implicit such as:
 
-```
+```scala
 implicit val scheduler = new Scheduler(4) with Parallel with FileBuffer
 ```
 
@@ -74,7 +74,7 @@ All the parameters in all classes are defined as option parameters. It is a Scal
 
 #### DataContainer
 
-```
+```scala
 class DataContainer(val f: Option[String] = None,
                               val header: Boolean = true,
                               val fuzzyMatch: Option[Int] = None,
@@ -102,7 +102,7 @@ Examples Usage:
 
 1. Use Sequential processing to convert Tab-delimited file to CSV file.
 
-```
+```scala
   "sequential processing" can "transform tab file into csv format" in {
 
     val scheduler = new Scheduler with FileBuffer with Sequential with CSVOutput
@@ -113,7 +113,7 @@ Examples Usage:
 ```
 
 2. The same task can be done through parallel processing: using 4 threads to convert CSV file to a Tab-delimited file.
-```
+```scala
 //other imports are omitted
 import utils.ParameterCallToOption.Implicits._
 
@@ -157,7 +157,7 @@ Here are a list of specialized modules and how to use them.
 
 #### Subtree
 
-```
+```scala
     val doc = new Subtree with SVM with VarroSubtreeXML
     doc.parse(
       ("../subtree/mTurkAllSentencesFuture.xml", "Future"),
