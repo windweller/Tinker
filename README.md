@@ -18,7 +18,7 @@ We want to make standard large file ML/NLP processing as smooth and as easy as p
 
 Tinker only release documentation for stable components, but its nightly built offers more. The next release will include a better API for NLP components (currently experimental and not very well-integrated into Tinker-processing). 
 
-- (next release) 0.13: added testing for parallel module. Further integrate with Akka Flow Graph as well as iterator approach to provide flexible and easy processing integration.
+- (next release) 0.13: added testing for parallel module. Further integrate with Akka Flow Graph as well as iterator approach to provide flexible and easy processing integration. Fixed a problem when generating output, `Datastructure` cannot be passed in.
 
 - 0.12: Official alpha-release. Cleaned legacy code (version 0.10 old APIs). Added NLP components on top of Tinker-core. Slight performance increase. Documentation major update.
 
