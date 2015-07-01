@@ -3,6 +3,13 @@ Tinker is a parallel-by-default File/Multi-File/Data Management System with addi
 
 It offers the ease of reading multiple formated files and merge/process as one, parallelize normal file operations (some of them NLP related) such as filtering, tokenization, compressing/aggregating rows, and so on.
 
+## Capable Tasks
+
+1. Convert extremely file from one format to another, similar to Canova  (http://deeplearning4j.org/canova.html#tutorial), but Tinker's performance is much faster (because of default parallel processing), and easier (we don't rely on outside markup language to define data structure).
+2. Constituency parsing: with Stanford constituency parser (http://nlp.stanford.edu/software/lex-parser.shtml)
+3. Tregex Matching: using a specific regex-like language to search through Stanford constituency tree (http://nlp.stanford.edu/software/tregex.shtml)
+4. Future Classification: for psycholinguistics researchers, they may want to check out this paper (http://www.aclweb.org/anthology/N15-2#page=178).
+
 ## Design Philosophy
 
 We want to make standard large file ML/NLP processing as smooth and as easy as possible, regardless of the computer's power/memory. We parallelize tasks whenever possible, and make most of the tasks asynchronous. Tinker has robust I/O interface that allows users to interact with files (of various format) and databases (PostgreSQL, MySQL...) without pain. It also uses buffering so lower memory computer can still function well with data multiple times larger than its capacity (speed being the drawback).
@@ -18,6 +25,10 @@ Tinker only release documentation for stable components, but its nightly built o
 - 0.11: Preparing for alpha-release, eliminate of module hiearchy (you can inherit them however you want), simplified inheritance/module linearization, unified type system for Tinker-core `RowIterator`, incorporating Akka-Stream 1.0M3 and Akka Stream-graph.
 
 - 0.10: first official pre-alpha release with workable APIs
+
+## For Academics
+
+This software/framework (or whatever you want to call it) is developed at the time of my undergraduate research project with Dr. Phillip Wolff and Dr. Jinho Choi. 
 
 ## Quick Start - Interactive (REPL)
 
