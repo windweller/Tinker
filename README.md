@@ -171,6 +171,8 @@ Here are a list of specialized modules and how to use them.
 
 ## Minor Issues
 
-1. Table columns are not typed (all represented as string), so we suffer minor performance penalty by converting them on spot.
+1. Table columns are not typed (all represented as string - for faster HashMap performance instead of Shapeless' HList https://github.com/milessabin/shapeless), so we suffer minor performance penalty by converting them on spot.
 
 2. Tinker's column count starts at 0 (not 1)
+
+3. Operation module should be a subsidiary module of DataContainer. They are seperate right now due to historical reasons and cleaner code base. They might be combined in the future.
