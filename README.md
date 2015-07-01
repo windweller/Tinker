@@ -100,7 +100,7 @@ class DataContainer(val f: Option[String] = None,
 
 Examples Usage:
 
-1. Use Sequential processing to convert Tab-delimited file to CSV file.
+1.Use Sequential processing to convert Tab-delimited file to CSV file.
 
 ```scala
   "sequential processing" can "transform tab file into csv format" in {
@@ -112,7 +112,7 @@ Examples Usage:
   }
 ```
 
-2. The same task can be done through parallel processing: using 4 threads to convert CSV file to a Tab-delimited file.
+2.The same task can be done through parallel processing: using 4 threads to convert CSV file to a Tab-delimited file.
 ```scala
 //other imports are omitted
 import utils.ParameterCallToOption.Implicits._
