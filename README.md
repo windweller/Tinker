@@ -28,7 +28,13 @@ Tinker only release documentation for stable components, but its nightly built o
 
 ## For Academics
 
-This software/framework (or whatever you want to call it) is developed at the time of my undergraduate research project with Dr. Phillip Wolff and Dr. Jinho Choi. 
+This library is developed at the time of my undergraduate research project with Dr. Phillip Wolff and Dr. Jinho Choi. Tinker is also included in the CLIR (Computational Linguistics and Information Retrieval) group (a.k.a Emory NLP): https://github.com/clir. The research project focuses on future-orientation detection (a psycholinguistic concept), and deals with files of 60 million lines (NYT corpus) and filtering/processing tweets.  
+
+If you are using this library in research, and if your research is future-orientation related, please cite:
+
+```
+Nie, A., Shepard, J., Choi, J., Copley, B., & Wolff, P. (2015, June). Computational Exploration of the Linguistic Structures of Future-Oriented Expression: Classification and Categorization. In NAACL-HLT 2015 Student Research Workshop (SRW) (Vol. 867, No. 164,772, p. 168).
+```
 
 ## Quick Start - Interactive (REPL)
 
