@@ -3,7 +3,7 @@ Tinker is a parallel-by-default File/Multi-File/Data Management System with addi
 
 It offers the ease of reading multiple formated files and merge/process as one, parallelize normal file operations (some of them NLP related) such as filtering, tokenization, compressing/aggregating rows, and so on.
 
-## Capable Tasks
+## Primary Usages
 
 1. Convert extremely file from one format to another, similar to Canova  (http://deeplearning4j.org/canova.html#tutorial), but Tinker's performance is much faster (because of default parallel processing), and easier (we don't rely on outside markup language to define data structure).
 2. Constituency parsing: with Stanford constituency parser (http://nlp.stanford.edu/software/lex-parser.shtml)
