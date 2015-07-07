@@ -79,7 +79,7 @@ abstract class DataContainer(val f: Option[String] = None,
     override def hasNext: Boolean = checkEmpty(itm.hasNext || cit._2.hasNext)
 
     override def next(): NormalRow = {
-      cit._2.next() += (fileColName.getOrElse("fileName") -> cit._1)
+      cit._2.next() += (fileColName.getOrElse("file_name") -> cit._1)
     }
 
     @tailrec

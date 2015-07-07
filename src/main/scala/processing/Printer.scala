@@ -11,7 +11,10 @@ import processing.buffers.file.FileBuffer
  * new Printer(...) with CSVOutput
  */
 abstract class Printer(filePath: Option[String],
-                       fileAppend: Boolean = true)(implicit val bufferConfig: BufferConfig = BufferConfig()) extends FileBuffer {
+                       fileAppend: Boolean = true)
+                      (implicit val bufferConfig: BufferConfig = BufferConfig()) extends FileBuffer {
+
+//  this: FileBuffer =>
 
   override val config: BufferConfig = bufferConfig
 
