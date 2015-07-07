@@ -1,13 +1,13 @@
 package processing
 
+import files.structure.DataStructure
+
 
 trait Sequential extends Operation {
 
-  //let's hope this works
-  //emmm, where's the execution???
-  def exec(): Unit = {
+  def exec(struct: Option[DataStructure] = None): Unit = {
     val rows = opSequence.pop()
-    rows.foreach(row => bufferWrite(row))
+    rows.foreach(row => bufferWrite(row, struct))
     bufferClose()
   }
 }

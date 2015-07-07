@@ -4,6 +4,7 @@ import java.io.{OutputStreamWriter, FileOutputStream, PrintWriter}
 import java.nio.file.{Files, Paths}
 
 import files.RowTypes.NormalRow
+import files.structure.DataStructure
 import processing.buffers.Buffer
 import utils.{FailureHandle, Global}
 
@@ -25,18 +26,18 @@ trait FileBuffer extends Buffer with FileOutputFormat with FailureHandle {
   var headerPrinted = false
 
   //this is to shield away the saving method
-  def bufferWrite(row: NormalRow): Unit = {
+  def bufferWrite(row: NormalRow, struct: Option[DataStructure]): Unit = {
 
     if (config.filePath.isEmpty) createTempFile()
 
     if (config.fileWithHeader && !headerPrinted) {
-      val arr = encodeHeader(row)
+      val arr = encodeHeader(row, struct)
       printer.println(arr(0))
       printer.println(arr(1))
       headerPrinted = true
     }
     else {
-      printer.println(encode(row))
+      printer.println(encode(row, struct))
     }
   }
 

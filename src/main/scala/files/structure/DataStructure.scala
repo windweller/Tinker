@@ -12,6 +12,8 @@ import scala.collection.mutable
  *
  * Right now it seems like DataStructure is not for
  * DataContainers, but more for algorithms
+ *
+ * @param ignoreColumn this will be taken into account for output generation
  */
 abstract class DataStructure(idColumn: Option[Int] = None,
                              idColumnWithName: Option[String] = None,
@@ -22,9 +24,11 @@ abstract class DataStructure(idColumn: Option[Int] = None,
                              targetColumn: Option[Int] = None,
                              targetColumnWithName: Option[String] = None,
                              val targetColumns: Option[IndexedSeq[Int]] = None,
+                             targetColumnsWithName: Option[IndexedSeq[String]] = None,
                              ignoreColumn: Option[Int] = None,
                              ignoreColumnWithName: Option[String] = None,
                              val ignoreColumns: Option[IndexedSeq[Int]] = None,
+                             val ignoreColumnsWithName: Option[IndexedSeq[String]] = None,
                              keepColumns: Option[IndexedSeq[Int]] = None,
                              keepColumnsWithNames: Option[IndexedSeq[String]] = None) extends FailureHandle with StructureUtils {
 
@@ -39,14 +43,16 @@ abstract class DataStructure(idColumn: Option[Int] = None,
   predefinedCheck()
 
   lazy val target: Option[String] = getSingleIntStringOption(targetColumn, targetColumnWithName)
+  lazy val targets: Option[IndexedSeq[String]] = getMultipleIntStringOption(targetColumns, targetColumnsWithName)
   lazy val id: Option[String] = getSingleIntStringOption(idColumn, idColumnWithName)
   lazy val ignore: Option[String] = getSingleIntStringOption(ignoreColumn, ignoreColumnWithName)
   lazy val label: Option[String] = getSingleIntStringOption(labelColumn, labelColumnWithName)
   lazy val keeps: Option[IndexedSeq[String]] = getMultipleIntStringOption(keepColumns, keepColumnsWithNames)
+  lazy val ignores: Option[IndexedSeq[String]] = getMultipleIntStringOption(ignoreColumns, ignoreColumnsWithName)
 
   /*
-  * iterator
-  */
+   * iterator
+   */
 
   //could be empty
   lazy val values: Vector[Option[String]] = Vector(target, id, ignore, label)

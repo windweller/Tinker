@@ -1,9 +1,11 @@
 package processing
 
-import files.RowTypes.RowIterator
+import akka.stream.scaladsl.Flow
+import files.RowTypes.{NormalRow, RowIterator}
 import processing.buffers.BufferConfig
 
 import scala.collection.mutable
+import scala.concurrent.Future
 
 /**
  * This stores sequence of Iterators
@@ -22,5 +24,13 @@ abstract class Scheduler(workerCount: Option[Int] = Some(4))(implicit val buffer
   val opSequence: mutable.Stack[RowIterator] = mutable.Stack()
 
   def clean(): Unit = opSequence.clear()
+
+  /**
+   * add to parallel graph flow
+   * @param func pass in this specific function
+   */
+  def addToGraph(func: NormalRow => Future[NormalRow]): Unit = {
+    graphFlows += Flow[NormalRow].mapAsync[NormalRow](func)
+  }
 
 }

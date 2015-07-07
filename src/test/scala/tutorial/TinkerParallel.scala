@@ -22,7 +22,7 @@ class TinkerParallel extends TestKit(ActorSystem("testsystem"))
     val scheduler = new Scheduler(4) with FileBuffer with Parallel with TabOutput
     val data = new DataContainer("./src/test/scala/tutorial/data/csvFile.csv", header = true)(scheduler) with CSV
 
-    data.save("./src/test/scala/tutorial/data/generatedTab.tab")
+    data.save("./src/test/scala/tutorial/data/generatedTab.tab" )
   }
 
 }

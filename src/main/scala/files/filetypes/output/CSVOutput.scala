@@ -2,6 +2,7 @@ package files.filetypes.output
 
 import com.github.tototoshi.csv._
 import files.RowTypes._
+import files.structure.DataStructure
 import processing.buffers.file.FileOutputFormat
 
 /**
@@ -16,12 +17,17 @@ trait CSVOutput extends FileOutputFormat {
   implicit object MyFormat extends DefaultCSVFormat
   val format = MyFormat
 
-  def encodeHeader(row: NormalRow): Array[String] = {
-    Array(generateString(row.keysIterator.toSeq), generateString(row.valuesIterator.toSeq))
+  def encodeHeader(row: NormalRow, struct: Option[DataStructure]): Array[String] = {
+    val cleanedRow = struct.map(st => row.filter(e => !st.ignores.get.contains(e._1)))
+    Array(generateString(cleanedRow.getOrElse(row).keysIterator.toSeq),
+                    generateString(cleanedRow.getOrElse(row).valuesIterator.toSeq))
   }
 
-  def encode(row: NormalRow): String =
-    generateString(row.valuesIterator.toSeq)
+  def encode(row: NormalRow, struct: Option[DataStructure]): String = {
+    val cleanedRow = struct.map(st => row.filter(e => !st.ignores.get.contains(e._1)))
+    generateString(cleanedRow.getOrElse(row).valuesIterator.toSeq)
+  }
+
 
   def outputSuffix: String = "csv"
 

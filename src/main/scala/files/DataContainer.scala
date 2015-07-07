@@ -1,5 +1,6 @@
 package files
 
+import files.structure.DataStructure
 import processing.Scheduler
 import utils.Global.Implicits._
 
@@ -44,22 +45,21 @@ abstract class DataContainer(val f: Option[String] = None,
 
 
   /* normal method (BufferConfig alreayd passed in from Scheduler) */
-  def exec(): Unit = {
+  def exec(struct: Option[DataStructure]): Unit = {
     if (scheduler.opSequence.isEmpty) scheduler.opSequence.push(strippedData)
-    scheduler.exec()
+    scheduler.exec(struct)
   }
-  def save(): Unit = exec()
+  def save(struct: Option[DataStructure]): Unit = exec(struct)
 
 
   /* shortcut for file save */
-  def exec(filePath: Option[String], fileAppend: Boolean = true): Unit = {
+  def exec(filePath: Option[String], fileAppend: Boolean = true, struct: Option[DataStructure] = None): Unit = {
     scheduler.config.filePath = filePath
     scheduler.config.fileAppend = fileAppend
     if (scheduler.opSequence.isEmpty) scheduler.opSequence.push(strippedData)
-    exec()
+    exec(struct)
   }
-  def save(filePath: Option[String], fileAppend: Boolean = true) = exec(filePath, fileAppend)
-
+  def save(filePath: Option[String], fileAppend: Boolean = true, struct: Option[DataStructure] = None) = exec(filePath, fileAppend, struct)
 
   /* Core methods */
 

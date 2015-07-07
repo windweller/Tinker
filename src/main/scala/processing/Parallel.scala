@@ -3,6 +3,7 @@ package processing
 import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
 import files.RowTypes._
+import files.structure.DataStructure
 import utils.ActorSys
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -14,13 +15,13 @@ trait Parallel extends Operation with ActorSys {
 
   //no need to clean scheduler's opSequence once exec() is done
   //right now parallel follows
-  def exec(): Unit = {
+  def exec(struct: Option[DataStructure] = None): Unit = {
 
     val rows = opSequence.pop()
     implicit val materializer = ActorFlowMaterializer()
 
     val source: Source[NormalRow, Unit] = Source(() => rows)
-    val sink = Sink.foreach[NormalRow](row => bufferWrite(row))
+    val sink = Sink.foreach[NormalRow](row => bufferWrite(row, struct))
 
     val g = FlowGraph.closed(sink) { implicit builder: FlowGraph.Builder =>
       sink =>

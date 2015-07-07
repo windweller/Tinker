@@ -31,6 +31,7 @@ libraryDependencies ++= {
     "com.bizo" % "mighty-csv_2.11" % "0.2",
     "com.github.tototoshi" %% "scala-csv" % "1.2.1",
     "org.apache.commons" % "commons-csv" % "1.1",
+    "com.chuusai" %% "shapeless" % "2.2.3",
     //NLP-components
     "cc.mallet" % "mallet" % "2.0.7-RC2",
     "edu.emory.clir" % "clearnlp" % "3.0.2",
