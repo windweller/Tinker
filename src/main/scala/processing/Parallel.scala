@@ -17,7 +17,7 @@ trait Parallel extends Operation with ActorSys {
   //right now parallel follows
   def exec(struct: Option[DataStructure] = None): Unit = {
 
-    val rows = opSequence.pop()
+    val rows = opSequence.top
     implicit val materializer = ActorFlowMaterializer()
 
     val source: Source[NormalRow, Unit] = Source(() => rows)

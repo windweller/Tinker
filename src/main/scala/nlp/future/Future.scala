@@ -76,7 +76,6 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
 
     val parseFlow: Flow[NormalRow, (NormalRow, Tree), Unit] =
       Flow[NormalRow].mapAsync[(NormalRow, Tree)](row => scala.concurrent.Future {
-//        println("processing: " + row(struct.target.get)) //no need to print
         (row, parser.parse(row(struct.target.get))) //struct.getIdValue(row).get,
       })
 
