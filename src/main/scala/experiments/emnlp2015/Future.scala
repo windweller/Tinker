@@ -38,7 +38,9 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
     patterns.foreach { p =>
       if (p.contains("TN|TC")) {
         //just replace all TN and TC
-        result ++= tnterms.get.map(tn => p.replace("TN|TC", tn))
+        //we are not replacing TN right now
+
+        //result ++= tnterms.get.map(tn => p.replace("TN|TC", tn))
         result ++= tcterms.get.map(tc => p.replace("TN|TC", tc))
       }
       else if (p.contains("TN")) {
@@ -56,7 +58,7 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
 
     //comment out during regular task
-    output.writeRow(Seq("SentenceID", "Sentence", "ParagraphID", "PageID") ++ preprocessTregex(patternRaw))
+    output.writeRow(Seq("sentence", "Allen", "Tim") ++ preprocessTregex(patternRaw))
 
     val conf: Config = ConfigFactory.load()
     implicit val system = ActorSystem("reactive-tweets", conf)
@@ -74,7 +76,7 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
       scala.concurrent.Future {
         val array = matcher.search(tuple._2, patterns)
         Timer.completeOne()
-        Seq(struct.getIdValue(tuple._1).get, struct.getTargetValue(tuple._1).get) ++ struct.getKeepColumnsValue(tuple._1).get ++ array.toSeq
+        Seq(struct.getTargetValue(tuple._1).get) ++ struct.getKeepColumnsValue(tuple._1).get ++ array.toSeq
       }
     }
 
