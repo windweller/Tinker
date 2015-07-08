@@ -40,10 +40,10 @@ object Stream extends App {
 //    future.saveFutureMatching("E:\\Allen\\R\\emnlp2015\\fixedOpenClassifier\\topic10_futureRules2.0.csv")
 
     // ========== Match NYT times tregex =========== //
-    val struct = new DataStructure(idColumnWithName = "SentenceID", targetColumnWithName = "Parse", keepColumnsWithNames = Vector("ParagraphID", "PageID")) with BasicNLP
-    val data = new DataContainer("E:\\Allen\\NYTFuture\\NYT", header = true) with Tab
-    val future = new FutureOnlyTregex(data, struct, futureRulesComplete ++ patternPresent ++ patternsPast,  tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTerms.txt")
-    future.saveFutureMatching("E:\\Allen\\NYTFuture\\NYT_result_2.2\\nyt_by_sen2_2.txt")
+//    val struct = new DataStructure(idColumnWithName = "SentenceID", targetColumnWithName = "Parse", keepColumnsWithNames = Vector("ParagraphID", "PageID")) with BasicNLP
+//    val data = new DataContainer("E:\\Allen\\NYTFuture\\NYT", header = true) with Tab
+//    val future = new FutureOnlyTregex(data, struct, futureRulesComplete ++ patternPresent ++ patternsPast,  tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTerms.txt")
+//    future.saveFutureMatching("E:\\Allen\\NYTFuture\\NYT_result_2.2\\nyt_by_sen2_2.txt")
 
     // =========== Match New MTurk result =========== //
 //      val struct = new DataStructure(idColumnWithName = "id", targetColumnWithName = "sentence") with BasicNLP
@@ -77,6 +77,14 @@ object Stream extends App {
 //    val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\fixedOpenClassifier\\MTurkSentences.csv", header = true) with CSV
 //    val future = new FutureOnlyTregex(data, struct, patternFuture ++ patternPresent ++ patternsPast)
 //    future.saveFutureMatching("E:\\Allen\\R\\emnlp2015\\training\\MTurkSentences.csv")
+
+    // ========== Rules 2.2 with TN TC reduced set on NYT sample ============
+    val struct = new DataStructure(idColumnWithName = "SentenceID", targetColumnWithName = "Sentence", keepColumnsWithNames = Vector("ParagraphID", "PageID")) with BasicNLP
+    val data = new DataContainer("E:\\Allen\\NYTFuture\\NYT\\nyt_082_sentences.txt", header = true) with Tab
+    val future = new Future(data, struct, futureRulesComplete ++ patternPresent ++ patternsPast,
+                            tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced.txt",
+                            tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
+    future.saveFutureMatching("E:\\Allen\\NYTFuture\\NYT_sample_2.2tctn_reduced\\nyt_by_sen2_2.txt")
   }
 
   def tokenize(): Unit = {
@@ -87,6 +95,6 @@ object Stream extends App {
   }
 
   //load future rules from file
-  def futureRulesComplete: List[String] = scala.io.Source.fromFile("E:\\Allen\\R\\emnlp2015\\theRules.txt").getLines().toList
+  def futureRulesComplete: List[String] = scala.io.Source.fromFile("E:\\Allen\\R\\emnlp2015\\FutureRules2.2.txt").getLines().toList
 
 }
