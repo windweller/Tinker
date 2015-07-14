@@ -15,7 +15,7 @@ import scala.collection.mutable
  *
  * @param ignoreColumn this will be taken into account for output generation
  */
-abstract class DataStructure(idColumn: Option[Int] = None,
+class DataStructure(idColumn: Option[Int] = None,
                              idColumnWithName: Option[String] = None,
                              val attributeColumns: Option[IndexedSeq[Int]] = None,
                              val attributeColumnsWithName: Option[IndexedSeq[String]] = None,
@@ -32,15 +32,10 @@ abstract class DataStructure(idColumn: Option[Int] = None,
                              keepColumns: Option[IndexedSeq[Int]] = None,
                              keepColumnsWithNames: Option[IndexedSeq[String]] = None) extends FailureHandle with StructureUtils {
 
-  def predefinedCheck(): Unit
-
   //we only allow one
   if (idColumn.nonEmpty && idColumnWithName.nonEmpty) fatal("Either use name or id number. Don't use both.")
   if (attributeColumns.nonEmpty && attributeColumnsWithName.nonEmpty) fatal("Either use name or id number. Don't use both.")
   if (labelColumn.nonEmpty && labelColumnWithName.nonEmpty) fatal("Either use name or id number. Don't use both.")
-
-  //predefined check
-  predefinedCheck()
 
   lazy val target: Option[String] = getSingleIntStringOption(targetColumn, targetColumnWithName)
   lazy val targets: Option[IndexedSeq[String]] = getMultipleIntStringOption(targetColumns, targetColumnsWithName)

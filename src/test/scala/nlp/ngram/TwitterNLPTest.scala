@@ -6,7 +6,6 @@ import files.DataContainer
 import files.filetypes.input.{CSV, Tab}
 import files.operations.FileOp
 import files.structure.DataStructure
-import files.structure.predefined.BasicNLP
 import nlp.preprocess.filters.{CharacterFilter, Filter, TwitterFilter, TwitterMispellingFilter}
 import nlp.preprocess.tokenization.Tokenizer
 import nlp.preprocess.tokenization.impl.Stanford
@@ -22,27 +21,27 @@ import scala.collection.mutable
 class TwitterNLPTest extends FlatSpec {
 
   "count sentence #" should "work" in {
-    val struct = new DataStructure(targetColumnWithName = "Text") with BasicNLP
+    val struct = new DataStructure(targetColumnWithName = "Text")
     val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\Tweets\\", header = true, fuzzyMatch = 9) with CSV
     println(data.strip.length)
   }
 
   "clean up tweets" should "work" in {
-    val struct = new DataStructure(targetColumnWithName = "Text") with BasicNLP
+    val struct = new DataStructure(targetColumnWithName = "Text")
     val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\Tweets\\", header = true, fuzzyMatch = 9) with CSV
     val filter = new Filter(data, struct) with TwitterFilter
     filter.preprocess("E:\\Allen\\R\\emnlp2015\\tweetsCleaned.csv")
   }
 
   "tokenize" should "work" in {
-    val struct = new DataStructure(targetColumn = 1, keepColumns = Vector(0)) with BasicNLP
+    val struct = new DataStructure(targetColumn = 1, keepColumns = Vector(0)) 
     val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\tweetsCleaned.csv", header = false) with CSV
     val tokenizer = new Tokenizer(data, struct) with Stanford
     tokenizer.tokenize().exec("E:\\Allen\\R\\emnlp2015\\tweetsTokenized.csv", fileAppend = true)
   }
 
   "unigram/vocabulary count by state" should "work" in {
-    val struct = new DataStructure(targetColumnWithName = "Text") with BasicNLP
+    val struct = new DataStructure(targetColumnWithName = "Text") 
     val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\Tweets\\", header = true, fuzzyMatch = 9) with CSV
     val ngram = new Ngram(data, struct) with Unigram
 
@@ -57,28 +56,28 @@ class TwitterNLPTest extends FlatSpec {
   }
 
   "clean tokenized tweets" should "work" in {
-    val struct = new DataStructure(idColumnWithName = "state", targetColumnWithName = "sentence") with BasicNLP
+    val struct = new DataStructure(idColumnWithName = "state", targetColumnWithName = "sentence") 
     val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\tweetsTokenized.csv", header = true) with CSV
     val filter = new Filter(data, struct) with CharacterFilter
     filter.preprocess("E:\\Allen\\R\\emnlp2015\\tweetsTokenizedClean.csv")
   }
 
   "replace mispelled word in tweets" should "work" in {
-    val struct = new DataStructure(idColumnWithName = "state", targetColumnWithName = "sentence") with BasicNLP
+    val struct = new DataStructure(idColumnWithName = "state", targetColumnWithName = "sentence") 
     val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\tweetsTokenizedClean.csv", header = true) with Tab
     val filter = new Filter(data, struct) with TwitterMispellingFilter
     filter.preprocess("E:\\Allen\\R\\emnlp2015\\tweetsTokenizedCleanMispelledReplaced.csv")
   }
 
   "replcae mispelled words in twitter test file" should "work" in {
-    val struct = new DataStructure(keepColumnsWithNames = Vector("Gabby", "Denton"), targetColumnWithName = "Sentence") with BasicNLP
+    val struct = new DataStructure(keepColumnsWithNames = Vector("Gabby", "Denton"), targetColumnWithName = "Sentence") 
     val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\GabbyDentonRatingOnTweets.csv", header = true) with CSV
     val filter = new Filter(data, struct) with TwitterMispellingFilter
     filter.preprocess("E:\\Allen\\R\\emnlp2015\\GabbyDentonRatingOnTweetsMispelledCleaned.csv")
   }
 
   "sentiment analysis" should "work" in {
-    val struct = new DataStructure(idColumnWithName = "state", targetColumnWithName = "sentence") with BasicNLP
+    val struct = new DataStructure(idColumnWithName = "state", targetColumnWithName = "sentence") 
     val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\tweetsTokenizedCleanMispelledReplaced.csv", header = true) with CSV
     val sentiment = new Sentiment(data, struct) with nlp.sentiment.impl.Stanford
     sentiment.classify("E:\\Allen\\R\\emnlp2015\\twitterSentimentNoMispell.csv")

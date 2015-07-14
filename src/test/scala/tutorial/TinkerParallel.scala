@@ -19,7 +19,7 @@ import utils.ParameterCallToOption.Implicits._
 object TinkerParallel extends App {
 
       val scheduler = new Scheduler(4) with FileBuffer with Parallel with TabOutput
-      val data = new DataContainer("./src/test/scala/tutorial/data/csvFile.csv", header = true)(scheduler) with CSV
+      val data = new DataContainer("./src/test/scala/tutorial/data/csvFile.csv", header = true) with CSV
 
       data.save("./src/test/scala/tutorial/data/generatedTab.tab" )
 

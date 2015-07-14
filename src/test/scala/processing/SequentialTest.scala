@@ -22,7 +22,7 @@ class SequentialTest extends FlatSpec {
 
   "Sequential processing in compressing future" should "work" in {
     val scheduler = new Scheduler(4) with FileBuffer with Sequential with CSVOutput
-    val dc = new DataContainer(f = "E:\\Allen\\R\\acl2015\\twitterFuture2.csv", header = false)(scheduler) with CSV with FileOp
+    val dc = new DataContainer(f = "E:\\Allen\\R\\acl2015\\twitterFuture2.csv", header = false) with CSV with FileOp
     dc.compressByAvg(groupByCol = 0, discardCols = Vector(1))
       .exec(filePath = "E:\\Allen\\R\\acl2015\\twitterFuture2Compressed.csv")
   }

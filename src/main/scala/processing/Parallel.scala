@@ -46,7 +46,6 @@ trait Parallel extends Operation {
     val materialized = g.run()
 
     materialized.onComplete{ e =>
-      println("here!")
       bufferClose()
       system.shutdown()
     }

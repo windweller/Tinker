@@ -10,7 +10,6 @@ import files.filetypes.input._
 import files.RowTypes._
 import files.filetypes.input.Tab
 import files.structure.DataStructure
-import files.structure.predefined.BasicNLP
 import nlp.matcher.Matcher
 import nlp.matcher.impl.Tregex
 import nlp.parser.Parser
@@ -35,7 +34,7 @@ object FutureApp extends App {
 
   val output: CSVWriter = CSVWriter.open("E:\\Allen\\NYTFuture\\NYT_result_2.0b\\nyt_by_sen.txt", append = true)
 
-  val struct = new DataStructure(idColumnWithName = "SentenceID", targetColumnWithName = "Parse", keepColumnsWithNames = Vector("ParagraphID", "PageID")) with BasicNLP
+  val struct = new DataStructure(idColumnWithName = "SentenceID", targetColumnWithName = "Parse", keepColumnsWithNames = Vector("ParagraphID", "PageID"))
   val data = new DataContainer("E:\\Allen\\NYTFuture\\NYT", header = true) with Tab
 
   /** process **/

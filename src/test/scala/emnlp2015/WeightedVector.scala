@@ -6,7 +6,6 @@ import edu.emory.clir.clearnlp.tokenization.EnglishTokenizer
 import files.DataContainer
 import files.filetypes.input.Tab
 import files.structure.DataStructure
-import files.structure.predefined.BasicNLP
 import utils.ParameterCallToOption.Implicits._
 
 import scala.collection.mutable
@@ -16,7 +15,7 @@ import scala.collection.mutable
  */
 object WeightedVector extends App {
 
-  val struct = new DataStructure(targetColumn = 1, keepColumns = Vector(0)) with BasicNLP
+  val struct = new DataStructure(targetColumn = 1, keepColumns = Vector(0))
   val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\tweetsTokenizedClean.csv", header = true) with Tab
 
   val tokenizer = new EnglishTokenizer

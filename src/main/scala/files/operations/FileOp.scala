@@ -33,7 +33,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
   //remove previous action, can be chained
   def rewind(): DataContainer with FileOp = {
     scheduler.opSequence.pop()
-    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize)(scheduler) with FileOp
+    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize) with FileOp
   }
 
   /* Core methods */
@@ -48,7 +48,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
     val it = compressBySumIt(getSingleIntStringOption(groupByCol, groupByColWithName).get,
       getMultipleIntStringOption(discardCols, discardColsWithName))
     scheduler.opSequence.push(it)
-    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize)(scheduler) with FileOp
+    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize) with FileOp
   }
 
   def compressBySumIt(g: String,
@@ -96,7 +96,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
     val it = compressByAvgIt(getSingleIntStringOption(groupByCol, groupByColWithName).get,
                       getMultipleIntStringOption(discardCols, discardColsWithName))
     scheduler.opSequence.push(it)
-    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize)(scheduler) with FileOp
+    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize) with FileOp
   }
 
   private[this] def compressByAvgIt(g: String,
@@ -173,7 +173,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
                               windowSize: Int): DataContainer with FileOp = {
     val it = compressBySlidingWindowIt(getMultipleIntStringOption(discardCols, discardColsWithName).get, windowSize)
     scheduler.opSequence.push(it)
-    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize)(scheduler) with FileOp
+    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize) with FileOp
   }
 
   /**
@@ -225,7 +225,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
 
     val it = countByGroupIt(colName)
     scheduler.opSequence.push(it)
-    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize)(scheduler) with FileOp
+    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize) with FileOp
   }
 
   //TODO: not entirely working, but it's probably printing's fault

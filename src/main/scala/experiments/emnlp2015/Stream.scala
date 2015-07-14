@@ -3,7 +3,6 @@ package experiments.emnlp2015
 import files.DataContainer
 import files.filetypes.input.{CSV, Tab}
 import files.structure.DataStructure
-import files.structure.predefined.BasicNLP
 import nlp.future.FutureRules._
 import nlp.preprocess.tokenization.Tokenizer
 import nlp.preprocess.tokenization.impl.Stanford
@@ -40,10 +39,10 @@ object Stream extends App {
 //    future.saveFutureMatching("E:\\Allen\\R\\emnlp2015\\fixedOpenClassifier\\topic10_futureRules2.0.csv")
 
     // ========== Match NYT times tregex =========== //
-    val struct = new DataStructure(idColumnWithName = "SentenceID", targetColumnWithName = "Parse", keepColumnsWithNames = Vector("ParagraphID", "PageID")) with BasicNLP
-    val data = new DataContainer("E:\\Allen\\NYTFuture\\NYT", header = true) with Tab
-    val future = new FutureOnlyTregex(data, struct, futureRulesComplete ++ patternPresent ++ patternsPast,  tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTerms.txt")
-    future.saveFutureMatching("E:\\Allen\\NYTFuture\\NYT_result_2.2\\nyt_by_sen2_2.txt")
+//    val struct = new DataStructure(idColumnWithName = "SentenceID", targetColumnWithName = "Parse", keepColumnsWithNames = Vector("ParagraphID", "PageID"))
+//    val data = new DataContainer("E:\\Allen\\NYTFuture\\NYT", header = true) with Tab
+//    val future = new FutureOnlyTregex(data, struct, futureRulesComplete ++ patternPresent ++ patternsPast,  tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTerms.txt")
+//    future.saveFutureMatching("E:\\Allen\\NYTFuture\\NYT_result_2.2\\nyt_by_sen2_2.txt")
 
     // =========== Match New MTurk result =========== //
 //      val struct = new DataStructure(idColumnWithName = "id", targetColumnWithName = "sentence") with BasicNLP
@@ -77,16 +76,30 @@ object Stream extends App {
 //    val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\fixedOpenClassifier\\MTurkSentences.csv", header = true) with CSV
 //    val future = new FutureOnlyTregex(data, struct, patternFuture ++ patternPresent ++ patternsPast)
 //    future.saveFutureMatching("E:\\Allen\\R\\emnlp2015\\training\\MTurkSentences.csv")
+
+    // ======= reparse PCFG on NYT_sample_2.2
+//    val data = new DataContainer("E:\\Allen\\NYTFuture\\NYT_sample_2.2tctn_reduced\\1000sentenceSampleFromNYT.csv", header = true) with CSV
+//    val struct =  new DataStructure(idColumnWithName = "SentenceID", targetColumnWithName = "Sentence")
+//    val future = new FutureParse(data, struct)
+//    future.saveFutureMatching("E:\\Allen\\NYTFuture\\NYT_sample_2.2tctn_reduced\\parsed1000.csv")
+
+    // ======= match NYT_sample_2.2ctn_reduced with rules2.2.2
+    val struct = new DataStructure(idColumnWithName = "SentenceID", targetColumnWithName = "Sentence")
+    val data = new DataContainer("E:\\Allen\\NYTFuture\\NYT_sample_2.2tctn_reduced\\1000sentenceSampleFromNYT.csv", header = true) with CSV
+    val future = new Future(data, struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced.txt", tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
+    future.saveFutureMatching("E:\\Allen\\NYTFuture\\NYT_sample_2.2tctn_reduced\\1000sentenceMatched2_2_2.csv")
+
   }
 
   def tokenize(): Unit = {
-      val struct = new DataStructure(targetColumnWithName = "MindWandering", keepColumnsWithNames = Vector("id")) with BasicNLP
+      val struct = new DataStructure(targetColumnWithName = "MindWandering", keepColumnsWithNames = Vector("id"))
       val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\mTurk61115_mindwanderingonly.csv", header = true) with CSV
       val tokenizer = new Tokenizer(data, struct) with Stanford
       tokenizer.tokenize().exec("E:\\Allen\\R\\emnlp2015\\mTurk61115_mindwanderingTokenized.csv", fileAppend = true)
   }
 
   //load future rules from file
-  def futureRulesComplete: List[String] = scala.io.Source.fromFile("E:\\Allen\\R\\emnlp2015\\theRules.txt").getLines().toList
+//  def futureRulesComplete: List[String] = scala.io.Source.fromFile("E:\\Allen\\R\\emnlp2015\\theRules.txt").getLines().toList
+  def futureRulesComplete: List[String] = scala.io.Source.fromFile("E:\\Allen\\NYTFuture\\NYT_sample_2.2tctn_reduced\\Rules2_2_2.txt").getLines().toList
 
 }

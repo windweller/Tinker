@@ -2,6 +2,7 @@ package parser.implementations.StanfordNLP
 
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser
 import files.DataContainer
+import files.structure.DataStructure
 import parser.Parser
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -18,15 +19,15 @@ trait EnglishPCFGParser extends Parser {
    *
    * This will transfer the parsed Tree class to string representation
    *
-   * @param generatedColumnName Enter the name that you want the newly generated column to be
+   * @param newColumn Enter the name that you want the newly generated column to be
    *
    * @return the generated column name (columnName if it's specified)
    */
-  override def parse(generatedColumnName: Option[String] = None): String = {
+  override def parse(newColumn: Option[String] = None, struct: DataStructure): String = {
     scheduler.addToGraph(row => scala.concurrent.Future {
-      row += (generatedColumnName.getOrElse("parsed") -> lp.parse(struct.getTargetValue(row).get).toString)
+      row += (newColumn.getOrElse("parsed") -> lp.parse(struct.getTargetValue(row).get).toString)
     })
-    generatedColumnName.getOrElse("Parsed")
+    newColumn.getOrElse("Parsed")
   }
 
 }
