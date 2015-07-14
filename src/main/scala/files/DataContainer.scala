@@ -3,7 +3,6 @@ package files
 import files.structure.DataStructure
 import processing.Scheduler
 import utils.Global.Implicits._
-
 import scala.annotation.tailrec
 import scala.collection.{AbstractIterator, mutable}
 import scala.collection.mutable.ArrayBuffer
@@ -18,21 +17,18 @@ import scala.collection.mutable.ArrayBuffer
  * to exec()
  *
  * @param fuzzyMatch this gets passed to FileMapIterator, exclusive end
- * @param pscheduler If you import Global.Implicits._, you will share the states
- *                   of all computations (which could be dangerous). Otherwise,
- *                   every DataContainer will have its own scheduler
  * @param rTaskSize Right task size (how many rows), for timer
  *
  */
 abstract class DataContainer(val f: Option[String] = None,
                               val header: Boolean = true,
                               val fuzzyMatch: Option[Int] = None,
-                              val rTaskSize: Option[Int] = None)(implicit val pscheduler: Option[Scheduler] = None) {
+                              val rTaskSize: Option[Int] = None) {
 
   import RowTypes._
 
   /* constructor */
-  val scheduler = pscheduler.getOrElse(defaultSchedulerConstructor())
+  val scheduler = defaultSchedulerConstructor()
 
   lazy val data = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else unify()
   lazy val strippedData = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else strip

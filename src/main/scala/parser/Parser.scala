@@ -5,17 +5,10 @@ import files.DataContainer
 import files.structure.DataStructure
 
 /**
- * All operation based class takes in implicit parameter scheduler
- * Parser contains any operation that either matches a sentence
- * or parses a sentence
- *
- * It can both add to scheduler or provide a function
- * so user can call and combine/use by themselves
- *
- * any action-based class uses scheduler internally provided by DataContainer
- * every data container creates its own scheduler and is independent from other
+ * This now serves as a general template for
+ * constituency parser
  */
-abstract class Parser(val data: DataContainer, val struct: DataStructure) {
+trait Parser {
 
   /**
    * all the method edits scheduler directly (past records are kept)

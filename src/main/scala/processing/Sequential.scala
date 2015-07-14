@@ -7,7 +7,6 @@ import files.structure.DataStructure
 import utils.ActorSys._
 import scala.concurrent.ExecutionContext.Implicits.global
 
-//TODO: this is not working
 trait Sequential extends Operation {
 
   def exec(struct: Option[DataStructure] = None): Unit = {
