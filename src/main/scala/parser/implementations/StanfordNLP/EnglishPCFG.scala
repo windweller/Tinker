@@ -1,8 +1,6 @@
 package parser.implementations.stanfordNLP
 
-import akka.stream.scaladsl.Flow
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser
-import files.RowTypes.NormalRow
 import parser.Parser
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -15,12 +13,14 @@ trait EnglishPCFG extends Parser {
 
   /**
    *
+   * This will transfer the parsed Tree class to string representation
+   *
    * @param columnName Enter the name that you want the newly generated column to be
    *
    * @return the generated column name (columnName if it's specified)
    */
   override def parse(columnName: Option[String] = None): String = {
-    data.scheduler.graphFlows += Flow[NormalRow].mapAsync[NormalRow](row => scala.concurrent.Future {
+    data.scheduler.addToGraph(row => scala.concurrent.Future {
       row += (columnName.getOrElse("parsed") -> lp.parse(struct.getTargetValue(row).get).toString)
     })
     columnName.getOrElse("parsed")

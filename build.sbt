@@ -11,14 +11,14 @@ resolvers += Resolver.sonatypeRepo("snapshots")
 
 resolvers ++= Seq(
   "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
-  "IESL Release" at "http://dev-iesl.cs.umass.edu/nexus/content/groups/public"
+  "IESL Release" at "http://dev-iesl.cs.umass.edu/nexus/content/groups/public",
+  "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
+  "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/"
 )
 
 libraryDependencies ++= {
   val akkaV = "2.3.9"
   Seq(
-    //compiler plug-in
-//    "org.scala-miniboxing.plugins" %% "miniboxing-runtime" % "0.4-SNAPSHOT",
     //parallel-processing
     "com.typesafe.akka"   %%   "akka-actor"    % akkaV,
     "com.typesafe.akka"   %%   "akka-slf4j"    % akkaV,
@@ -32,6 +32,10 @@ libraryDependencies ++= {
     "com.github.tototoshi" %% "scala-csv" % "1.2.1",
     "org.apache.commons" % "commons-csv" % "1.1",
     "com.chuusai" %% "shapeless" % "2.2.3",
+    //Linear Algebra-components
+    "org.scalanlp" %% "breeze" % "0.11.2",
+    "org.scalanlp" %% "breeze-natives" % "0.11.2",
+    "org.scalanlp" %% "breeze-viz" % "0.11.2",
     //NLP-components
     "cc.mallet" % "mallet" % "2.0.7-RC2",
     "edu.emory.clir" % "clearnlp" % "3.0.2",
@@ -44,8 +48,6 @@ libraryDependencies ++= {
     "tw.edu.ntu.csie" % "libsvm" % "3.17"
   )
 }
-
-//addCompilerPlugin("org.scala-miniboxing.plugins" %% "miniboxing-plugin" % "0.4-SNAPSHOT")
 
 initialCommands in console := """
 import files.filetypes._

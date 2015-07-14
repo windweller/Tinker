@@ -5,8 +5,8 @@ import akka.stream.scaladsl._
 import files.RowTypes._
 import files.structure.DataStructure
 import utils.ActorSys
+import scala.concurrent.ExecutionContext.Implicits.global
 
-//TODO: this is not working
 trait Sequential extends Operation with ActorSys {
 
   def exec(struct: Option[DataStructure] = None): Unit = {
@@ -16,15 +16,15 @@ trait Sequential extends Operation with ActorSys {
     val source: Source[NormalRow, Unit] = Source(() => rows)
     val sink = Sink.foreach[NormalRow](row => bufferWrite(row, struct))
 
+    //pipelining sequential actions
     val g = FlowGraph.closed(sink) { implicit builder: FlowGraph.Builder =>
       sink =>
 
         import FlowGraph.Implicits._
 
-        graphFlows.foreach { flow =>
-          source ~> flow
-        }
+        val withoutSink = source via graphFlows.fold(Flow[NormalRow])(_ via _)
 
+        val runnableFlow = withoutSink ~> sink
     }
 
     val materialized = g.run()
@@ -33,8 +33,5 @@ trait Sequential extends Operation with ActorSys {
       bufferClose()
       system.shutdown()
     }
-
-//    rows.foreach(row => bufferWrite(row, struct))
-//    bufferClose()
   }
 }

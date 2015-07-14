@@ -34,7 +34,10 @@ trait Parallel extends Operation with ActorSys {
         source ~> bcast.in
 
         0 to workerNum.get - 1 foreach  { i =>
-          bcast.out(i) ~> merge
+          //adding custom flow after the fanning out
+          val withoutSink = bcast.out(i) ~> graphFlows.fold(Flow[NormalRow])(_ via _)
+          withoutSink ~> merge
+
         }
 
         merge ~> sink
