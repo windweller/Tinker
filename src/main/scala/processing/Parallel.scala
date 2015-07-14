@@ -4,14 +4,14 @@ import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
 import files.RowTypes._
 import files.structure.DataStructure
-import utils.ActorSys
+import utils.ActorSys._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 
 /**
  * Created by anie on 4/21/2015
  */
-trait Parallel extends Operation with ActorSys {
+trait Parallel extends Operation {
 
   //no need to clean scheduler's opSequence once exec() is done
   //right now parallel follows
@@ -43,6 +43,7 @@ trait Parallel extends Operation with ActorSys {
     val materialized = g.run()
 
     materialized.onComplete{ e =>
+      println("here!")
       bufferClose()
       system.shutdown()
     }

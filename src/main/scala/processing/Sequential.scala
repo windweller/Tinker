@@ -4,10 +4,11 @@ import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
 import files.RowTypes._
 import files.structure.DataStructure
-import utils.ActorSys
+import utils.ActorSys._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 //TODO: this is not working
-trait Sequential extends Operation with ActorSys {
+trait Sequential extends Operation {
 
   def exec(struct: Option[DataStructure] = None): Unit = {
     val rows = opSequence.top
