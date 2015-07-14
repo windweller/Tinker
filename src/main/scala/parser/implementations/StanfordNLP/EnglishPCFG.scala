@@ -15,15 +15,15 @@ trait EnglishPCFG extends Parser {
    *
    * This will transfer the parsed Tree class to string representation
    *
-   * @param columnName Enter the name that you want the newly generated column to be
+   * @param generatedColumnName Enter the name that you want the newly generated column to be
    *
    * @return the generated column name (columnName if it's specified)
    */
-  override def parse(columnName: Option[String] = None): String = {
+  override def parse(generatedColumnName: Option[String] = None): String = {
     data.scheduler.addToGraph(row => scala.concurrent.Future {
-      row += (columnName.getOrElse("parsed") -> lp.parse(struct.getTargetValue(row).get).toString)
+      row += (generatedColumnName.getOrElse("parsed") -> lp.parse(struct.getTargetValue(row).get).toString)
     })
-    columnName.getOrElse("parsed")
+    generatedColumnName.getOrElse("Parsed")
   }
 
 }

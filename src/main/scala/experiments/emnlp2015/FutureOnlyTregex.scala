@@ -59,7 +59,7 @@ class FutureOnlyTregex(val data: DataContainer, val struct: DataStructure, val p
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
 
     //comment out during regular task
-    output.writeRow(Seq("SentenceID", "Parse", "ParagraphID", "PageID") ++ preprocessTregex(patternRaw))
+    output.writeRow(Seq("SentenceID", "Sentence", "Parse", "ParagraphID", "PageID") ++ preprocessTregex(patternRaw))
 
     val conf: Config = ConfigFactory.load()
     implicit val system = ActorSystem("reactive-tweets", conf)
@@ -80,14 +80,13 @@ class FutureOnlyTregex(val data: DataContainer, val struct: DataStructure, val p
         }
         Timer.completeOne()
 
-        Seq(struct.getIdValue(row).get, result) ++ struct.getKeepColumnsValue(row).get ++ array.toSeq
+        Seq(struct.getIdValue(row).get, result,struct.getTargetValue(row).get) ++ struct.getKeepColumnsValue(row).get ++ array.toSeq
       }
     }
 
     val tweets: Source[NormalRow, Unit] = Source(() => data.strip)
 
     val printSink = Sink.foreach[Seq[Any]](line => output.writeRow(line))
-
 
     val g = FlowGraph.closed(printSink) { implicit builder: FlowGraph.Builder =>
       printsink =>
