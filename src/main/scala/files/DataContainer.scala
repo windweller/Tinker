@@ -28,6 +28,7 @@ abstract class DataContainer(val f: Option[String] = None,
   import RowTypes._
 
   /* constructor */
+  /* scheduler is inside every dataContainer, the FileOps on dataContainer is the FileOps on scheduler */
   val scheduler = defaultSchedulerConstructor()
 
   lazy val data = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else unify()
