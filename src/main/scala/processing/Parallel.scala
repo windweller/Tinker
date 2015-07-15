@@ -37,9 +37,7 @@ trait Parallel extends Operation {
           //adding custom flow after the fanning out
           val withoutSink = bcast.out(i) ~> graphFlows.fold(Flow[NormalRow])(_ via _)
           withoutSink ~> merge
-
         }
-
         merge ~> sink
     }
 
