@@ -27,7 +27,7 @@ trait EnglishPCFGParser extends Parser {
     scheduler.addToGraph(row => scala.concurrent.Future {
       row += (newColumn.getOrElse("parsed") -> lp.parse(struct.getTargetValue(row).get).toString)
     })
-    newColumn.getOrElse("Parsed")
+    newColumn.getOrElse("parsed")
   }
 
 }

@@ -13,4 +13,5 @@ import utils.ParameterCallToOption.Implicits._
 object Parser extends App {
   val data = new DataContainer("./src/test/scala/tutorial/data/csvFile.csv", header = true) with CSV with EnglishPCFGParser
   data.parse(None, parser.Struct(idColumn = 5, targetColumn = 3))
+
 }
