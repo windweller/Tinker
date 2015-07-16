@@ -7,7 +7,7 @@ import files.structure.{DataStruct, DataStructure, StructureUtils}
 import utils.FailureHandle
 import utils.collections.ArrayUtil._
 import utils.ParameterCallToOption.Implicits._
-
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.annotation.tailrec
 import scala.collection.immutable.HashMap
 import scala.collection.mutable.ArrayBuffer

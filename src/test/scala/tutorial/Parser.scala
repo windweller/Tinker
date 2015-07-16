@@ -4,7 +4,6 @@ import files.DataContainer
 import files.filetypes.input.CSV
 import files.operations.FileOp
 import files.structure.{DataStruct, DataStructure}
-import parser.implementations.StanfordNLP
 import parser.implementations.StanfordNLP.EnglishPCFGParser
 import utils.ParameterCallToOption.Implicits._
 import files.structure.Index._

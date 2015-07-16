@@ -87,7 +87,7 @@ object Stream extends App {
     val struct = new DataStructure(idColumnWithName = "SentenceID", targetColumnWithName = "Sentence")
     val data = new DataContainer("E:\\Allen\\NYTFuture\\NYT_sample_2.2tctn_reduced\\1000sentenceSampleFromNYT.csv", header = true) with CSV
     val future = new Future(data, struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced.txt", tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
-    future.saveFutureMatching("E:\\Allen\\NYTFuture\\NYT_sample_2.2tctn_reduced\\1000sentenceMatched2_2_2.csv")
+    future.saveFutureMatching("E:\\Allen\\NYTFuture\\NYT_sample_2.2tctn_reduced\\1000sentenceMatched2_2_21.csv")
 
   }
 
