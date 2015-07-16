@@ -114,8 +114,3 @@ trait StructureUtils {
 
 }
 
-//something to think about, that will support DSL like
-//5 to Last
-object IndexInstructions extends Enumeration {
-  val Last = Value
-}

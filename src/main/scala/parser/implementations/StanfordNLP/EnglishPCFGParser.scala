@@ -2,7 +2,7 @@ package parser.implementations.StanfordNLP
 
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser
 import files.DataContainer
-import files.structure.DataStructure
+import files.structure.{DataStruct, DataStructure}
 import parser.Parser
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -23,7 +23,7 @@ trait EnglishPCFGParser extends Parser {
    *
    * @return the generated column name (columnName if it's specified)
    */
-  override def parse(newColumn: Option[String] = None, struct: DataStructure): String = {
+  override def parse(newColumn: Option[String] = None, struct: DataStruct): String = {
     scheduler.addToGraph(row => scala.concurrent.Future {
       row += (newColumn.getOrElse("parsed") -> lp.parse(struct.getTargetValue(row).get).toString)
     })

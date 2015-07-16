@@ -3,7 +3,7 @@ package files.operations
 import com.github.tototoshi.csv.CSVWriter
 import files.DataContainer
 import files.RowTypes.{NormalRow, RowIterator}
-import files.structure.{DataStructure, StructureUtils}
+import files.structure.{DataStruct, DataStructure, StructureUtils}
 import utils.FailureHandle
 import utils.collections.ArrayUtil._
 import utils.ParameterCallToOption.Implicits._
@@ -12,6 +12,7 @@ import scala.annotation.tailrec
 import scala.collection.immutable.HashMap
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.{AbstractIterator, mutable}
+import scala.concurrent.Future
 
 /**
  * Created by anie on 4/18/2015
@@ -33,13 +34,33 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
   //remove previous action, can be chained
   def rewind(): DataContainer with FileOp = {
     scheduler.opSequence.pop()
-    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize) with FileOp
+    this
   }
 
   /* Core methods */
 
+  def drop(struct: DataStruct): DataContainer with FileOp = {
+    if (struct.target.nonEmpty) {
+      scheduler.addToGraph(row => Future {
+        row.remove(struct.target.get)
+        row
+      })
+    } else {
+      scheduler.addToGraph(row => Future {
+        struct.targets.get.foreach(key => row.remove(key))
+        row
+      })
+    }
+    this
+  }
+
+  //alias for drop
+  def ignore(struct: DataStruct): DataContainer with FileOp = drop(struct)
+
+
+
   /**
-   * Unfinished
+   * Legacy methods
    */
 
   def compressBySum(groupByCol: Option[Int] = None, groupByColWithName: Option[String] = None,

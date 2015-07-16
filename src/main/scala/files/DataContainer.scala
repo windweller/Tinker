@@ -18,12 +18,16 @@ import scala.collection.mutable.ArrayBuffer
  *
  * @param fuzzyMatch this gets passed to FileMapIterator, exclusive end
  * @param rTaskSize Right task size (how many rows), for timer
- *
+ * @param ignoreFileName it determines whether file name information if kept (put in a column) or not,
+ *                       could be used in conjunction with fileNameColumn
+ * @param fileNameColumn this column is only useful if ignoreFileName = true
  */
 abstract class DataContainer(val f: Option[String] = None,
                               val header: Boolean = true,
                               val fuzzyMatch: Option[Int] = None,
-                              val rTaskSize: Option[Int] = None) {
+                              val rTaskSize: Option[Int] = None,
+                              val ignoreFileName: Boolean = false,
+                              val fileNameColumn: Option[String] = None) {
 
   import RowTypes._
 
@@ -31,15 +35,22 @@ abstract class DataContainer(val f: Option[String] = None,
   /* scheduler is inside every dataContainer, the FileOps on dataContainer is the FileOps on scheduler */
   val scheduler = defaultSchedulerConstructor()
 
-  lazy val data = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else unify()
+  if (!ignoreFileName) {
+    scheduler.opSequence.push(unify(fileNameColumn))
+  } else {
+    scheduler.opSequence.push(strip)
+  }
+
+  lazy val data = scheduler.opSequence.top
+
+  //@deprecated will be removed for the next release
   lazy val strippedData = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else strip
 
-  def taskSize: Option[Int] = if (rTaskSize.nonEmpty) rTaskSize
-                                   else Some(strip.length)
-
   //only used when timer is activated
-  val taskSizeActions: ArrayBuffer[(Int) => Int] = ArrayBuffer.empty[(Int) => Int]
+  def taskSize: Option[Int] = if (rTaskSize.nonEmpty) rTaskSize
+  else Some(strip.length)
 
+  val taskSizeActions: ArrayBuffer[(Int) => Int] = ArrayBuffer.empty[(Int) => Int]
 
   /* normal method (BufferConfig alreayd passed in from Scheduler) */
   def exec(struct: Option[DataStructure]): Unit = {
