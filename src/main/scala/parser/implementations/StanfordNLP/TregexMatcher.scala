@@ -4,7 +4,7 @@ import edu.stanford.nlp.trees.Tree
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.DataContainer
 import files.structure.DataStruct
-import nlp.future.FutureRules
+import scala.concurrent.ExecutionContext.Implicits.global
 import parser.Parser
 import utils.FailureHandle
 
@@ -13,10 +13,10 @@ import scala.collection.mutable
 /**
  * Created by Aimingnie on 5/12/15
  */
-trait Tregex extends Parser with FailureHandle {
+trait TregexMatcher extends Parser with FailureHandle {
   this: DataContainer =>
 
-  override def matcher(file: Option[String] = None, patternsRaw: Option[List[String]], struct: DataStruct): DataContainer with Parser = {
+  override def matcher(file: Option[String] = None, patternsRaw: Option[List[String]] = None, struct: DataStruct = DataStruct()): DataContainer with Parser = {
     if (patternsRaw.isEmpty && file.isEmpty) {
       fail("you must put in file or list of patterns")
     } else {

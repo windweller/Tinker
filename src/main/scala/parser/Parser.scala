@@ -19,8 +19,14 @@ trait Parser {
    *
    * @return the generated column name (columnName if it's specified)
    */
-  def parse(newColumn: Option[String] = None, struct: DataStruct): DataContainer with Parser = this
+  def parse(newColumn: Option[String] = None, struct: DataStruct): DataContainer with Parser = {
+    println("You don't have an implementation of parse")
+    this
+  }
 
-  def matcher(file: Option[String] = None, patterns: Option[List[String]], struct: DataStruct): DataContainer with Parser = this
+  def matcher(file: Option[String] = None, patterns: Option[List[String]] = None, struct: DataStruct = DataStruct()): DataContainer with Parser = {
+    println("You don't have an implementation of matcher")
+    this
+  }
 
 }

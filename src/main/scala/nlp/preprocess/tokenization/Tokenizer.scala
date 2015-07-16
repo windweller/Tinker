@@ -12,7 +12,7 @@ import utils.Global.Implicits._
 abstract class Tokenizer(val data: DataContainer,
                          val struct: DataStructure)(implicit val pscheduler: Option[Scheduler] = None) {
 
-  val scheduler = pscheduler.getOrElse(defaultSchedulerConstructor())
+  val scheduler = pscheduler.getOrElse(defaultSchedulerConstructor(4))
 
   def exec(): Unit = scheduler.exec()
   def save(): Unit = exec()

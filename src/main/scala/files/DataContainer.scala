@@ -21,19 +21,22 @@ import scala.collection.mutable.ArrayBuffer
  * @param ignoreFileName it determines whether file name information if kept (put in a column) or not,
  *                       could be used in conjunction with fileNameColumn
  * @param fileNameColumn this column is only useful if ignoreFileName = true
+ * @param core this indicates how many parallel cores you want Tinker to run on, in this version
+ *             we don't support different threading numbers for different process (but it's down the road)
  */
 abstract class DataContainer(val f: Option[String] = None,
                               val header: Boolean = true,
                               val fuzzyMatch: Option[Int] = None,
                               val rTaskSize: Option[Int] = None,
                               val ignoreFileName: Boolean = false,
-                              val fileNameColumn: Option[String] = None) {
+                              val fileNameColumn: Option[String] = None,
+                              val core: Option[Int] = None) {
 
   import RowTypes._
 
   /* constructor */
   /* scheduler is inside every dataContainer, the FileOps on dataContainer is the FileOps on scheduler */
-  val scheduler = defaultSchedulerConstructor()
+  val scheduler = defaultSchedulerConstructor(core.getOrElse(4))
 
   if (!ignoreFileName) {
     scheduler.opSequence.push(unify(fileNameColumn))

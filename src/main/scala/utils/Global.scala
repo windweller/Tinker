@@ -24,8 +24,8 @@ object Global {
   object Implicits {
 
     //every time a DataContainer is constructed, this method is called
-    def defaultSchedulerConstructor(): Scheduler =
-          new Scheduler(4)(BufferConfig()) with Sequential with FileBuffer with CSVOutput
+    def defaultSchedulerConstructor(core: Int): Scheduler =
+          new Scheduler(core)(BufferConfig()) with Sequential with FileBuffer with CSVOutput
 
   }
 
