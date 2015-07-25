@@ -90,11 +90,25 @@ object Stream extends App {
 //    future.saveFutureMatching("E:\\Allen\\NYTFuture\\NYT_sample_2.2tctn_reduced\\1000sentenceMatched2_2_21.csv")
 
     // ======= Parse and match Robert's Delayed Discounting data with rules2.2.2
-    val struct = new DataStructure(idColumnWithName = "ID", targetColumnWithName = "Sentence")
-    val data = new DataContainer("E:\\Allen\\Future\\LinguisticslogdataFutureTokenized.csv", header = true) with CSV
-    val future = new Future(data, struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced.txt",
-                            tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
-    future.saveFutureMatching("E:\\Allen\\Future\\LinguisticslogdataFuture2_2_21.csv")
+//    val struct = new DataStructure(idColumnWithName = "ID", targetColumnWithName = "Sentence")
+//    val data = new DataContainer("E:\\Allen\\Future\\LinguisticslogdataFutureTokenized.csv", header = true) with CSV
+//    val future = new Future(data, struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced.txt",
+//                            tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
+//    future.saveFutureMatching("E:\\Allen\\Future\\LinguisticslogdataFuture2_2_21.csv")
+
+    // ======= Parse and match Jason's MTurk data with rules2.2.2
+//    val struct = new DataStructure(idColumnWithName = "id", targetColumnWithName = "sentence")
+//    val data = new DataContainer("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyTokenized.csv", header = true) with CSV
+//    val future = new Future(data, struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced.txt",
+//      tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
+//    future.saveFutureMatching("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyFuture2_2_21.csv")
+
+    // ======== Parse 1000 Tweets for Gabby with rules2.2.2
+      val struct = new DataStructure(targetColumnWithName = "Sentence", idColumnWithName = "ID")
+      val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\1000Tweets.csv", header = true) with CSV
+      val future = new Future(data,struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced.txt",
+              tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
+      future.saveFutureMatching("E:\\Allen\\Future\\1000tweets2_2_2.csv")
   }
 
   def tokenize(): Unit = {
@@ -103,10 +117,17 @@ object Stream extends App {
 //      val tokenizer = new Tokenizer(data, struct) with Stanford
 //      tokenizer.tokenize().exec("E:\\Allen\\R\\emnlp2015\\mTurk61115_mindwanderingTokenized.csv", fileAppend = true)
 
-    val struct = new DataStructure(targetColumnWithName = "Sentence", keepColumnsWithNames = Vector("ID"))
-    val data = new DataContainer("E:\\Allen\\Future\\LinguisticslogdataFuture.csv", header = true) with CSV
+    // ======= Tokenize Robert's Delayed Discounting data
+//    val struct = new DataStructure(targetColumnWithName = "Sentence", keepColumnsWithNames = Vector("ID"))
+//    val data = new DataContainer("E:\\Allen\\Future\\LinguisticslogdataFuture.csv", header = true) with CSV
+//    val tokenizer = new Tokenizer(data, struct) with Stanford
+//    tokenizer.tokenize().exec("E:\\Allen\\Future\\LinguisticslogdataFutureTokenized.csv", fileAppend = true)
+
+    // ======= Tokenize Jason's MTurk data
+    val struct = new DataStructure(targetColumnWithName = "MindWandering", keepColumnsWithNames = Vector("id"))
+    val data = new DataContainer("E:\\Allen\\Future\\mTurk61115_mindwanderingonly.csv", header = true) with CSV
     val tokenizer = new Tokenizer(data, struct) with Stanford
-    tokenizer.tokenize().exec("E:\\Allen\\Future\\LinguisticslogdataFutureTokenized.csv", fileAppend = true)
+    tokenizer.tokenize().exec("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyTokenized.csv", fileAppend = true)
   }
 
   //load future rules from file
