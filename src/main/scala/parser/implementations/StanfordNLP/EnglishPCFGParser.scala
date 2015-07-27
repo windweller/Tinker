@@ -24,7 +24,7 @@ trait EnglishPCFGParser extends Parser {
    * @return the generated column name (columnName if it's specified)
    */
   override def parse(newColumn: Option[String] = None, struct: DataStruct): DataContainer with Parser = {
-    scheduler.addToGraph(row => scala.concurrent.Future {
+    this.scheduler.addToGraph(row => scala.concurrent.Future {
       row += (newColumn.getOrElse("parsed") -> lp.parse(struct.getTargetValue(row).get).toString)
     })
     this
