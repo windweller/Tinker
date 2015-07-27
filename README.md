@@ -170,21 +170,48 @@ You will only inherit base modules if you wish to customize and develop your own
 
 ## Advanced Usage
 
-Here are a list of specialized modules and how to use them.
+#### Custom Module
 
-#### Subtree
+Here is a way to write your custom module, and build into the pipeline. Imagine you are not satisfied with the default feature extractor in the Tinker. You want to build a custom `SpeacialFeatureExtractor`. What you can do is this (by using Scala's self-type):
 
 ```scala
-    val doc = new Subtree with SVM with VarroSubtreeXML
-    doc.parse(
-      ("../subtree/mTurkAllSentencesFuture.xml", "Future"),
-      ("../subtree/mTurkAllSentencesNANFuture.xml", "NANFuture")
-    )
-    doc.generateSentenceFeatures()
-    doc.saveSentenceFeatures("../subtree/TinkerSentenceFeature.txt")
-    doc.saveSubtreeWithSerialNumber("../subtree/TinkerSubtreeList.txt")
+  trait SpeacialFeatureExtractor {
+    this: DataContainer =>
+    
+      def addSpecialFeatures(): Unit = {
+        //after some computations
+        //add to the Akka Stream Graph
+        this.scheduler.addToGraph(row => scala.concurrent.Future{
+           row
+        })
+        //or add to the iterator pipeline
+        val it = getIteratorFunction()
+        scheduler.opSequence.push(it)
+      }
+  }
+  
+```
+
+If you want to invoke other dependencies, so for example, if this `specialFeatureExtractor` depends on constituency parsing result:
+
+```scala
+  trait SpeacialFeatureExtractor {
+    this: DataContainer with AbstractConstituencyParser =>
+    
+      def addSpecialFeatures(): Unit = {
+        //after some computations
+        //add to the Akka Stream Graph
+        this.scheduler.addToGraph(row => scala.concurrent.Future{
+           row
+        })
+        //or add to the iterator pipeline
+        val it = getIteratorFunction()
+        scheduler.opSequence.push(it)
+      }
   }
 ```
+
+Every abstract modules will provide information on how to access their features from the `NormalRow`.
 
 ## Minor Issues
 
