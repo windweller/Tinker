@@ -58,7 +58,6 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
   def ignore(struct: DataStruct): DataContainer with FileOp = drop(struct)
 
 
-
   /**
    * Legacy methods
    */

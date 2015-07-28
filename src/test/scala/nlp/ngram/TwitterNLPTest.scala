@@ -41,7 +41,7 @@ class TwitterNLPTest extends FlatSpec {
   }
 
   "unigram/vocabulary count by state" should "work" in {
-    val struct = new DataStructure(targetColumnWithName = "Text") 
+    val struct = new DataStructure(targetColumnWithName = "Text")
     val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\Tweets\\", header = true, fuzzyMatch = 9) with CSV
     val ngram = new Ngram(data, struct) with Unigram
 

@@ -12,12 +12,12 @@ import scala.collection.mutable
  */
 trait Operation extends Buffer {
 
-  val graphFlows: mutable.ListBuffer[Flow[NormalRow, NormalRow, Unit]] =
+  var graphFlows: mutable.ListBuffer[Flow[NormalRow, NormalRow, Unit]] =
                                     mutable.ListBuffer.empty[Flow[NormalRow, NormalRow, Unit]]
 
   val workerNum: Option[Int]  //for parallel only
 
-  val opSequence: mutable.Stack[RowIterator]
+  var opSequence: mutable.Stack[RowIterator]
 
   def exec(struct: Option[DataStructure] = None): Unit
 

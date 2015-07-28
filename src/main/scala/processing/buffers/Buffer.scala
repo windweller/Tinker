@@ -9,7 +9,7 @@ import utils.FailureHandle
  */
 trait Buffer {
 
-  val config: BufferConfig
+  var config: BufferConfig
 
   //this is to shield away the saving method
   //no matter saving to a file, database, or something else

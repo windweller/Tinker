@@ -1,7 +1,10 @@
 package files
 
+import files.filetypes.output.CSVOutput
 import files.structure.DataStructure
-import processing.Scheduler
+import processing.buffers.file.{FileOutputFormat, FileBuffer}
+import processing.{Sequential, Scheduler}
+import processing.buffers.BufferConfig
 import utils.Global.Implicits._
 import scala.annotation.tailrec
 import scala.collection.{AbstractIterator, mutable}
@@ -23,6 +26,7 @@ import scala.collection.mutable.ArrayBuffer
  * @param fileNameColumn this column is only useful if ignoreFileName = true
  * @param core this indicates how many parallel cores you want Tinker to run on, in this version
  *             we don't support different threading numbers for different process (but it's down the road)
+ *             By inputing a core number, you automatically opt for parallelism
  */
 abstract class DataContainer(val f: Option[String] = None,
                               val header: Boolean = true,
@@ -35,8 +39,10 @@ abstract class DataContainer(val f: Option[String] = None,
   import RowTypes._
 
   /* constructor */
+
   /* scheduler is inside every dataContainer, the FileOps on dataContainer is the FileOps on scheduler */
-  val scheduler = defaultSchedulerConstructor(core.getOrElse(4))
+  var scheduler = if (core.isEmpty) defaultSchedulerConstructor(1)
+                  else parallelSchedulerConstructor(core.get)
 
   if (!ignoreFileName) {
     scheduler.opSequence.push(unify(fileNameColumn))
@@ -71,6 +77,50 @@ abstract class DataContainer(val f: Option[String] = None,
     exec(struct)
   }
   def save(filePath: Option[String], fileAppend: Boolean = true, struct: Option[DataStructure] = None) = exec(filePath, fileAppend, struct)
+
+  /* Native Operation Methods */
+  /* Those are methods that very essential to DataContainer that can't be put in FileOp*/
+
+  def toCSV(filePath: Option[String] = None, fileAppend: Option[Boolean] = Some(true)): DataContainer = {
+
+    val nScheduler = if (core.isEmpty) defaultSchedulerConstructor(1)
+                        else parallelSchedulerConstructor(core.get)
+
+    nScheduler.config = scheduler.config
+
+    if (filePath.nonEmpty)
+      nScheduler.config.filePath = filePath
+
+    if (fileAppend.nonEmpty)
+      nScheduler.config.fileAppend = fileAppend.get
+
+    nScheduler.graphFlows = scheduler.graphFlows
+    nScheduler.opSequence = scheduler.opSequence
+
+    scheduler = nScheduler
+
+    this
+  }
+
+  def toTab(filePath: Option[String] = None, fileAppend: Option[Boolean] = Some(true)): DataContainer = {
+    val nScheduler = if (core.isEmpty) tabSeqSchedulerConstructor(1)
+                          else tabParallelSchedulerConstructor(core.get)
+
+    nScheduler.config = scheduler.config
+
+    if (filePath.nonEmpty)
+      nScheduler.config.filePath = filePath
+
+    if (fileAppend.nonEmpty)
+      nScheduler.config.fileAppend = fileAppend.get
+
+    nScheduler.graphFlows = scheduler.graphFlows
+    nScheduler.opSequence = scheduler.opSequence
+
+    scheduler = nScheduler
+
+    this
+  }
 
   /* Core methods */
 

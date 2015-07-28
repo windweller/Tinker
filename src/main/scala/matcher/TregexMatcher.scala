@@ -1,22 +1,25 @@
-package parser.implementations.StanfordNLP
+package matcher
 
 import edu.stanford.nlp.trees.Tree
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.DataContainer
 import files.structure.DataStruct
-import scala.concurrent.ExecutionContext.Implicits.global
-import parser.Parser
 import utils.FailureHandle
 
 import scala.collection.mutable
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
  * Created by Aimingnie on 5/12/15
  */
-trait TregexMatcher extends Parser with FailureHandle {
+trait TregexMatcher extends Matcher with FailureHandle {
+
   this: DataContainer =>
 
-  override def matcher(file: Option[String] = None, patternsRaw: Option[List[String]] = None, struct: DataStruct = DataStruct()): DataContainer with Parser = {
+  override def matcher(file: Option[String] = None,
+                       patternsRaw: Option[List[String]] = None,
+                       struct: DataStruct = DataStruct()): DataContainer with Matcher = {
+
     if (patternsRaw.isEmpty && file.isEmpty) {
       fail("you must put in file or list of patterns")
     } else {

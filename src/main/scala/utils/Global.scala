@@ -1,9 +1,9 @@
 package utils
 
-import files.filetypes.output.CSVOutput
+import files.filetypes.output.{TabOutput, CSVOutput}
 import processing.buffers.BufferConfig
-import processing.buffers.file.FileBuffer
-import processing.{Scheduler, Sequential}
+import processing.buffers.file.{FileOutputFormat, FileBuffer}
+import processing.{Parallel, Operation, Scheduler, Sequential}
 import utils.ParameterCallToOption.Implicits._
 
 import scala.collection.mutable
@@ -27,6 +27,14 @@ object Global {
     def defaultSchedulerConstructor(core: Int): Scheduler =
           new Scheduler(core)(BufferConfig()) with Sequential with FileBuffer with CSVOutput
 
+    def parallelSchedulerConstructor(core: Int): Scheduler =
+      new Scheduler(core)(BufferConfig()) with Parallel with FileBuffer with CSVOutput
+
+    def tabSeqSchedulerConstructor(core: Int): Scheduler =
+      new Scheduler(core)(BufferConfig()) with Sequential with FileBuffer with TabOutput
+
+    def tabParallelSchedulerConstructor(core: Int): Scheduler =
+      new Scheduler(core)(BufferConfig()) with Parallel with FileBuffer with TabOutput
   }
 
 }
