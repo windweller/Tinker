@@ -4,7 +4,7 @@ import files.DataContainer
 import files.filetypes.input._
 import files.operations.FileOp
 import files.structure.{DataStruct, DataStructure}
-import matcher.TregexMatcher
+import matcher.implementations.TregexMatcher
 import parser.implementations.StanfordNLP.EnglishPCFGParser
 import utils.ParameterCallToOption.Implicits._
 import files.structure.Index._

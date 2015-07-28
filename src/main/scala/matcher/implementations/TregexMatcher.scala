@@ -1,9 +1,10 @@
-package matcher
+package matcher.implementations
 
 import edu.stanford.nlp.trees.Tree
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.DataContainer
 import files.structure.DataStruct
+import matcher.Matcher
 import utils.FailureHandle
 
 import scala.collection.mutable
