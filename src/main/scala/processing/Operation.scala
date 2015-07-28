@@ -4,13 +4,14 @@ import akka.stream.scaladsl.Flow
 import files.RowTypes.{NormalRow, RowIterator}
 import files.structure.DataStructure
 import processing.buffers.Buffer
+import utils.FailureHandle
 
 import scala.collection.mutable
 
 /**
  * All modules such as parser
  */
-trait Operation extends Buffer {
+trait Operation extends Buffer with FailureHandle {
 
   var graphFlows: mutable.ListBuffer[Flow[NormalRow, NormalRow, Unit]] =
                                     mutable.ListBuffer.empty[Flow[NormalRow, NormalRow, Unit]]
@@ -19,6 +20,8 @@ trait Operation extends Buffer {
 
   var opSequence: mutable.Stack[RowIterator]
 
-  def exec(struct: Option[DataStructure] = None): Unit
+  def exec(struct: Option[DataStructure] = None): Unit = {
+    fatal("must implement either Parallel or Sequential module")
+  }
 
 }

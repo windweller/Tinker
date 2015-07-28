@@ -15,7 +15,7 @@ trait Parallel extends Operation {
 
   //no need to clean scheduler's opSequence once exec() is done
   //right now parallel follows
-  def exec(struct: Option[DataStructure] = None): Unit = {
+  override def exec(struct: Option[DataStructure] = None): Unit = {
 
     val rows = opSequence.top
     implicit val materializer = ActorFlowMaterializer()

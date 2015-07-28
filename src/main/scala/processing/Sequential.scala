@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 trait Sequential extends Operation {
 
-  def exec(struct: Option[DataStructure] = None): Unit = {
+  override def exec(struct: Option[DataStructure] = None): Unit = {
     val rows = opSequence.top
     implicit val materializer = ActorFlowMaterializer()
 

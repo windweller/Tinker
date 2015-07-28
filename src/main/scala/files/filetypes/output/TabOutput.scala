@@ -9,7 +9,7 @@ import processing.buffers.file.FileOutputFormat
  */
 trait TabOutput extends FileOutputFormat {
 
-  def encodeHeader(row: NormalRow, struct: Option[DataStructure]): Array[String] = {
+  override def encodeHeader(row: NormalRow, struct: Option[DataStructure]): Array[String] = {
 
     if (struct.nonEmpty) {
       val cleanedRow = row.filter(e => !struct.get.ignores.get.contains(e._1))
@@ -21,7 +21,7 @@ trait TabOutput extends FileOutputFormat {
 
   }
 
-  def encode(row: NormalRow, struct: Option[DataStructure]): String = {
+  override def encode(row: NormalRow, struct: Option[DataStructure]): String = {
     if (struct.nonEmpty) {
       val cleanedRow = row.filter(e => !struct.get.ignores.get.contains(e._1))
       cleanedRow.valuesIterator.mkString("\t")
@@ -29,6 +29,6 @@ trait TabOutput extends FileOutputFormat {
     row.valuesIterator.mkString("\t")
   }
 
-  def outputSuffix: String = "tab"
+  override def outputSuffix: String = "tab"
 
 }

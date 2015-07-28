@@ -34,14 +34,15 @@ abstract class DataContainer(val f: Option[String] = None,
                               val rTaskSize: Option[Int] = None,
                               val ignoreFileName: Boolean = false,
                               val fileNameColumn: Option[String] = None,
-                              val core: Option[Int] = None) {
+                              val core: Option[Int] = None)(implicit val pscheduler: Option[Scheduler] = None) {
 
   import RowTypes._
 
   /* constructor */
 
   /* scheduler is inside every dataContainer, the FileOps on dataContainer is the FileOps on scheduler */
-  var scheduler = if (core.isEmpty) defaultSchedulerConstructor(1)
+  var scheduler = if (pscheduler.nonEmpty) pscheduler.get
+                  else if (core.isEmpty) defaultSchedulerConstructor(1)
                   else parallelSchedulerConstructor(core.get)
 
   if (!ignoreFileName) {

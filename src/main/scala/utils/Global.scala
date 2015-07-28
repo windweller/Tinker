@@ -35,6 +35,9 @@ object Global {
 
     def tabParallelSchedulerConstructor(core: Int): Scheduler =
       new Scheduler(core)(BufferConfig()) with Parallel with FileBuffer with TabOutput
+
+    def typedSchedulerConstructor[T <: Operation, F <: FileOutputFormat](core: Int): Scheduler =
+                  new Scheduler(core)(BufferConfig()) with T with FileBuffer with F
   }
 
 }
