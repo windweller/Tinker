@@ -1,10 +1,7 @@
 package files
 
-import files.filetypes.output.CSVOutput
 import files.structure.DataStructure
-import processing.buffers.file.{FileOutputFormat, FileBuffer}
 import processing.{Sequential, Scheduler}
-import processing.buffers.BufferConfig
 import utils.Global.Implicits._
 import scala.annotation.tailrec
 import scala.collection.{AbstractIterator, mutable}
@@ -79,34 +76,26 @@ abstract class DataContainer(val f: Option[String] = None,
   }
   def save(filePath: Option[String], fileAppend: Boolean = true, struct: Option[DataStructure] = None) = exec(filePath, fileAppend, struct)
 
-  /* Native Operation Methods */
-  /* Those are methods that very essential to DataContainer that can't be put in FileOp*/
+  /* Shortcut Methods */
 
   def toCSV(filePath: Option[String] = None, fileAppend: Option[Boolean] = Some(true)): DataContainer = {
 
     val nScheduler = if (core.isEmpty) defaultSchedulerConstructor(1)
                         else parallelSchedulerConstructor(core.get)
-
-    nScheduler.config = scheduler.config
-
-    if (filePath.nonEmpty)
-      nScheduler.config.filePath = filePath
-
-    if (fileAppend.nonEmpty)
-      nScheduler.config.fileAppend = fileAppend.get
-
-    nScheduler.graphFlows = scheduler.graphFlows
-    nScheduler.opSequence = scheduler.opSequence
-
-    scheduler = nScheduler
-
+    exchangeScheduler(nScheduler, filePath, fileAppend)
     this
   }
 
   def toTab(filePath: Option[String] = None, fileAppend: Option[Boolean] = Some(true)): DataContainer = {
     val nScheduler = if (core.isEmpty) tabSeqSchedulerConstructor(1)
                           else tabParallelSchedulerConstructor(core.get)
+    exchangeScheduler(nScheduler, filePath, fileAppend)
+    this
+  }
 
+  //this private function affects outside parameter
+  private[this] def exchangeScheduler(nScheduler: Scheduler,
+                                      filePath: Option[String], fileAppend: Option[Boolean]): Unit = {
     nScheduler.config = scheduler.config
 
     if (filePath.nonEmpty)
@@ -119,8 +108,6 @@ abstract class DataContainer(val f: Option[String] = None,
     nScheduler.opSequence = scheduler.opSequence
 
     scheduler = nScheduler
-
-    this
   }
 
   /* Core methods */
