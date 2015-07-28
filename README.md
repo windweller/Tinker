@@ -73,7 +73,9 @@ Basic File I/O has a nice high-level abstraction that treats a directory of file
 
 ## Processing Design
 
-Because we seek to optimize performance (and leverage memory use) to the maximum, we use scheduling as our processing concept. By `import utils.Global.Implicits.scheduler`, you get our default scheduler, that uses `Parallel` and `FileBuffer` module by default, and assumes a 4-core processor (4 workers running concurrently).
+Because we seek to optimize performance (and leverage memory use) to the maximum, we use scheduling as our processing concept. All the processing has been handled by module `Scheduler`. We generate default scheduler for each `DataContainer`, and you can always configure your own `Scheduler` and pass it into `DataContainer` class.
+
+Our default scheduler uses `Parallel` and `FileBuffer` module by default, and assumes a 4-core processor (4 workers running concurrently).
 
 All task-related operational modules such as `Parser` requires an implicit scheduler. You can import the global default, or use your own one, and make it implicit such as:
 
