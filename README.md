@@ -14,6 +14,8 @@ It offers the ease of reading multiple formated files and merge/process as one, 
 
 We want to make standard large file ML/NLP processing as smooth and as easy as possible, regardless of the computer's power/memory. We parallelize tasks whenever possible, and make most of the tasks asynchronous. Tinker has robust I/O interface that allows users to interact with files (of various format) and databases (PostgreSQL, MySQL...) without pain. It also uses buffering so lower memory computer can still function well with data multiple times larger than its capacity (speed being the drawback).
 
+Unlike many libaries that rely on configuration files, or 10 config parameters to one method call (or class construction), Tinker uses types (called "modules") to modify and define behavior, which is easier, and can check error at compile time.
+
 ## Current State
 
 Tinker only release documentation for stable components, but its nightly built offers more. The next release will include a better API for NLP components (currently experimental and not very well-integrated into Tinker-processing). 
