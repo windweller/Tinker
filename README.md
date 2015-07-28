@@ -75,15 +75,17 @@ Basic File I/O has a nice high-level abstraction that treats a directory of file
 
 Because we seek to optimize performance (and leverage memory use) to the maximum, we use scheduling as our processing concept. All the processing has been handled by module `Scheduler`. We generate default scheduler for each `DataContainer`, and you can always configure your own `Scheduler` and pass it into `DataContainer` class.
 
-Our default scheduler uses `Parallel` and `FileBuffer` module by default, and assumes a 4-core processor (4 workers running concurrently).
+Our default scheduler uses `Sequential` and `FileBuffer` module.
 
-All task-related operational modules such as `Parser` requires an implicit scheduler. You can import the global default, or use your own one, and make it implicit such as:
+To switch between parallel processing or sequential processing, put in `core = desired # of processes` when constructing your datacontainer.
+
+All task-related operational modules such as `Parser` requires an implicit scheduler. You can use our default, or create your own one, and make it implicit such as:
 
 ```scala
 implicit val scheduler = new Scheduler(4) with Parallel with FileBuffer
 ```
 
-This is functionally equivalent to importing the global scheduler. You can create different or multiple schedulers and pass them explicitly to different classes, and this is shown at the advanced technique section.
+Schedulers are independent for each class, and you should not pass the same scheduler to multiple data containers. If it is passed to multiple containers, it would override the data, causing undesired effect.
 
 `DataContainer` has defined a method `exec()`, which is linked with processing. Whenever `exec()` is called, a file is being saved whether the location is provided or not. If the location is not provided, such file will be a temporary file and deleted when JVM is shut down. Users can use `Global.tempFiles.pop()` to get the full filepath (including name) of the last computed file.
 
