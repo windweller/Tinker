@@ -3,15 +3,14 @@ package files.operations
 import com.github.tototoshi.csv.CSVWriter
 import files.DataContainer
 import files.RowTypes.{NormalRow, RowIterator}
-import files.structure.{DataSelect$, DataStructure, StructureUtils}
+import files.structure.{DataSelect, DataStructure, StructureUtils}
 import utils.FailureHandle
 import utils.collections.ArrayUtil._
-import utils.ParameterCallToOption.Implicits._
-import scala.concurrent.ExecutionContext.Implicits.global
+
 import scala.annotation.tailrec
-import scala.collection.immutable.HashMap
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.{AbstractIterator, mutable}
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 /**

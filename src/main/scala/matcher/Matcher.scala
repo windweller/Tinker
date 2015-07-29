@@ -1,8 +1,7 @@
 package matcher
 
 import files.DataContainer
-import files.structure.DataSelect$
-import parser.Parser
+import files.structure.DataSelect
 
 /**
  * Created by anie on 7/16/2015

@@ -2,7 +2,7 @@ package parser
 
 
 import files.DataContainer
-import files.structure.{DataSelect$, DataStructure}
+import files.structure.DataSelect
 
 /**
  * This now serves as a general template for

@@ -3,7 +3,7 @@ package matcher.implementations
 import edu.stanford.nlp.trees.Tree
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.DataContainer
-import files.structure.DataSelect$
+import files.structure.DataSelect
 import matcher.Matcher
 import utils.FailureHandle
 

@@ -1,7 +1,7 @@
 package tokenizer
 
 import files.DataContainer
-import files.structure.DataSelect$
+import files.structure.DataSelect
 
 /**
  * Created by anie on 7/28/2015

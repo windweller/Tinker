@@ -3,7 +3,7 @@ package tokenizer.implementations.ClearNLP
 import edu.emory.clir.clearnlp.component.utils.NLPUtils
 import edu.emory.clir.clearnlp.util.lang.TLanguage
 import files.DataContainer
-import files.structure.DataSelect$
+import files.structure.DataSelect
 import tokenizer.Tokenizer
 
 import scala.concurrent.Future

@@ -6,7 +6,7 @@ import edu.stanford.nlp.ling.HasWord
 import edu.stanford.nlp.process.DocumentPreprocessor
 import files.DataContainer
 import files.RowTypes._
-import files.structure.DataSelect$
+import files.structure.DataSelect
 import tokenizer.Tokenizer
 
 import scala.collection.{AbstractIterator, mutable}
