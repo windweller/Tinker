@@ -3,11 +3,10 @@ package tutorial
 import files.DataContainer
 import files.filetypes.input._
 import files.operations.FileOp
-import files.structure.{DataSelect$, DataStructure}
+import files.structure.DataSelect
 import matcher.implementations.TregexMatcher
 import parser.implementations.StanfordNLP.EnglishPCFGParser
 import utils.ParameterCallToOption.Implicits._
-import files.structure.Index._
 
 /**
  * Created by anie on 7/14/2015
