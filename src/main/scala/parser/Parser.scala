@@ -2,7 +2,7 @@ package parser
 
 
 import files.DataContainer
-import files.structure.{DataStruct, DataStructure}
+import files.structure.{DataSelect$, DataStructure}
 
 /**
  * This now serves as a general template for
@@ -18,6 +18,6 @@ trait Parser {
    *
    * @return the generated column name (columnName if it's specified)
    */
-  def parse(newColumn: Option[String] = None, struct: DataStruct): DataContainer with Parser
+  def parse(newColumn: Option[String] = None, struct: DataSelect): DataContainer with Parser
 
 }

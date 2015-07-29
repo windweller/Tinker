@@ -1,7 +1,7 @@
 package tokenizer
 
 import files.DataContainer
-import files.structure.DataStruct
+import files.structure.DataSelect$
 
 /**
  * Created by anie on 7/28/2015
@@ -16,6 +16,6 @@ trait Tokenizer {
    * @param struct pass in the target
    * @return
    */
-  def tokenize(struct: DataStruct): DataContainer with Tokenizer
+  def tokenize(struct: DataSelect): DataContainer with Tokenizer
 
 }

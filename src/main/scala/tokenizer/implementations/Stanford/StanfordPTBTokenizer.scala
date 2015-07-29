@@ -6,7 +6,7 @@ import edu.stanford.nlp.ling.HasWord
 import edu.stanford.nlp.process.DocumentPreprocessor
 import files.DataContainer
 import files.RowTypes._
-import files.structure.DataStruct
+import files.structure.DataSelect$
 import tokenizer.Tokenizer
 
 import scala.collection.{AbstractIterator, mutable}
@@ -24,13 +24,13 @@ trait StanfordPTBTokenizer extends Tokenizer {
    * and Keep columns in data structure
    * @return
    */
-  override def tokenize(struct: DataStruct): DataContainer with Tokenizer = {
+  override def tokenize(struct: DataSelect): DataContainer with Tokenizer = {
     val it = splitSentences(struct)
     scheduler.opSequence.push(it)
     this
   }
 
-  def splitSentences(struct: DataStruct) = new AbstractIterator[NormalRow] {
+  def splitSentences(struct: DataSelect) = new AbstractIterator[NormalRow] {
 
     val it = data //picks up the right data
 

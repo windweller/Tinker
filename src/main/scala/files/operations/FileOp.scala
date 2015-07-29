@@ -3,7 +3,7 @@ package files.operations
 import com.github.tototoshi.csv.CSVWriter
 import files.DataContainer
 import files.RowTypes.{NormalRow, RowIterator}
-import files.structure.{DataStruct, DataStructure, StructureUtils}
+import files.structure.{DataSelect$, DataStructure, StructureUtils}
 import utils.FailureHandle
 import utils.collections.ArrayUtil._
 import utils.ParameterCallToOption.Implicits._
@@ -39,7 +39,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
 
   /* Core methods */
 
-  def drop(struct: DataStruct): DataContainer with FileOp = {
+  def drop(struct: DataSelect): DataContainer with FileOp = {
     if (struct.target.nonEmpty) {
       scheduler.addToGraph(row => Future {
         row.remove(struct.target.get)
@@ -55,7 +55,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
   }
 
   //alias for drop
-  def ignore(struct: DataStruct): DataContainer with FileOp = drop(struct)
+  def ignore(struct: DataSelect): DataContainer with FileOp = drop(struct)
 
 
   /**

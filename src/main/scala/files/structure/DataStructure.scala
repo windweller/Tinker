@@ -14,6 +14,8 @@ import scala.collection.mutable
  * DataContainers, but more for algorithms
  *
  * @param ignoreColumn this will be taken into account for output generation
+ *
+ * @deprecated this is replaced by DataStruct and DataSelect
  */
 class DataStructure(idColumn: Option[Int] = None,
                              idColumnWithName: Option[String] = None,

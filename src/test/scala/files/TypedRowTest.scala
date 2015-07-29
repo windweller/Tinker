@@ -9,6 +9,8 @@ class TypedRowTest extends FlatSpec {
 
   behavior of "TypedRow"
 
-
+  it should "have () method to create" in {
+    val row = TypedRow(2)
+  }
 
 }

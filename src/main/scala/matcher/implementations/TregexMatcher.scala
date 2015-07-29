@@ -3,7 +3,7 @@ package matcher.implementations
 import edu.stanford.nlp.trees.Tree
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.DataContainer
-import files.structure.DataStruct
+import files.structure.DataSelect$
 import matcher.Matcher
 import utils.FailureHandle
 
@@ -19,7 +19,7 @@ trait TregexMatcher extends Matcher with FailureHandle {
 
   override def matcher(file: Option[String] = None,
                        patternsRaw: Option[List[String]] = None,
-                       struct: DataStruct = DataStruct()): DataContainer with Matcher = {
+                       struct: DataSelect = DataSelect()): DataContainer with Matcher = {
 
     if (patternsRaw.isEmpty && file.isEmpty) {
       fail("you must put in file or list of patterns")
