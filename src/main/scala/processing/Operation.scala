@@ -20,8 +20,6 @@ trait Operation extends Buffer with FailureHandle {
 
   var opSequence: mutable.Stack[RowIterator]
 
-  def exec(struct: Option[DataStructure] = None): Unit = {
-    fatal("must implement either Parallel or Sequential module")
-  }
+  def exec(struct: Option[DataStructure] = None): Unit
 
 }

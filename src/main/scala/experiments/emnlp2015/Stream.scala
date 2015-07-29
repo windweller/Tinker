@@ -97,18 +97,19 @@ object Stream extends App {
 //    future.saveFutureMatching("E:\\Allen\\Future\\LinguisticslogdataFuture2_2_21.csv")
 
     // ======= Parse and match Jason's MTurk data with rules2.2.2
-//    val struct = new DataStructure(idColumnWithName = "id", targetColumnWithName = "sentence")
-//    val data = new DataContainer("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyTokenized.csv", header = true) with CSV
+    val struct = new DataStructure(idColumnWithName = "id", targetColumnWithName = "sentence")
+    val data = new DataContainer("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyTokenized.csv", header = true) with CSV
 //    val future = new Future(data, struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced.txt",
-//      tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
-//    future.saveFutureMatching("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyFuture2_2_21.csv")
+//                            tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
+    val future = new Future(data, struct, patternFuture ++ patternsPast)
+    future.saveFutureMatching("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyFutureOld.csv")
 
     // ======== Parse 1000 Tweets for Gabby with rules2.2.2
-      val struct = new DataStructure(targetColumnWithName = "Sentence", idColumnWithName = "ID")
-      val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\1000Tweets.csv", header = true) with CSV
-      val future = new Future(data,struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced.txt",
-              tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
-      future.saveFutureMatching("E:\\Allen\\Future\\1000tweets2_2_2.csv")
+//      val struct = new DataStructure(targetColumnWithName = "Sentence", idColumnWithName = "ID")
+//      val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\1000Tweets.csv", header = true) with CSV
+//      val future = new Future(data,struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced.txt",
+//              tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
+//      future.saveFutureMatching("E:\\Allen\\Future\\1000tweets2_2_2.csv")
   }
 
   def tokenize(): Unit = {
