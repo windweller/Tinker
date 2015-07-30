@@ -26,4 +26,7 @@ class DataStruct {
   def addToStringHeader(columnName: String, vectorPos: Int): Unit = stringHeader += (columnName -> vectorPos)
   def addToFeatureHeader(columnName: String, vectorPos: Int): Unit = featureHeader += (columnName -> vectorPos)
 
+  def addToStringHeader(columnName: String, vectorPos: Range): Unit = {
+
+  }
 }

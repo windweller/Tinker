@@ -39,7 +39,8 @@ abstract class DataContainer(val f: Option[String] = None,
   /* constructor */
 
   //dataStruct of the data, should be bundled to change each time
-  val ds: DataStruct
+  //will be implicitly passed into TypedRow when change happens
+  implicit val ds: DataStruct
 
   /* scheduler is inside every dataContainer, the FileOps on dataContainer is the FileOps on scheduler */
   var scheduler = if (pscheduler.nonEmpty) {pscheduler.get.dataStructure = ds; pscheduler.get}
