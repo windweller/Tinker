@@ -1,7 +1,7 @@
 package nlp.preprocess.tokenization
 
 import files.DataContainer
-import files.structure.DataStructure
+import files.structure.{DataStruct, DataStructure}
 import processing.Scheduler
 import utils.Global.Implicits._
 
@@ -12,7 +12,7 @@ import utils.Global.Implicits._
 abstract class Tokenizer(val data: DataContainer,
                          val struct: DataStructure)(implicit val pscheduler: Option[Scheduler] = None) {
 
-  val scheduler = pscheduler.getOrElse(defaultSchedulerConstructor(4))
+  val scheduler = pscheduler.getOrElse(defaultSchedulerConstructor(4, new DataStruct()))
 
   def exec(): Unit = scheduler.exec()
   def save(): Unit = exec()

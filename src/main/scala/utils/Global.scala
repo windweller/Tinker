@@ -1,6 +1,7 @@
 package utils
 
 import files.filetypes.output.{TabOutput, CSVOutput}
+import files.structure.DataStruct
 import processing.buffers.BufferConfig
 import processing.buffers.file.{FileOutputFormat, FileBuffer}
 import processing.{Parallel, Operation, Scheduler, Sequential}
@@ -24,17 +25,31 @@ object Global {
   object Implicits {
 
     //every time a DataContainer is constructed, this method is called
-    def defaultSchedulerConstructor(core: Int): Scheduler =
-          new Scheduler(core)(BufferConfig()) with Sequential with FileBuffer with CSVOutput
+    def defaultSchedulerConstructor(core: Int, ds: DataStruct): Scheduler = {
+      val s = new Scheduler(core)(BufferConfig()) with Sequential with FileBuffer with CSVOutput
+      s.dataStructure = ds
+      s
+    }
 
-    def parallelSchedulerConstructor(core: Int): Scheduler =
-      new Scheduler(core)(BufferConfig()) with Parallel with FileBuffer with CSVOutput
 
-    def tabSeqSchedulerConstructor(core: Int): Scheduler =
-      new Scheduler(core)(BufferConfig()) with Sequential with FileBuffer with TabOutput
+    def parallelSchedulerConstructor(core: Int, ds: DataStruct): Scheduler = {
+      val s = new Scheduler(core)(BufferConfig()) with Parallel with FileBuffer with CSVOutput
+      s.dataStructure = ds
+      s
+    }
 
-    def tabParallelSchedulerConstructor(core: Int): Scheduler =
-      new Scheduler(core)(BufferConfig()) with Parallel with FileBuffer with TabOutput
+    def tabSeqSchedulerConstructor(core: Int, ds: DataStruct): Scheduler = {
+      val s = new Scheduler(core)(BufferConfig()) with Sequential with FileBuffer with TabOutput
+      s.dataStructure = ds
+      s
+    }
+
+
+    def tabParallelSchedulerConstructor(core: Int, ds: DataStruct): Scheduler = {
+      val s =  new Scheduler(core)(BufferConfig()) with Parallel with FileBuffer with TabOutput
+      s.dataStructure = ds
+      s
+    }
 
   }
 

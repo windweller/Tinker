@@ -67,7 +67,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
     val it = compressBySumIt(getSingleIntStringOption(groupByCol, groupByColWithName).get,
       getMultipleIntStringOption(discardCols, discardColsWithName))
     scheduler.opSequence.push(it)
-    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize) with FileOp
+    this
   }
 
   def compressBySumIt(g: String,
@@ -115,7 +115,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
     val it = compressByAvgIt(getSingleIntStringOption(groupByCol, groupByColWithName).get,
                       getMultipleIntStringOption(discardCols, discardColsWithName))
     scheduler.opSequence.push(it)
-    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize) with FileOp
+    this
   }
 
   private[this] def compressByAvgIt(g: String,
@@ -192,7 +192,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
                               windowSize: Int): DataContainer with FileOp = {
     val it = compressBySlidingWindowIt(getMultipleIntStringOption(discardCols, discardColsWithName).get, windowSize)
     scheduler.opSequence.push(it)
-    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize) with FileOp
+    this
   }
 
   /**
@@ -244,7 +244,7 @@ trait FileOp extends DataContainer with StructureUtils with FailureHandle {
 
     val it = countByGroupIt(colName)
     scheduler.opSequence.push(it)
-    new DataContainer(this.f, this.header, this.fuzzyMatch, this.rTaskSize) with FileOp
+    this
   }
 
   //TODO: not entirely working, but it's probably printing's fault

@@ -1,6 +1,7 @@
 package files
 
 import files.RowTypes._
+import files.structure.DataStruct
 import utils.OptionToParameter.Implicits._
 import utils._
 
@@ -18,6 +19,8 @@ import scala.collection.mutable
  * because it implements DataContainer's certain methods and types
  */
 trait Doc extends DataContainer with FailureHandle {
+
+  val ds: DataStruct = new DataStruct
 
   /**** Abstract methods/variables ****/
 

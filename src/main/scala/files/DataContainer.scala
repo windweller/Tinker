@@ -1,6 +1,6 @@
 package files
 
-import files.structure.DataStructure
+import files.structure.{DataStruct, DataStructure}
 import processing.Scheduler
 import utils.Global.Implicits._
 
@@ -38,10 +38,13 @@ abstract class DataContainer(val f: Option[String] = None,
 
   /* constructor */
 
+  //dataStruct of the data, should be bundled to change each time
+  val ds: DataStruct
+
   /* scheduler is inside every dataContainer, the FileOps on dataContainer is the FileOps on scheduler */
-  var scheduler = if (pscheduler.nonEmpty) pscheduler.get
-                  else if (core.isEmpty) defaultSchedulerConstructor(1)
-                  else parallelSchedulerConstructor(core.get)
+  var scheduler = if (pscheduler.nonEmpty) {pscheduler.get.dataStructure = ds; pscheduler.get}
+                  else if (core.isEmpty) defaultSchedulerConstructor(1, ds)
+                  else parallelSchedulerConstructor(core.get, ds)
 
   if (!ignoreFileName) {
     scheduler.opSequence.push(unify(fileNameColumn))
@@ -82,15 +85,15 @@ abstract class DataContainer(val f: Option[String] = None,
 
   def toCSV: DataContainer = {
 
-    val nScheduler = if (core.isEmpty) defaultSchedulerConstructor(1)
-                        else parallelSchedulerConstructor(core.get)
+    val nScheduler = if (core.isEmpty) defaultSchedulerConstructor(1, ds)
+                        else parallelSchedulerConstructor(core.get, ds)
     exchangeScheduler(nScheduler)
     this
   }
 
   def toTab: DataContainer = {
-    val nScheduler = if (core.isEmpty) tabSeqSchedulerConstructor(1)
-                          else tabParallelSchedulerConstructor(core.get)
+    val nScheduler = if (core.isEmpty) tabSeqSchedulerConstructor(1, ds)
+                          else tabParallelSchedulerConstructor(core.get, ds)
     exchangeScheduler(nScheduler)
     this
   }
