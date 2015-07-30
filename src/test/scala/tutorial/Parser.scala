@@ -22,7 +22,7 @@ object Parser extends App {
     "(VP < (VBG < going) < (S < (VP < TO)))",
     "(VP < (VBG < going) > (PP < TO))",
     "MD < will"
-  ), struct = DataSelect()).toTab()
+  ), struct = DataSelect()).toTab
 
   data.save("./src/test/scala/tutorial/data/sentences_parsed.tab")
 }

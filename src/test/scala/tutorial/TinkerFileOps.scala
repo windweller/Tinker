@@ -12,7 +12,7 @@ object TinkerFileOps extends App {
 
    //this did not pass test btw
    val data = new DataContainer("./src/test/scala/tutorial/data/csvFile.csv", header = true) with CSV
-   data.toTab("./src/test/scala/tutorial/data/converted.tab")
-   data.save(Some(new DataStructure()))
+   data.toTab
+   data.save("./src/test/scala/tutorial/data/converted.tab")
 
 }
