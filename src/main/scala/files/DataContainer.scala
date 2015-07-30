@@ -1,11 +1,12 @@
 package files
 
 import files.structure.DataStructure
-import processing.{Sequential, Scheduler}
+import processing.Scheduler
 import utils.Global.Implicits._
+
 import scala.annotation.tailrec
-import scala.collection.{AbstractIterator, mutable}
 import scala.collection.mutable.ArrayBuffer
+import scala.collection.{AbstractIterator, mutable}
 
 /**
  * Redesign of old DataContainer
@@ -50,7 +51,7 @@ abstract class DataContainer(val f: Option[String] = None,
 
   lazy val data = scheduler.opSequence.top
 
-  //@deprecated will be removed for the next release
+  //@depcrecated: the fucntionality is taken care of for the "!ignoreFileName" command
   lazy val strippedData = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else strip
 
   //only used when timer is activated
@@ -59,7 +60,8 @@ abstract class DataContainer(val f: Option[String] = None,
 
   val taskSizeActions: ArrayBuffer[(Int) => Int] = ArrayBuffer.empty[(Int) => Int]
 
-  /* normal method (BufferConfig alreayd passed in from Scheduler) */
+  /* save method (BufferConfig alreayd passed in from Scheduler) */
+
   def exec(struct: Option[DataStructure]): Unit = {
     if (scheduler.opSequence.isEmpty) scheduler.opSequence.push(strippedData)
     scheduler.exec(struct)
@@ -78,32 +80,24 @@ abstract class DataContainer(val f: Option[String] = None,
 
   /* Shortcut Methods */
 
-  def toCSV(filePath: Option[String] = None, fileAppend: Option[Boolean] = Some(true)): DataContainer = {
+  def toCSV: DataContainer = {
 
     val nScheduler = if (core.isEmpty) defaultSchedulerConstructor(1)
                         else parallelSchedulerConstructor(core.get)
-    exchangeScheduler(nScheduler, filePath, fileAppend)
+    exchangeScheduler(nScheduler)
     this
   }
 
-  def toTab(filePath: Option[String] = None, fileAppend: Option[Boolean] = Some(true)): DataContainer = {
+  def toTab: DataContainer = {
     val nScheduler = if (core.isEmpty) tabSeqSchedulerConstructor(1)
                           else tabParallelSchedulerConstructor(core.get)
-    exchangeScheduler(nScheduler, filePath, fileAppend)
+    exchangeScheduler(nScheduler)
     this
   }
 
   //this private function affects outside parameter
-  private[this] def exchangeScheduler(nScheduler: Scheduler,
-                                      filePath: Option[String], fileAppend: Option[Boolean]): Unit = {
+  private[this] def exchangeScheduler(nScheduler: Scheduler): Unit = {
     nScheduler.config = scheduler.config
-
-    if (filePath.nonEmpty)
-      nScheduler.config.filePath = filePath
-
-    if (fileAppend.nonEmpty)
-      nScheduler.config.fileAppend = fileAppend.get
-
     nScheduler.graphFlows = scheduler.graphFlows
     nScheduler.opSequence = scheduler.opSequence
 

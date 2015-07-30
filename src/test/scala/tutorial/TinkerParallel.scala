@@ -1,14 +1,10 @@
 package tutorial
 
-import akka.actor.ActorSystem
-import akka.testkit.TestKit
 import files.DataContainer
 import files.filetypes.input.CSV
 import files.filetypes.output.TabOutput
-import org.scalatest.{Matchers, MustMatchers, BeforeAndAfterAll, FlatSpecLike}
 import processing.buffers.file.FileBuffer
 import processing.{Parallel, Scheduler}
-import utils.ActorSys
 import utils.ParameterCallToOption.Implicits._
 
 /**

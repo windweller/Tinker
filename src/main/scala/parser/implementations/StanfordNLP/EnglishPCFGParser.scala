@@ -2,7 +2,7 @@ package parser.implementations.StanfordNLP
 
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser
 import files.DataContainer
-import files.structure.{DataSelect$, DataStructure}
+import files.structure.{DataSelect, DataStructure}
 import parser.Parser
 import scala.concurrent.ExecutionContext.Implicits.global
 

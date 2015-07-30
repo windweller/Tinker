@@ -10,7 +10,7 @@ package files
  *
  */
 class TypedRow(val stringVector: Option[Vector[String]] = None,
-                val featureVector: Option[Vector[Double]] = None)(implicit val header: DataHeader) {
+                val featureVector: Option[Vector[Double]] = None) {
 
 
 

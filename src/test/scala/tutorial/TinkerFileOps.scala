@@ -1,9 +1,18 @@
 package tutorial
 
+import files.DataContainer
+import files.filetypes.input.CSV
+import files.structure.DataStructure
+import utils.ParameterCallToOption.Implicits._
+
 /**
  * Created by anie on 7/15/2015.
  */
 object TinkerFileOps extends App {
 
+   //this did not pass test btw
+   val data = new DataContainer("./src/test/scala/tutorial/data/csvFile.csv", header = true) with CSV
+   data.toTab("./src/test/scala/tutorial/data/converted.tab")
+   data.save(Some(new DataStructure()))
 
 }
