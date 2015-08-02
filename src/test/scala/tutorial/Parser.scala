@@ -1,7 +1,7 @@
 package tutorial
 
 import files.DataContainer
-import files.filetypes.input._
+import files.filetypes.input.Tab
 import files.operations.FileOp
 import files.structure.DataSelect
 import matcher.implementations.TregexMatcher
@@ -25,4 +25,5 @@ object Parser extends App {
   ), struct = DataSelect()).toTab
 
   data.save("./src/test/scala/tutorial/data/sentences_parsed.tab")
+
 }

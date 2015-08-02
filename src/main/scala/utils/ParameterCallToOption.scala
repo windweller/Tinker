@@ -2,6 +2,7 @@ package utils
 
 import processing.Scheduler
 
+import scala.collection.mutable
 import scala.language.implicitConversions
 
 /**
@@ -18,6 +19,7 @@ object ParameterCallToOption {
     implicit def indexedSeqString2Option(indexedSeq: IndexedSeq[String]): Option[IndexedSeq[String]] = Some(indexedSeq)
     implicit def scheduler2Option(scheduler: Scheduler): Option[Scheduler] = Some(scheduler)
     implicit def listString2Option(list: List[String]): Option[List[String]] = Some(list)
+    implicit def hashmap2Option(map: mutable.HashMap[String, Int]): Option[mutable.HashMap[String, Int]] = Some(map)
   }
 }
 
