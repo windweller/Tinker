@@ -2,11 +2,10 @@ package tutorial
 
 import files.DataContainer
 import files.filetypes.input.CSV
-import files.structure.DataStructure
 import utils.ParameterCallToOption.Implicits._
 
 /**
- * Created by anie on 7/15/2015.
+ * Created by anie on 7/15/2015
  */
 object TinkerFileOps extends App {
 
