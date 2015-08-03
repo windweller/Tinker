@@ -99,10 +99,9 @@ object Stream extends App {
     // ======= Parse and match Jason's MTurk data with rules2.2.2
     val struct = new DataStructure(idColumnWithName = "id", targetColumnWithName = "sentence")
     val data = new DataContainer("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyTokenized.csv", header = true) with CSV
-//    val future = new Future(data, struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced.txt",
-//                            tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
-    val future = new Future(data, struct, patternFuture ++ patternsPast)
-    future.saveFutureMatching("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyFutureOld.csv")
+    val future = new Future(data, struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced.txt",
+                            tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
+    future.saveFutureMatching("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyFutureRule2_2_2.csv")
 
     // ======== Parse 1000 Tweets for Gabby with rules2.2.2
 //      val struct = new DataStructure(targetColumnWithName = "Sentence", idColumnWithName = "ID")
