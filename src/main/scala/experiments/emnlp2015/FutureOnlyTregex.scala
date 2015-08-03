@@ -45,8 +45,8 @@ class FutureOnlyTregex(val data: DataContainer, val struct: DataStructure, val p
         result ++= tcterms.get.map(tc => p.replace("TN|TC", tc))
       }
       else if (p.contains("TC|TN")) {
-        result ++= tnterms.get.map(tn => p.replace("TN|TC", tn))
-        result ++= tcterms.get.map(tc => p.replace("TN|TC", tc))
+        result ++= tnterms.get.map(tn => p.replace("TC|TN", tn))
+        result ++= tcterms.get.map(tc => p.replace("TC|TN", tc))
       }
       else if (p.contains("TN")) {
         result ++= tnterms.get.map(tn => p.replace("TN", tn))
