@@ -27,8 +27,7 @@ trait Doc extends DataContainer with FailureHandle {
 
   def typesuffix: Vector[String]
 
-  //this method is being overriden by differnt types
-  def parse: (String) => Vector[String]
+  def parse: (String) => Vector[String] //this method is being overriden by differnt types
 
   /**** Concrete implementations ****/
 

@@ -1,7 +1,9 @@
 package files
 
 import java.io.File
+
 import utils.FailureHandle
+
 import scala.annotation.tailrec
 
 /**
@@ -14,8 +16,9 @@ import scala.annotation.tailrec
  * It takes care of codecs (for most of them)
  * and removes non-ASCII characters, so it takes longer time than simple traversal
  */
-class FileIterator(preFiles: Array[File], val header: Boolean) extends Iterator[String] with FailureHandle {
+class NFileIterator(preFiles: Array[File], val header: Boolean) extends Iterator[String] with FailureHandle {
 
+  //generate list of non-empty files
   val files = preFiles.filter(file => file.length() != 0L)
 
   private[this] val defaultCodecs = Vector(
