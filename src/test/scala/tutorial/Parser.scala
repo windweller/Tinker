@@ -1,9 +1,9 @@
 package tutorial
 
-import files.DataContainer
+import core.DataContainer
 import files.filetypes.input.Tab
 import files.operations.FileOp
-import files.structure.DataSelect
+import core.structure.DataSelect
 import matcher.implementations.TregexMatcher
 import parser.implementations.StanfordNLP.EnglishPCFGParser
 import utils.ParameterCallToOption.Implicits._

@@ -1,6 +1,6 @@
 package processing
 
-import files.DataContainer
+import core.DataContainer
 import files.filetypes.input.CSV
 import files.filetypes.output.CSVOutput
 import files.operations.FileOp

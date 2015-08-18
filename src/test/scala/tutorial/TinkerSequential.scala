@@ -1,6 +1,6 @@
 package tutorial
 
-import files.DataContainer
+import core.DataContainer
 import files.filetypes.input._
 import files.filetypes.output.{TabOutput, CSVOutput}
 import org.scalatest.FlatSpec

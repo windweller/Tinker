@@ -8,14 +8,14 @@ import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
 import com.github.tototoshi.csv.CSVWriter
 import com.typesafe.config.{ConfigFactory, Config}
+import core.{RowTypes, DataContainer}
 import edu.stanford.nlp.ling.CoreAnnotations
 import edu.stanford.nlp.neural.rnn.RNNCoreAnnotations
 import edu.stanford.nlp.pipeline.{Annotation, StanfordCoreNLP}
 import edu.stanford.nlp.sentiment.SentimentCoreAnnotations
 import edu.stanford.nlp.trees.Tree
-import files.DataContainer
-import files.RowTypes.NormalRow
-import files.structure.DataStructure
+import RowTypes.NormalRow
+import core.structure.DataStructure
 import org.ejml.simple.SimpleMatrix
 import utils.Timer
 

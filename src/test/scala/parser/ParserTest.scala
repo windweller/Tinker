@@ -2,10 +2,10 @@ package parser
 
 import akka.actor.ActorSystem
 import akka.testkit.TestKit
-import files.DataContainer
+import core.DataContainer
 import files.filetypes.input.{CSV, Tab}
 import files.filetypes.output.CSVOutput
-import files.structure.DataStructure
+import core.structure.DataStructure
 import org.scalatest.{BeforeAndAfterAll, FlatSpecLike, FlatSpec}
 import processing.buffers.file.FileBuffer
 import processing.{Parallel, Scheduler}

@@ -1,6 +1,7 @@
 package files
 
-import files.structure.DataStruct
+import core.TypedRow
+import core.structure.DataStruct
 import org.scalatest.FlatSpec
 
 import scala.collection.mutable

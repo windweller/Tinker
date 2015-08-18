@@ -1,7 +1,7 @@
 package nlp.basic
 
-import files.DataContainer
-import files.structure.DataStructure
+import core.DataContainer
+import core.structure.DataStructure
 
 /**
  * Created by Aimingnie on 4/25/15.

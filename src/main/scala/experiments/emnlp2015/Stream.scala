@@ -1,8 +1,8 @@
 package experiments.emnlp2015
 
-import files.DataContainer
+import core.DataContainer
 import files.filetypes.input.{CSV, Tab}
-import files.structure.DataStructure
+import core.structure.DataStructure
 import nlp.future.FutureRules._
 import nlp.preprocess.tokenization.Tokenizer
 import nlp.preprocess.tokenization.impl.Stanford
@@ -97,11 +97,11 @@ object Stream extends App {
 //    future.saveFutureMatching("E:\\Allen\\Future\\LinguisticslogdataFuture2_2_21.csv")
 
     // ======= Parse and match Jason's MTurk data with rules2.2.2
-    val struct = new DataStructure(idColumnWithName = "id", targetColumnWithName = "sentence")
-    val data = new DataContainer("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyTokenized.csv", header = true) with CSV
-    val future = new Future(data, struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced.txt",
-                            tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
-    future.saveFutureMatching("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyFutureRule2_2_2.csv")
+//    val struct = new DataStructure(idColumnWithName = "id", targetColumnWithName = "sentence")
+//    val data = new DataContainer("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyTokenized.csv", header = true) with CSV
+//    val future = new Future(data, struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced2.txt",
+//                            tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced2.txt")
+//    future.saveFutureMatching("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyFutureRule2_2_3.csv")
 
     // ======== Parse 1000 Tweets for Gabby with rules2.2.2
 //      val struct = new DataStructure(targetColumnWithName = "Sentence", idColumnWithName = "ID")
@@ -109,6 +109,27 @@ object Stream extends App {
 //      val future = new Future(data,struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced.txt",
 //              tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced.txt")
 //      future.saveFutureMatching("E:\\Allen\\Future\\1000tweets2_2_2.csv")
+
+    // ======== Tweets Parsing/matching on 3.5 Month data ==========
+//    val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\tweetsByStateFinalCleaned.csv", header = true) with Tab
+//    val struct = new DataStructure(targetColumnWithName = "Tweet", idColumnWithName = "State")
+//    val future = new Future(data, struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced2.txt",
+//                              tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced2.txt")
+//    future.saveFutureMatching("E:\\Allen\\R\\emnlp2015\\tweetsByStateParsedMatched.csv")
+
+    // ======= Run Word2Vec pre-processing on NYT
+//      val struct = new DataStructure(targetColumnWithName = "Parse")
+//      val data = new DataContainer("E:\\Allen\\NYTFuture\\NYT", header = true) with Tab
+//      val preword2vec = new PreWord2VecFuture(data, struct, (futureRulesComplete ++ patternsPast).toArray, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced2.txt",
+//                                  tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced2.txt")
+//      preword2vec.saveWord2VecTrainingFile("E:\\Allen\\R\\emnlp2015\\preword2vectrainingfile.txt")
+
+    // ======== Tweets on Country
+    val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\tweetsByCountryCharacterFilteredEmoticonRemoved.csv", header = true) with CSV
+    val struct = new DataStructure(targetColumnWithName = "Tweet", idColumnWithName = "State")
+    val future = new Future(data, struct, futureRulesComplete ++ patternsPast, tcdoc = "E:\\Allen\\R\\emnlp2015\\TCTermsReduced2.txt",
+                                  tndoc = "E:\\Allen\\R\\emnlp2015\\TNTermsReduced2.txt")
+    future.saveFutureMatching("E:\\Allen\\R\\emnlp2015\\tweetsByCountryParsedMatched.csv")
   }
 
   def tokenize(): Unit = {
@@ -124,10 +145,17 @@ object Stream extends App {
 //    tokenizer.tokenize().exec("E:\\Allen\\Future\\LinguisticslogdataFutureTokenized.csv", fileAppend = true)
 
     // ======= Tokenize Jason's MTurk data
-    val struct = new DataStructure(targetColumnWithName = "MindWandering", keepColumnsWithNames = Vector("id"))
-    val data = new DataContainer("E:\\Allen\\Future\\mTurk61115_mindwanderingonly.csv", header = true) with CSV
+//    val struct = new DataStructure(targetColumnWithName = "MindWandering", keepColumnsWithNames = Vector("id"))
+//    val data = new DataContainer("E:\\Allen\\Future\\mTurk61115_mindwanderingonly.csv", header = true) with CSV
+//    val tokenizer = new Tokenizer(data, struct) with Stanford
+//    tokenizer.tokenize().exec("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyTokenized.csv", fileAppend = true)
+
+    // ======= Tokenize Tweets ======
+    val struct = new DataStructure(targetColumnWithName = "Text", keepColumnsWithNames = Vector("file_name"))
+    val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\Tweets", header = true) with CSV
     val tokenizer = new Tokenizer(data, struct) with Stanford
-    tokenizer.tokenize().exec("E:\\Allen\\Future\\mTurk61115_mindwanderingonlyTokenized.csv", fileAppend = true)
+    tokenizer.tokenize().exec("E:\\Allen\\R\\emnlp2015\\newTweetsTokenized.csv", fileAppend = true)
+
   }
 
   //load future rules from file

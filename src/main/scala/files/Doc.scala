@@ -1,7 +1,8 @@
 package files
 
-import files.RowTypes._
-import files.structure.DataStruct
+import core.{DataContainer, RowTypes}
+import RowTypes._
+import core.structure.DataStruct
 import utils.OptionToParameter.Implicits._
 import utils._
 

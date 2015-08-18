@@ -5,10 +5,10 @@ import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
 import com.github.tototoshi.csv.CSVWriter
 import com.typesafe.config.{ConfigFactory, Config}
+import core.{DataContainer, RowTypes}
 import edu.stanford.nlp.trees.Tree
-import files.DataContainer
-import files.RowTypes._
-import files.structure.DataStructure
+import RowTypes._
+import core.structure.DataStructure
 import nlp.parser.Parser
 import utils.Timer
 

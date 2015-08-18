@@ -5,11 +5,11 @@ import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
 import com.github.tototoshi.csv.CSVWriter
 import com.typesafe.config.{Config, ConfigFactory}
+import core.{RowTypes, DataContainer}
 import edu.stanford.nlp.trees.Tree
 import edu.stanford.nlp.trees.tregex.TregexPattern
-import files.DataContainer
-import files.RowTypes.NormalRow
-import files.structure.DataStructure
+import RowTypes.NormalRow
+import core.structure.DataStructure
 import nlp.matcher.Matcher
 import nlp.matcher.impl.Tregex
 import nlp.parser.Parser

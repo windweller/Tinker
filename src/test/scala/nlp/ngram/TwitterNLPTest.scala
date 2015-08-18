@@ -1,11 +1,11 @@
 package nlp.ngram
 
 import com.github.tototoshi.csv.CSVWriter
+import core.DataContainer
 import edu.emory.clir.clearnlp.tokenization.EnglishTokenizer
-import files.DataContainer
 import files.filetypes.input.{CSV, Tab}
 import files.operations.FileOp
-import files.structure.DataStructure
+import core.structure.DataStructure
 import nlp.preprocess.filters.{CharacterFilter, Filter, TwitterFilter, TwitterMispellingFilter}
 import nlp.preprocess.tokenization.Tokenizer
 import nlp.preprocess.tokenization.impl.Stanford

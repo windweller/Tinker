@@ -2,8 +2,9 @@ package processing
 
 import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
-import files.RowTypes._
-import files.structure.DataStructure
+import core.RowTypes
+import RowTypes._
+import core.structure.DataStructure
 import utils.ActorSys._
 import scala.concurrent.ExecutionContext.Implicits.global
 

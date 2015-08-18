@@ -1,5 +1,6 @@
 package files
 
+import core.DataContainer
 import files.filetypes.input.CSV
 import files.operations.FileOp
 import org.scalatest.FlatSpec
@@ -10,9 +11,9 @@ import utils.ParameterCallToOption.Implicits._
  */
 class DataContainerTest extends FlatSpec {
 
-  "assembled object" should "work" in {
-    val data = new DataContainer("") with CSV with FileOp
-
+  "data container" should "work" in {
+    val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\Country_Tweets\\Tweets") with CSV
+    print(data.strip.size)
 
   }
 

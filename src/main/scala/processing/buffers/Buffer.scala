@@ -1,7 +1,8 @@
 package processing.buffers
 
-import files.RowTypes.NormalRow
-import files.structure.DataStructure
+import core.RowTypes
+import RowTypes.NormalRow
+import core.structure.DataStructure
 import utils.FailureHandle
 
 /**

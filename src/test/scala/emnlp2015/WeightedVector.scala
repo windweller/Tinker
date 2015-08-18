@@ -2,10 +2,10 @@ package emnlp2015
 
 import java.io.{FileOutputStream, OutputStreamWriter, PrintWriter}
 
+import core.DataContainer
 import edu.emory.clir.clearnlp.tokenization.EnglishTokenizer
-import files.DataContainer
 import files.filetypes.input.Tab
-import files.structure.DataStructure
+import core.structure.DataStructure
 import utils.ParameterCallToOption.Implicits._
 
 import scala.collection.mutable

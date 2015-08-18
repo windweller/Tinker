@@ -1,7 +1,7 @@
 package nlp.ngram
 
-import files.DataContainer
-import files.structure.DataStructure
+import core.DataContainer
+import core.structure.DataStructure
 
 import scala.collection.mutable
 

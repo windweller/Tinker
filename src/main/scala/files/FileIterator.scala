@@ -5,6 +5,7 @@ import java.io.File
 import utils.FailureHandle
 
 import scala.annotation.tailrec
+import scala.util.Try
 
 /**
  * Best way to traverse a large file
@@ -16,8 +17,12 @@ import scala.annotation.tailrec
 class FileIterator(files: Array[File], val header: Boolean) extends Iterator[String] with FailureHandle {
 
   private[this] val defaultCodecs = Vector(
+    scala.io.Codec("ISO-8859-1"),
     scala.io.Codec("UTF-8"),
-    scala.io.Codec("ISO-8859-1")
+    scala.io.Codec("UTF-16"),
+    scala.io.Codec("Cp1252"),
+    scala.io.Codec("Cp037"),
+    scala.io.Codec("Cp1149")
   )
 
   private[this] var remainingFiles = files.iterator
@@ -58,6 +63,7 @@ class FileIterator(files: Array[File], val header: Boolean) extends Iterator[Str
   //this has a strong assumption that the next
   //file is guaranteed not to be empty
   override def next(): String = {
+    println(currentFile.getName)
     currentFileIterator.next()
   }
 
@@ -66,9 +72,10 @@ class FileIterator(files: Array[File], val header: Boolean) extends Iterator[Str
   private[this] def getIterator(file: File, codecs:Iterator[io.Codec]): Iterator[String] = {
     if (codecs.hasNext)
       try {
-        val it = io.Source.fromFile(file)(codecs.next()).getLines()
+        val codec = codecs.next()
+        val it = io.Source.fromFile(file)(codec).getLines()
         it.next()
-        io.Source.fromFile(file)(codecs.next()).getLines()
+        io.Source.fromFile(file)(codec).getLines()
       }
       catch {
         case ex: Exception =>

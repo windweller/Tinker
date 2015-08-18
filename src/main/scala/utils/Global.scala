@@ -1,7 +1,7 @@
 package utils
 
 import files.filetypes.output.{TabOutput, CSVOutput}
-import files.structure.DataStruct
+import core.structure.DataStruct
 import processing.buffers.BufferConfig
 import processing.buffers.file.{FileOutputFormat, FileBuffer}
 import processing.{Parallel, Operation, Scheduler, Sequential}

@@ -1,8 +1,7 @@
 package parser
 
-
-import files.DataContainer
-import files.structure.DataSelect
+import core.DataContainer
+import core.structure.DataSelect
 
 /**
  * This now serves as a general template for

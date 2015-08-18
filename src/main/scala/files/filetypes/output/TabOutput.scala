@@ -1,7 +1,8 @@
 package files.filetypes.output
 
-import files.RowTypes._
-import files.structure.DataStructure
+import core.RowTypes
+import RowTypes._
+import core.structure.DataStructure
 import processing.buffers.file.FileOutputFormat
 
 /**

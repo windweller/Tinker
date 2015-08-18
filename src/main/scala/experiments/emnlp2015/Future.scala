@@ -5,11 +5,11 @@ import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
 import com.github.tototoshi.csv.CSVWriter
 import com.typesafe.config.{Config, ConfigFactory}
+import core.{DataContainer, RowTypes}
 import edu.stanford.nlp.trees.Tree
 import edu.stanford.nlp.trees.tregex.TregexPattern
-import files.DataContainer
-import files.RowTypes._
-import files.structure.DataStructure
+import RowTypes._
+import core.structure.DataStructure
 import nlp.matcher.Matcher
 import nlp.matcher.impl.Tregex
 import nlp.parser.Parser
@@ -61,7 +61,7 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
 
     //comment out during regular task
-    output.writeRow(Seq("ID", "Sentence", "Parse") ++ preprocessTregex(patternRaw))
+    output.writeRow(Seq("State", "Sentence", "Parse") ++ preprocessTregex(patternRaw))
 
     val conf: Config = ConfigFactory.load()
     implicit val system = ActorSystem("reactive-tweets", conf)
@@ -93,12 +93,12 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
 
       import FlowGraph.Implicits._
 
-      val bcast = builder.add(Balance[NormalRow](10))
-        val merge = builder.add(Merge[Seq[Any]](10))
+      val bcast = builder.add(Balance[NormalRow](20))
+        val merge = builder.add(Merge[Seq[Any]](20))
 
       tweets ~> bcast.in
 
-        0 to 9 foreach  { i =>
+        0 to 19 foreach  { i =>
           bcast.out(i) ~> parseFlow ~> tregexMatchFlow ~> merge
         }
 

@@ -1,8 +1,9 @@
 package processing
 
 import akka.stream.scaladsl.Flow
-import files.RowTypes.{NormalRow, RowIterator}
-import files.structure.{DataStruct, DataStructure}
+import core.RowTypes
+import RowTypes.{NormalRow, RowIterator}
+import core.structure.{DataStruct, DataStructure}
 import processing.buffers.Buffer
 import utils.FailureHandle
 

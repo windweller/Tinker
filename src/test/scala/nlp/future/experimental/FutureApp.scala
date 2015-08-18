@@ -4,12 +4,12 @@ import akka.actor.ActorSystem
 import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl.{Source, Sink, Flow}
 import com.github.tototoshi.csv.CSVWriter
+import core.{DataContainer, RowTypes}
 import edu.stanford.nlp.trees.Tree
-import files.DataContainer
 import files.filetypes.input._
-import files.RowTypes._
+import RowTypes._
 import files.filetypes.input.Tab
-import files.structure.DataStructure
+import core.structure.DataStructure
 import nlp.matcher.Matcher
 import nlp.matcher.impl.Tregex
 import nlp.parser.Parser

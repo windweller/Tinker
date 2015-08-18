@@ -1,8 +1,8 @@
 package files.filetypes.output
 
-import files.DataContainer
+import core.DataContainer
 import files.filetypes.input.Tab
-import files.structure.DataStructure
+import core.structure.DataStructure
 import org.scalatest.FlatSpec
 import utils.ParameterCallToOption.Implicits._
 

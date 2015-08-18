@@ -1,9 +1,10 @@
 package nlp.preprocess.tokenization.impl
 
 import java.io.StringReader
+import core.RowTypes
 import edu.stanford.nlp.ling.HasWord
 import edu.stanford.nlp.process.DocumentPreprocessor
-import files.RowTypes._
+import RowTypes._
 import nlp.preprocess.tokenization.Tokenizer
 import scala.collection.{mutable, AbstractIterator}
 import utils.ParameterCallToOption.Implicits._

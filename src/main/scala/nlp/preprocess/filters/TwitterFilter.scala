@@ -24,16 +24,21 @@ trait TwitterFilter extends Filter {
     val it = data.data
     val result = ArrayBuffer.empty[Seq[String]]
 
+    var z = 0
+
     it.foreach { row =>
       if (row.get(struct.target.get).nonEmpty) {
         val tweet = row(struct.target.get).replaceAll(TwitterRegex.searchPattern.toString(), "")
         if (tweet.trim.nonEmpty && tweet.split(" ").length >= 2) {
-          result += Seq(struct.getIdValue(row).getOrElse(row("fileName")), tweet)
+//          result += Seq(struct.getIdValue(row).getOrElse(row("file_name")), tweet)
+          output.writeRow(Seq(struct.getIdValue(row).getOrElse(row("file_name")), tweet))
+        z += 1
+        if (z % 10000 == 0) println(z)
         }
       }
     }
 
-    output.writeAll(result.toSeq)
+//    output.writeAll(result.toSeq)
   }
 
   object TwitterRegex {

@@ -1,6 +1,6 @@
 package tweets
 
-import files.DataContainer
+import core.DataContainer
 import files.filetypes.input.CSV
 import utils.ParameterCallToOption.Implicits._
 import org.scalatest.FlatSpec

@@ -1,7 +1,7 @@
 package nlp.sentiment
 
-import files.DataContainer
-import files.structure.DataStructure
+import core.DataContainer
+import core.structure.DataStructure
 
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer

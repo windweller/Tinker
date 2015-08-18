@@ -1,8 +1,9 @@
 package processing
 
 import akka.stream.scaladsl.Flow
-import files.RowTypes.{NormalRow, RowIterator}
-import files.structure.DataStruct
+import core.RowTypes
+import RowTypes.{NormalRow, RowIterator}
+import core.structure.DataStruct
 import processing.buffers.BufferConfig
 
 import scala.collection.mutable

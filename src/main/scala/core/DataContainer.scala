@@ -1,6 +1,6 @@
 package core
 
-import files.structure.{DataStruct, DataStructure}
+import core.structure.{DataStruct, DataStructure}
 import processing.Scheduler
 import utils.Global.Implicits._
 

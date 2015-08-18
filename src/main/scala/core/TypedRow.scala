@@ -1,6 +1,6 @@
 package core
 
-import files.structure.DataStruct
+import core.structure.DataStruct
 
 import scala.language.implicitConversions
 

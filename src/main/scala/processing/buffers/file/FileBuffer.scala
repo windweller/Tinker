@@ -3,8 +3,9 @@ package processing.buffers.file
 import java.io.{OutputStreamWriter, FileOutputStream, PrintWriter}
 import java.nio.file.{Files, Paths}
 
-import files.RowTypes.NormalRow
-import files.structure.DataStructure
+import core.RowTypes
+import RowTypes.NormalRow
+import core.structure.DataStructure
 import processing.buffers.Buffer
 import utils.{FailureHandle, Global}
 

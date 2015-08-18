@@ -14,7 +14,7 @@ object Timer {
   var startTime: Long = System.currentTimeMillis()
   var currentTime: Long = 0
 
-  val taskTotal =  42833583 //42833583 // 4017266 // 4252996
+  val taskTotal =  3111328 //NYT: 42833583 // 4017266 // 4252996 // unfiltered tweets: 13145853 //character filtered tweets: 8901153 //after emoticon: 8898482 //final: 8613152 //on country: 3111328
   var currentProgress = 0
 
   def completeOne(): Unit = {
@@ -25,7 +25,7 @@ object Timer {
   }
 
   def print(): Unit = {
-    val writer = new PrintWriter("E:\\Allen\\R\\emnlp2015\\timerSentiment.txt", "UTF-8")
+    val writer = new PrintWriter("E:\\Allen\\R\\emnlp2015\\timerTweetCountry.txt", "UTF-8")
     writer.println("Progress: "+currentProgress + " / " + taskTotal + " => " + percentFormat.format(currentProgress/taskTotal))
     val expectedSecs = ((currentTime - startTime) / currentProgress.toDouble) * (taskTotal - currentProgress)
 

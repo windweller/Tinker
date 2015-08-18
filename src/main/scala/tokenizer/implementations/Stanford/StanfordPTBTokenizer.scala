@@ -2,11 +2,11 @@ package tokenizer.implementations.Stanford
 
 import java.io.StringReader
 
+import core.{RowTypes, DataContainer}
 import edu.stanford.nlp.ling.HasWord
 import edu.stanford.nlp.process.DocumentPreprocessor
-import files.DataContainer
-import files.RowTypes._
-import files.structure.DataSelect
+import RowTypes._
+import core.structure.DataSelect
 import tokenizer.Tokenizer
 
 import scala.collection.{AbstractIterator, mutable}

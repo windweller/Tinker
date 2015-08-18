@@ -1,6 +1,6 @@
 package tutorial
 
-import files.DataContainer
+import core.DataContainer
 import files.filetypes.input.{CSV, Tab}
 import org.scalatest.FlatSpec
 import utils.ParameterCallToOption.Implicits._
