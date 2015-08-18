@@ -1,4 +1,4 @@
-package files
+package core
 
 import files.structure.DataStruct
 
@@ -20,8 +20,6 @@ import scala.language.implicitConversions
  */
 class TypedRow(sv: Option[Vector[String]] = None,
                fv: Option[Vector[Double]] = None) {
-
-  import files.TypedRow.Implicits._
 
   var stringVector: Vector[String] = sv.getOrElse(Vector.empty[String])
   var featureVector: Vector[Double] = fv.getOrElse(Vector.empty[Double])

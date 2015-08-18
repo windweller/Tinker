@@ -1,4 +1,4 @@
-package files.structure
+package core.structure
 
 import scala.language.implicitConversions
 

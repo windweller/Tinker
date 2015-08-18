@@ -1,7 +1,8 @@
-package files.structure
+package core.structure
 
-import files.RowTypes._
-import files.structure.Index.IndexRange
+import core.RowTypes
+import RowTypes._
+import core.structure.Index.IndexRange
 
 /**
  * Created by anie on 7/15/2015

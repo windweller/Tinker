@@ -1,4 +1,4 @@
-package files
+package core
 
 import files.structure.{DataStruct, DataStructure}
 import processing.Scheduler
@@ -175,9 +175,4 @@ abstract class DataContainer(val f: Option[String] = None,
     }
   }
 
-}
-
-object RowTypes {
-  type NormalRow = mutable.HashMap[String, String] //enforced HashMap for it's eC performance
-  type RowIterator = Iterator[NormalRow]
 }

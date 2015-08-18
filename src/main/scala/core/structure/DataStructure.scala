@@ -1,6 +1,7 @@
-package files.structure
+package core.structure
 
-import files.RowTypes._
+import core.RowTypes
+import RowTypes._
 import utils.FailureHandle
 import scala.collection.mutable
 
