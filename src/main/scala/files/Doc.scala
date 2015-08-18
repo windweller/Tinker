@@ -48,7 +48,7 @@ trait Doc extends DataContainer with FailureHandle {
    */
   lazy val headerString: Vector[String] =
     if (file.headerRaw.nonEmpty) {
-      val vec = parse(file.headerRaw.get)
+      val vec = parse(file.headerRaw)
       val vec2 = parse(file.firstRow)
 
       if (vec.size < vec2.size)

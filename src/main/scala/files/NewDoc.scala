@@ -11,6 +11,10 @@ import utils.FailureHandle
  * of FileMapIterator, and pass down the header collecting
  * function to FileIterator
  *
+ * Compared to the old Doc trait, this delays header checking
+ * (like if the first row has as many cells as header)
+ * much later, because this would screw up the code
+ *
  */
 trait NewDoc extends DataContainer with FailureHandle {
 

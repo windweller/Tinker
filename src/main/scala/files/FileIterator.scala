@@ -27,7 +27,7 @@ class FileIterator(preFiles: Array[File], val header: Boolean) extends Iterator[
     scala.io.Codec("Cp1149")
   )
 
-  var headerString = ""
+  var headerRaw = ""
 
   private[this] val remainingFiles = files.iterator
   private[this] var currentFile = remainingFiles.next()
@@ -49,9 +49,9 @@ class FileIterator(preFiles: Array[File], val header: Boolean) extends Iterator[
 
   //check if header is consistent, also fill up header when it's empty
   private[this] def checkHeader(header: String): Unit = {
-    if (headerString == "") headerString = header.replaceAll("[^\\x00-\\x7F]", "")
-    else if (headerString != header.replaceAll("[^\\x00-\\x7F]", "")) {
-      println("previous header: " + headerString)
+    if (headerRaw == "") headerRaw = header.replaceAll("[^\\x00-\\x7F]", "")
+    else if (headerRaw != header.replaceAll("[^\\x00-\\x7F]", "")) {
+      println("previous header: " + headerRaw)
       println("current header: " + header)
       fatal("file: " + currentFile.getName + " does not have matching header")
     }
