@@ -27,7 +27,10 @@ class FileIterator(preFiles: Array[File], val header: Boolean) extends Iterator[
     scala.io.Codec("Cp1149")
   )
 
-  var headerRaw = ""
+  var headerRaw: Option[String] = None
+  var firstRow: String = "" //it's always here
+
+  initialize() //initialize above two values
 
   private[this] val remainingFiles = files.iterator
   private[this] var currentFile = remainingFiles.next()
@@ -49,12 +52,31 @@ class FileIterator(preFiles: Array[File], val header: Boolean) extends Iterator[
 
   //check if header is consistent, also fill up header when it's empty
   private[this] def checkHeader(header: String): Unit = {
-    if (headerRaw == "") headerRaw = header.replaceAll("[^\\x00-\\x7F]", "")
-    else if (headerRaw != header.replaceAll("[^\\x00-\\x7F]", "")) {
+    headerRaw.foreach(h => if (h != header) {
       println("previous header: " + headerRaw)
       println("current header: " + header)
       fatal("file: " + currentFile.getName + " does not have matching header")
+    })
+  }
+
+  //we must initialize header for Doc trait
+  //this is called only once
+  private[this] def initialize(): Unit = {
+    if (header) {
+      headerRaw = Some(currentFileIt.next().replaceAll("[^\\x00-\\x7F]", ""))
+      firstRow = next()
+      reset()
     }
+    else {
+      headerRaw = None
+      firstRow = next()
+      reset()
+    }
+  }
+
+  //because the file did not change, just reget the iterator
+  private[this] def reset(): Unit = {
+    currentFileIt = getIterator(currentFile, defaultCodecs.iterator)
   }
 
   //fixed the encoding problem

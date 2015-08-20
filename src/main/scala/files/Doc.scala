@@ -55,7 +55,7 @@ trait Doc extends DataContainer with FailureHandle {
         vec ++ (vec.size to vec2.size).map(e => e.toString)
       else vec
     }
-    else Vector.iterate("0", parse(file.peekHead).length)(pos => (pos.toInt + 1).toString)
+    else Vector.iterate("0", parse(file.firstRow).length)(pos => (pos.toInt + 1).toString)
   //header string is the problem
 
 
