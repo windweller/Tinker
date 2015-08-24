@@ -57,7 +57,7 @@ trait Doc extends DataContainer with FailureHandle {
     else Vector.iterate("0", parse(file.firstRow).length)(pos => (pos.toInt + 1).toString)
 
 
-  //fill
+  //TODO: fill in the data structure
 
 
   protected def readFileIterator[T](transform: (String) => T, file: FileIterator): Iterator[T] = file.map(l => transform(l))
