@@ -37,7 +37,6 @@ trait Doc extends DataContainer with FailureHandle {
   //allow peaking, assuming all files share same structure
   lazy private[this] val file = files.head._2
 
-
   /**
    * this new method forces HashMap on header/nonHeader structure
    * only inefficient part is the toString, toInt conversion
@@ -56,7 +55,9 @@ trait Doc extends DataContainer with FailureHandle {
       else vec
     }
     else Vector.iterate("0", parse(file.firstRow).length)(pos => (pos.toInt + 1).toString)
-  //header string is the problem
+
+
+  //fill
 
 
   protected def readFileIterator[T](transform: (String) => T, file: FileIterator): Iterator[T] = file.map(l => transform(l))
