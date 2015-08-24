@@ -18,6 +18,8 @@ import scala.collection.mutable
  *
  * This is a downstream of DataContainer,
  * because it implements DataContainer's certain methods and types
+ *
+ * Doc also automatically
  */
 trait Doc extends DataContainer with FailureHandle {
 
@@ -45,7 +47,7 @@ trait Doc extends DataContainer with FailureHandle {
    * #1: If header.size > real column.size, it chops off header (because real data is more important)
    * #2: If header.size < real column.size, it will make up the header as Integer index, starting from 0 as usual
    */
-  lazy val headerString: Vector[String] =
+  val headerString: Vector[String] =
     if (file.headerRaw.nonEmpty) {
       val vec = parse(file.headerRaw)
       val vec2 = parse(file.firstRow)

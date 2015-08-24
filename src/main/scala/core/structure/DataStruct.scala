@@ -52,3 +52,11 @@ class DataStruct(sHeader: Option[mutable.HashMap[String, Int]] = None,
   }
 
 }
+
+object DataStruct {
+
+  def inferTypes(header: Vector[String], firstRow: Vector[String]): Unit = {
+
+  }
+
+}
