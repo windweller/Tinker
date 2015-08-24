@@ -5,7 +5,7 @@ It offers the ease of reading multiple formated files and merge/process as one, 
 
 ## Primary Usages
 
-1. Convert extremely file from one format to another, similar to Canova  (http://deeplearning4j.org/canova.html#tutorial), but Tinker's performance is much faster (because of default parallel processing), and easier (we don't rely on outside markup language to define data structure).
+1. Convert files from one format to another, similar to Canova  (http://deeplearning4j.org/canova.html#tutorial), but Tinker's performance is much faster (because of default parallel processing), and easier (we don't rely on outside markup language to define data structure).
 2. Constituency parsing: with Stanford constituency parser (http://nlp.stanford.edu/software/lex-parser.shtml)
 3. Tregex Matching: using a specific regex-like language to search through Stanford constituency tree (http://nlp.stanford.edu/software/tregex.shtml)
 4. Future Classification: for psycholinguistics researchers, they may want to check out this paper (http://www.aclweb.org/anthology/N15-2#page=178).
