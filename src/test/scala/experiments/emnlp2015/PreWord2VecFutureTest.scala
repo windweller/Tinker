@@ -18,17 +18,6 @@ class PreWord2VecFutureTest extends FlatSpec {
     val patterns = Array("VBD", "VBG").map(e => TregexPattern.compile(e))
     val tree = parser.parse("I was going to eat an apple.")
 
-//    patterns.foreach { pattern =>
-//
-//      val matcher = pattern.matcher(tree)
-//      if (matcher.find()) {
-//        //we should go to the tree node
-//        val matchedNode = matcher.getMatch
-//        matchedNode.setValue("$R5" + " " + matchedNode.value())
-//        println(matchedNode)
-//      }
-//    }
-
     val result = ArrayBuffer.empty[String]
     traverseTree(tree, patterns, result)
     println(result.mkString(" "))
