@@ -36,6 +36,7 @@ libraryDependencies ++= {
     "org.scalanlp" %% "breeze" % "0.11.2",
     "org.scalanlp" %% "breeze-natives" % "0.11.2",
     "org.scalanlp" %% "breeze-viz" % "0.11.2",
+    "org.spire-math" %% "spire" % "0.10.1",
     //NLP-components
     "cc.mallet" % "mallet" % "2.0.7-RC2",
     "edu.emory.clir" % "clearnlp" % "3.2.0",

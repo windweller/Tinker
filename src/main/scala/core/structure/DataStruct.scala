@@ -19,6 +19,10 @@ class DataStruct(sHeader: Option[mutable.HashMap[String, Int]] = None,
  * performance
  */
 
+  //this maintains the order of the string
+  //don't know if I want to store types as well, probably not needed
+  var orderedHeader = Vector.empty[String]
+
   //"column name" -> 5 (vector position)
   val stringHeader = sHeader.getOrElse(mutable.HashMap.empty[String, Int])
   val featureHeader = fHeader.getOrElse(mutable.HashMap.empty[String, Int])
@@ -27,15 +31,25 @@ class DataStruct(sHeader: Option[mutable.HashMap[String, Int]] = None,
   //headerGroup provides a way to quickly access required header
   val headerGroups = mutable.HashMap.empty[String, Vector[String]]
 
-  def addToHeaderGroup(headerName: String, headers: Vector[String]): Unit = headerGroups += (headerName -> headers)
+  //this does not add to string/featureHeader, must be used in conjunction
+  //with other methods
+  def addToHeaderGroup(headerName: String, headers: Vector[String]): Unit = {
+    headerGroups += (headerName -> headers)
+  }
 
   /**
    * Aux function to add to Vector
    * @param columnName the name to add to hashmap (key)
    * @param vectorPos corresponding position in the vector of this value
    */
-  def addToStringHeader(columnName: String, vectorPos: Int): Unit = stringHeader += (columnName -> vectorPos)
-  def addToFeatureHeader(columnName: String, vectorPos: Int): Unit = featureHeader += (columnName -> vectorPos)
+  def addToStringHeader(columnName: String, vectorPos: Int): Unit = {
+    stringHeader += (columnName -> vectorPos)
+    orderedHeader = orderedHeader :+ columnName
+  }
+  def addToFeatureHeader(columnName: String, vectorPos: Int): Unit = {
+    featureHeader += (columnName -> vectorPos)
+    orderedHeader = orderedHeader :+ columnName
+  }
 
   //this gurantees one traversal
   def addToStringHeader(columnName: Vector[String], vectorPos: Range): Unit =
@@ -48,15 +62,8 @@ class DataStruct(sHeader: Option[mutable.HashMap[String, Int]] = None,
                                       columnName: Vector[String], vectorPos: Range): Unit = {
     vectorPos.indices.foreach { i =>
       headerA += columnName(i) -> vectorPos(i)
+      orderedHeader = orderedHeader :+ columnName(i)
     }
-  }
-
-}
-
-object DataStruct {
-
-  def inferTypes(header: Vector[String], firstRow: Vector[String]): Unit = {
-
   }
 
 }

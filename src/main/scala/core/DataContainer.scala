@@ -1,6 +1,6 @@
 package core
 
-import core.structure.{DataStruct, DataStructure}
+import core.structure.{Schema, DataStruct, DataStructure}
 import processing.Scheduler
 import utils.Global.Implicits._
 
@@ -25,6 +25,8 @@ import scala.collection.{AbstractIterator, mutable}
  * @param core this indicates how many parallel cores you want Tinker to run on, in this version
  *             we don't support different threading numbers for different process (but it's down the road)
  *             By inputing a core number, you automatically opt for parallelism
+ * @param schema pass in a schema that specifies how columns should be parsed (as string or double). No need
+ *               to specify every single one, just ones that need to be taken care of, such as ID column.
  */
 abstract class DataContainer(val f: Option[String] = None,
                               val header: Boolean = true,
@@ -32,7 +34,8 @@ abstract class DataContainer(val f: Option[String] = None,
                               val rTaskSize: Option[Int] = None,
                               val ignoreFileName: Boolean = false,
                               val fileNameColumn: Option[String] = None,
-                              val core: Option[Int] = None)(implicit val pscheduler: Option[Scheduler] = None) {
+                              val core: Option[Int] = None,
+                              val schema: Schema = Schema())(implicit val pscheduler: Option[Scheduler] = None) {
 
   import RowTypes._
 
@@ -175,4 +178,3 @@ abstract class DataContainer(val f: Option[String] = None,
     }
   }
 
-}

@@ -23,8 +23,6 @@ import scala.collection.mutable
  */
 trait Doc extends DataContainer with FailureHandle {
 
-  val ds: DataStruct = new DataStruct
-
   /**** Abstract methods/variables ****/
 
   def typesuffix: Vector[String]
@@ -59,7 +57,12 @@ trait Doc extends DataContainer with FailureHandle {
     else Vector.iterate("0", parse(file.firstRow).length)(pos => (pos.toInt + 1).toString)
 
 
-  //TODO: fill in the data structure
+  //We fill the data struct according to schema
+  implicit val ds: DataStruct = {
+    //a method that generates two hashmaps that fill up featureHeader and stringHeader
+    //and return a DataStruct
+
+  }
 
 
   protected def readFileIterator[T](transform: (String) => T, file: FileIterator): Iterator[T] = file.map(l => transform(l))
