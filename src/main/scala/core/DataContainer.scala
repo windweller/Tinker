@@ -46,9 +46,11 @@ abstract class DataContainer(val f: Option[String] = None,
   implicit val ds: DataStruct
 
   /* scheduler is inside every dataContainer, the FileOps on dataContainer is the FileOps on scheduler */
-  var scheduler = if (pscheduler.nonEmpty) {pscheduler.get.dataStructure = ds; pscheduler.get}
-                  else if (core.isEmpty) defaultSchedulerConstructor(1, ds)
-                  else parallelSchedulerConstructor(core.get, ds)
+  var scheduler = if (pscheduler.nonEmpty) {
+    pscheduler.get.dataStructure = ds; pscheduler.get
+  }
+  else if (core.isEmpty) defaultSchedulerConstructor(1, ds)
+  else parallelSchedulerConstructor(core.get, ds)
 
   if (!ignoreFileName) {
     scheduler.opSequence.push(unify(fileNameColumn))
@@ -73,6 +75,7 @@ abstract class DataContainer(val f: Option[String] = None,
     if (scheduler.opSequence.isEmpty) scheduler.opSequence.push(strippedData)
     scheduler.exec(struct)
   }
+
   def save(struct: Option[DataStructure]): Unit = exec(struct)
 
 
@@ -83,6 +86,7 @@ abstract class DataContainer(val f: Option[String] = None,
     if (scheduler.opSequence.isEmpty) scheduler.opSequence.push(strippedData)
     exec(struct)
   }
+
   def save(filePath: Option[String], fileAppend: Boolean = true, struct: Option[DataStructure] = None) = exec(filePath, fileAppend, struct)
 
   /* Shortcut Methods */
@@ -90,14 +94,14 @@ abstract class DataContainer(val f: Option[String] = None,
   def toCSV: DataContainer = {
 
     val nScheduler = if (core.isEmpty) defaultSchedulerConstructor(1, ds)
-                        else parallelSchedulerConstructor(core.get, ds)
+    else parallelSchedulerConstructor(core.get, ds)
     exchangeScheduler(nScheduler)
     this
   }
 
   def toTab: DataContainer = {
     val nScheduler = if (core.isEmpty) tabSeqSchedulerConstructor(1, ds)
-                          else tabParallelSchedulerConstructor(core.get, ds)
+    else tabParallelSchedulerConstructor(core.get, ds)
     exchangeScheduler(nScheduler)
     this
   }
@@ -177,4 +181,4 @@ abstract class DataContainer(val f: Option[String] = None,
       }
     }
   }
-
+}

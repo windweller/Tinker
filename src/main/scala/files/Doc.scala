@@ -1,10 +1,10 @@
 package files
 
-import core.{DataContainer, RowTypes}
-import RowTypes._
-import core.structure.DataStruct
+import core.DataContainer
+import core.RowTypes._
 import utils.OptionToParameter.Implicits._
 import utils._
+import core.structure.DataStruct
 
 import scala.collection.mutable
 
@@ -61,7 +61,7 @@ trait Doc extends DataContainer with FailureHandle {
   implicit val ds: DataStruct = {
     //a method that generates two hashmaps that fill up featureHeader and stringHeader
     //and return a DataStruct
-
+    new DataStruct()
   }
 
 
