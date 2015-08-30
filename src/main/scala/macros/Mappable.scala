@@ -25,8 +25,8 @@ object Mappable {
     val params = ctor.paramLists.head
 
     val toMapParams = params.map { field =>
-      val name = field.name.toTermName
-      val mapKey = name.decoded
+      val name = field.asTerm.name
+      val mapKey = name.decodedName.toString
       q"$mapKey -> t.$name"
     }
 
