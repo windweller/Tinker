@@ -33,8 +33,8 @@ object Mappable {
     val companion = tpe.typeSymbol.companion
 
     val fromMapParams = params.map { field =>
-      val name = field.name.toTermName
-      val decoded = name.decoded
+      val name = field.asTerm.name
+      val decoded = name.decodedName.toString
       val returnType = tpe.decl(name).typeSignature
       q"map($decoded).asInstanceOf[$returnType]"
     }
@@ -42,7 +42,7 @@ object Mappable {
     c.Expr[Mappable[T]] { q"""
       new Mappable[$tpe] {
         def toMap(t: $tpe) = Map(..$toMapParams)
-        def fromMap(map: Map[String, Any]) = ???
+        def fromMap(map: Map[String, Any]) = $companion(..$fromMapParams)
       }
     """
     }
