@@ -1,19 +1,16 @@
 package macros
 
 import scala.language.experimental.macros
-import scala.reflect.macros.blackbox
+import scala.reflect.macros.whitebox
+
 /**
  * Created by anie on 8/27/2015
  */
 object Mappable {
 
-  def materialize[T: Mappable](map: Map[String, Any]) = implicitly[Mappable[T]].fromMap(map)
-
-  def mapify[T: Mappable](t: T) = implicitly[Mappable[T]].toMap(t)
-
   implicit def materializeMappable[T]: Mappable[T] = macro materializeMappableImpl[T]
 
-  def materializeMappableImpl[T:c.WeakTypeTag](c: blackbox.Context): c.Expr[Mappable[T]] = {
+  def materializeMappableImpl[T:c.WeakTypeTag](c: whitebox.Context): c.Tree = {
     import c.universe._
     val tpe = weakTypeOf[T]
 
@@ -39,14 +36,12 @@ object Mappable {
       q"map($decoded).asInstanceOf[$returnType]"
     }
 
-    c.Expr[Mappable[T]] { q"""
+    q"""
       new Mappable[$tpe] {
         def toMap(t: $tpe) = Map(..$toMapParams)
         def fromMap(map: Map[String, Any]) = $companion(..$fromMapParams)
       }
     """
-    }
-
   }
 
 }
