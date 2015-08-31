@@ -31,7 +31,6 @@ object Global {
       s
     }
 
-
     def parallelSchedulerConstructor(core: Int, ds: DataStruct): Scheduler = {
       val s = new Scheduler(core)(BufferConfig()) with Parallel with FileBuffer with CSVOutput
       s.dataStructure = ds
@@ -43,7 +42,6 @@ object Global {
       s.dataStructure = ds
       s
     }
-
 
     def tabParallelSchedulerConstructor(core: Int, ds: DataStruct): Scheduler = {
       val s =  new Scheduler(core)(BufferConfig()) with Parallel with FileBuffer with TabOutput

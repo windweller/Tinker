@@ -1,0 +1,3 @@
+name	gender	CodeNumber
+Smith	M	3
+Lora	F	4

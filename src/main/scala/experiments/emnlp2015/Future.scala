@@ -61,7 +61,7 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)
 
     //comment out during regular task
-    output.writeRow(Seq("State", "Sentence", "Parse") ++ preprocessTregex(patternRaw))
+    output.writeRow(Seq("ID", "Sentence", "Parse") ++ preprocessTregex(patternRaw))
 
     val conf: Config = ConfigFactory.load()
     implicit val system = ActorSystem("reactive-tweets", conf)

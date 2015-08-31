@@ -12,12 +12,12 @@ import utils.ParameterCallToOption.Implicits._
  * Created by Aimingnie on 6/29/15
  */
 object TinkerSequential extends App {
-  
-  def convertFromTabToCSV(): Unit = {
-    val scheduler = new Scheduler with FileBuffer with Sequential with CSVOutput
-    val data = new DataContainer("./src/test/scala/tutorial/data/tabFile.tab", header = true) with Tab
 
-    data.save("./src/test/scala/tutorial/data/generatedCSV.csv")
+  convertFromTabToCSV()
+
+  def convertFromTabToCSV(): Unit = {
+    val data = new DataContainer("./src/test/scala/tutorial/data/tabFile.tab", header = true) with Tab
+    data.toCSV.save("./src/test/scala/tutorial/data/generatedCSV.csv")
   }
 
   def convertFromCSVToTab(): Unit = {

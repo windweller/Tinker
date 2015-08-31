@@ -32,6 +32,7 @@ libraryDependencies ++= {
     "com.github.tototoshi" %% "scala-csv" % "1.2.1",
     "org.apache.commons" % "commons-csv" % "1.1",
     "com.chuusai" %% "shapeless" % "2.2.3",
+    "commons-cli" % "commons-cli" % "1.2",
     //Linear Algebra-components
     "org.scalanlp" %% "breeze" % "0.11.2",
     "org.scalanlp" %% "breeze-natives" % "0.11.2",
