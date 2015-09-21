@@ -1,11 +1,12 @@
-
 name := "Tinker"
 
 version := "0.1"
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.11.7"
 
 mainClass in (Compile, run) := Some("experiments.emnlp2015.Stream")
+
+addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0-M5" cross CrossVersion.full)
 
 resolvers += Resolver.sonatypeRepo("snapshots")
 
@@ -26,13 +27,16 @@ libraryDependencies ++= {
     "com.typesafe.akka"   %%   "akka-testkit"  % akkaV   % "test",
     "org.scalatest"       %%   "scalatest"     % "2.2.4" % "test",
     "ch.qos.logback"      % "logback-classic"  % "1.1.2",
+    //benchmark
+    "com.storm-enroute" %% "scalameter" % "0.7",
     //utilities
     "com.github.nscala-time" %% "nscala-time" % "1.8.0",
     "com.bizo" % "mighty-csv_2.11" % "0.2",
     "com.github.tototoshi" %% "scala-csv" % "1.2.1",
     "org.apache.commons" % "commons-csv" % "1.1",
-    "com.chuusai" %% "shapeless" % "2.2.3",
+    "ch.epfl.lamp" %% "scala-records" % "0.4",
     "commons-cli" % "commons-cli" % "1.2",
+    "com.github.mpilquist" %% "simulacrum" % "0.4.0",
     //Linear Algebra-components
     "org.scalanlp" %% "breeze" % "0.11.2",
     "org.scalanlp" %% "breeze-natives" % "0.11.2",
@@ -50,6 +54,9 @@ libraryDependencies ++= {
     "tw.edu.ntu.csie" % "libsvm" % "3.17"
   )
 }
+
+testFrameworks += new TestFramework("org.scalameter.ScalaMeterFramework")
+parallelExecution in Test := false
 
 initialCommands in console := """
 import files.filetypes._

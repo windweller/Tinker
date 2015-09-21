@@ -1,6 +1,0 @@
-ID	MD < will	file_name	Sentence	(VP < (VBG < going) > (PP < TO))	parsed	(VP < (VBG < going) < (S < (VP < TO)))
-1	0	sentences	 Today is pretty dark.	0	(ROOT (S (NP (NNP Today)) (VP (VBZ is) (ADJP (RB pretty) (JJ dark))) (. .)))	0
-5	0	sentences	 I should come up with a plan.	0	(ROOT (S (NP (PRP I)) (VP (MD should) (VP (VB come) (PRT (RP up)) (PP (IN with) (NP (DT a) (NN plan))))) (. .)))	0
-3	0	sentences	 There is so much going on.	0	(ROOT (S (NP (EX There)) (VP (VBZ is) (ADVP (RB so) (RB much)) (VP (VBG going) (PRT (RP on)))) (. .)))	0
-4	0	sentences	 I can't keep track of everything.	0	(ROOT (S (NP (PRP I)) (VP (MD ca) (RB n't) (VP (VB keep) (NP (NP (NN track)) (PP (IN of) (NP (NN everything)))))) (. .)))	0
-2	0	sentences	 I need to pay my rent tomorrow.	0	(ROOT (S (NP (PRP I)) (VP (VBP need) (S (VP (TO to) (VP (VB pay) (NP (PRP$ my) (NN rent)) (NP (NN tomorrow)))))) (. .)))	0

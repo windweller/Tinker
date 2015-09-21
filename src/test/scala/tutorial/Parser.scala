@@ -2,10 +2,9 @@ package tutorial
 
 import core.DataContainer
 import files.filetypes.input.Tab
-import files.operations.FileOp
 import core.structure.DataSelect
-import matcher.implementations.TregexMatcher
-import parser.implementations.StanfordNLP.EnglishPCFGParser
+import nlp.matcher.implementations.TregexMatcher
+import nlp.parser.implementations.StanfordNLP.EnglishPCFGParser
 import utils.ParameterCallToOption.Implicits._
 
 /**
@@ -14,7 +13,7 @@ import utils.ParameterCallToOption.Implicits._
 object Parser extends App {
   val data = new DataContainer("./src/test/scala/tutorial/data/sentences.tab",
                                 header = true,
-                                core = 10) with Tab with EnglishPCFGParser with TregexMatcher with FileOp
+                                core = 10) with Tab with EnglishPCFGParser with TregexMatcher
 
   data.parse(None, DataSelect(targetColumnWithName = "Sentence"))
 

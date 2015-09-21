@@ -3,7 +3,7 @@ package core.structure
 import scala.language.implicitConversions
 
 /**
- * Created by anie on 7/15/2015.
+ * Created by anie on 7/15/2015
  */
 
 case class Index(i: Option[Int], s: Option[String]) extends StructureUtils {

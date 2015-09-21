@@ -1,8 +1,7 @@
 package processing
 
 import akka.stream.scaladsl.Flow
-import core.RowTypes
-import RowTypes.{NormalRow, RowIterator}
+import core.TypedRow
 import core.structure.DataStruct
 import processing.buffers.BufferConfig
 
@@ -21,6 +20,7 @@ import scala.concurrent.Future
  */
 abstract class Scheduler(val workerCount: Option[Int] = Some(4))(implicit val bufferConfig: BufferConfig = BufferConfig()) extends Operation {
 
+  //this is overriden
   var dataStructure: DataStruct = new DataStruct()
 
   val workerNum = workerCount
@@ -28,7 +28,7 @@ abstract class Scheduler(val workerCount: Option[Int] = Some(4))(implicit val bu
   var config = bufferConfig
 
   //this keeps a history of iterators
-  var opSequence: mutable.Stack[RowIterator] = mutable.Stack()
+  var opSequence: mutable.Stack[Iterator[TypedRow]] = mutable.Stack()
 
   def clean(): Unit = opSequence.clear()
 
@@ -36,8 +36,8 @@ abstract class Scheduler(val workerCount: Option[Int] = Some(4))(implicit val bu
    * add to parallel graph flow
    * @param func pass in this specific function
    */
-  def addToGraph(func: NormalRow => Future[NormalRow]): Unit = {
-    graphFlows += Flow[NormalRow].mapAsync[NormalRow](func)
+  def addToGraph(func: TypedRow => Future[TypedRow]): Unit = {
+    graphFlows += Flow[TypedRow].mapAsync[TypedRow](func)
   }
 
 }

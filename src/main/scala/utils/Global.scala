@@ -1,10 +1,10 @@
 package utils
 
-import files.filetypes.output.{TabOutput, CSVOutput}
-import core.structure.DataStruct
+import core.structure.{DataStruct, Schema}
+import files.filetypes.output.{CSVOutput, TabOutput}
 import processing.buffers.BufferConfig
-import processing.buffers.file.{FileOutputFormat, FileBuffer}
-import processing.{Parallel, Operation, Scheduler, Sequential}
+import processing.buffers.file.FileBuffer
+import processing.{Parallel, Scheduler, Sequential}
 import utils.ParameterCallToOption.Implicits._
 
 import scala.collection.mutable
@@ -23,6 +23,11 @@ object Global {
 
 
   object Implicits {
+
+    //provide a global implicit schema that's easy to import
+    //so users don't have to manually create if chosen not to
+    //this should be able to reduce crashes or bugs
+    implicit lazy val schema: Schema = Schema()
 
     //every time a DataContainer is constructed, this method is called
     def defaultSchedulerConstructor(core: Int, ds: DataStruct): Scheduler = {

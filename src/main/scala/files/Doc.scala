@@ -1,10 +1,9 @@
 package files
 
-import core.DataContainer
-import core.RowTypes._
+import core.structure.DataStruct
+import core.{DataContainer, TypedRow}
 import utils.OptionToParameter.Implicits._
 import utils._
-import core.structure.DataStruct
 
 import scala.collection.mutable
 
@@ -31,6 +30,9 @@ trait Doc extends DataContainer with FailureHandle {
 
   /**** Concrete implementations ****/
 
+  //We fill the data struct according to schema
+  implicit val ds: DataStruct = new DataStruct()
+
   //get all files
   def files: Map[String, FileIterator] = FileMapIterator.getFileMap(f, header, fuzzyMatch)(typesuffix)
 
@@ -56,26 +58,45 @@ trait Doc extends DataContainer with FailureHandle {
     }
     else Vector.iterate("0", parse(file.firstRow).length)(pos => (pos.toInt + 1).toString)
 
-
-  //We fill the data struct according to schema
-  implicit val ds: DataStruct = {
-    //a method that generates two hashmaps that fill up featureHeader and stringHeader
-    //and return a DataStruct
-    new DataStruct()
-  }
-
-
-  protected def readFileIterator[T](transform: (String) => T, file: FileIterator): Iterator[T] = file.map(l => transform(l))
+  private[this] def readFileIterator[T](transform: (String) => T)(file: FileIterator): Iterator[T] = file.map(l => transform(l))
 
   /**
    * For smaller memory footprint, and faster performance
    * Scala mutable HashMap has proven to be the best collection (better than Java)
+   * @return a hashmap, key as file name, value as RowIterator
+   */
+  private[this] def dataIterators: mutable.HashMap[String, Iterator[TypedRow]] = {
+    val map = mutable.HashMap.empty[String, Iterator[TypedRow]]
+    files.foreach { case (name, fi) =>
+      map.put(name, readFileIterator[TypedRow]{ line =>
+        specialBuildTypedRow(parse(line))
+      }(fi))
+    }
+    map
+  }
+
+  /**
+   * This is a highly specialized method that is not generic at all
+   * but it guarantees one traversal
+   *
+   * ignore columns is handled here. Those columns are not even going into
+   * type casting or row building
+   * @param values
    * @return
    */
-  def dataIterators: mutable.HashMap[String, RowIterator] = {
-    val map = mutable.HashMap.empty[String, RowIterator]
-    files.foreach(e => map.put(e._1, readFileIterator[NormalRow]((line) => mutable.HashMap(headerString.zip(parse(line)): _*), e._2)))
-    map
+  private[this] def specialBuildTypedRow(values: Vector[String]): TypedRow = {
+    //to construct TypedRow
+    val tr = TypedRow(schema)
+
+    implicit val sm = schema // += requires implicit schema, we only implicitize in here
+
+    //combined with header vector
+    values.indices.foreach{ i =>
+      if (schema.ifnotIgnore(headerString(i)))
+        tr += headerString(i) -> values(i)
+    }
+
+    tr
   }
 
   override def iteratorMap = dataIterators

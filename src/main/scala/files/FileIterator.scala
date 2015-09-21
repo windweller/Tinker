@@ -69,6 +69,7 @@ class FileIterator(preFiles: Array[File], val header: Boolean) extends Iterator[
       headerRaw = Some(currentFileIt.next().replaceAll("[^\\x00-\\x7F]", ""))
       firstRow = next()
       reset()
+      next() //this is to skip the header
     }
     else {
       headerRaw = None

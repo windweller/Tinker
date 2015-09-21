@@ -1,9 +1,7 @@
 package processing.buffers.file
 
-import core.RowTypes
-import RowTypes._
-import core.structure.DataStructure
-import utils.FailureHandle
+import core.TypedRow
+import core.structure.DataSelect
 
 /**
  * Created by Aimingnie on 5/17/15.
@@ -11,9 +9,9 @@ import utils.FailureHandle
 trait FileOutputFormat {
 
   //will get and encode header, Array(0) is key, Array(1) is value
-  def encodeHeader(row: NormalRow, struct: Option[DataStructure]): Array[String]
+  def encodeHeader(row: TypedRow, select: Option[DataSelect] = None, ignore: Option[DataSelect] = None): Array[String]
 
-  def encode(row: NormalRow, struct: Option[DataStructure]): String
+  def encode(row: TypedRow, select: Option[DataSelect] = None, ignore: Option[DataSelect] = None): String
 
   def outputSuffix: String
 

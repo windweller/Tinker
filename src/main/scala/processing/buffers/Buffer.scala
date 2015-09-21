@@ -1,8 +1,7 @@
 package processing.buffers
 
-import core.RowTypes
-import RowTypes.NormalRow
-import core.structure.DataStructure
+import core.TypedRow
+import core.structure.DataSelect
 import utils.FailureHandle
 
 /**
@@ -14,7 +13,7 @@ trait Buffer {
 
   //this is to shield away the saving method
   //no matter saving to a file, database, or something else
-  def bufferWrite(row: NormalRow, struct: Option[DataStructure]): Unit
+  def bufferWrite(row: TypedRow, select: Option[DataSelect], ignore: Option[DataSelect]): Unit
 
   //Close the connection to outputStream
   //whether it's file, database, or something else

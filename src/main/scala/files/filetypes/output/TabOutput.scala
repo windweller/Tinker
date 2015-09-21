@@ -1,8 +1,7 @@
 package files.filetypes.output
 
-import core.RowTypes
-import RowTypes._
-import core.structure.DataStructure
+import core.TypedRow
+import core.structure.DataSelect
 import processing.buffers.file.FileOutputFormat
 
 /**
@@ -10,11 +9,12 @@ import processing.buffers.file.FileOutputFormat
  */
 trait TabOutput extends FileOutputFormat {
 
-  override def encodeHeader(row: NormalRow, struct: Option[DataStructure]): Array[String] = {
+  override def encodeHeader(row: TypedRow, select: Option[DataSelect] = None, ignore: Option[DataSelect] = None): Array[String] = {
 
-    if (struct.nonEmpty) {
-      val cleanedRow = row.filter(e => !struct.get.ignores.get.contains(e._1))
-      Array(cleanedRow.keysIterator.mkString("\t"), cleanedRow.valuesIterator.mkString("\t"))
+    val cleanedRow = row.select(select, ignore)
+
+    if (cleanedRow.nonEmpty) {
+      Array(cleanedRow.get.keysIterator.mkString("\t"), cleanedRow.get.valuesIterator.mkString("\t"))
     }
     else {
       Array(row.keysIterator.mkString("\t"), row.valuesIterator.mkString("\t"))
@@ -22,10 +22,12 @@ trait TabOutput extends FileOutputFormat {
 
   }
 
-  override def encode(row: NormalRow, struct: Option[DataStructure]): String = {
-    if (struct.nonEmpty) {
-      val cleanedRow = row.filter(e => !struct.get.ignores.get.contains(e._1))
-      cleanedRow.valuesIterator.mkString("\t")
+  override def encode(row: TypedRow, select: Option[DataSelect] = None, ignore: Option[DataSelect] = None): String = {
+
+    val cleanedRow = row.select(select, ignore)
+
+    if (cleanedRow.nonEmpty) {
+      cleanedRow.get.valuesIterator.mkString("\t")
     } else
     row.valuesIterator.mkString("\t")
   }

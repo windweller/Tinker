@@ -1,9 +1,8 @@
 package files.filetypes.output
 
 import com.github.tototoshi.csv._
-import core.RowTypes
-import RowTypes._
-import core.structure.DataStructure
+import core.TypedRow
+import core.structure.DataSelect
 import processing.buffers.file.FileOutputFormat
 
 /**
@@ -18,14 +17,23 @@ trait CSVOutput extends FileOutputFormat {
   implicit object MyFormat extends DefaultCSVFormat
   val format = MyFormat
 
-  override def encodeHeader(row: NormalRow, struct: Option[DataStructure]): Array[String] = {
-    val cleanedRow = struct.map(st => row.filter(e => !st.ignores.get.contains(e._1)))
+  /**
+   *
+   * @param row
+   * @param select with ignore, could be both empty
+   * @param ignore
+   * @return
+   */
+  override def encodeHeader(row: TypedRow, select: Option[DataSelect] = None, ignore: Option[DataSelect] = None): Array[String] = {
+
+    val cleanedRow = row.select(select, ignore)
+
     Array(generateString(cleanedRow.getOrElse(row).keysIterator.toSeq),
                     generateString(cleanedRow.getOrElse(row).valuesIterator.toSeq))
   }
 
-  override def encode(row: NormalRow, struct: Option[DataStructure]): String = {
-    val cleanedRow = struct.map(st => row.filter(e => !st.ignores.get.contains(e._1)))
+  override def encode(row: TypedRow, select: Option[DataSelect] = None, ignore: Option[DataSelect] = None): String = {
+    val cleanedRow = row.select(select, ignore)
     generateString(cleanedRow.getOrElse(row).valuesIterator.toSeq)
   }
 

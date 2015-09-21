@@ -1,7 +1,7 @@
 package nlp.future
 
 /**
- * Created by Aimingnie on 7/7/15.
+ * Created by Aimingnie on 7/7/15
  */
 object FutureRules {
 

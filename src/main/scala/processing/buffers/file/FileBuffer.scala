@@ -1,11 +1,10 @@
 package processing.buffers.file
 
-import java.io.{OutputStreamWriter, FileOutputStream, PrintWriter}
+import java.io.{FileOutputStream, OutputStreamWriter, PrintWriter}
 import java.nio.file.{Files, Paths}
 
-import core.RowTypes
-import RowTypes.NormalRow
-import core.structure.DataStructure
+import core.TypedRow
+import core.structure.DataSelect
 import processing.buffers.Buffer
 import utils.{FailureHandle, Global}
 
@@ -27,18 +26,18 @@ trait FileBuffer extends Buffer with FileOutputFormat with FailureHandle {
   var headerPrinted = false
 
   //this is to shield away the saving method
-  def bufferWrite(row: NormalRow, struct: Option[DataStructure]): Unit = {
+  def bufferWrite(row: TypedRow, select: Option[DataSelect], ignore: Option[DataSelect]): Unit = {
 
     if (config.filePath.isEmpty) createTempFile()
 
     if (config.fileWithHeader && !headerPrinted) {
-      val arr = encodeHeader(row, struct)
+      val arr = encodeHeader(row, select, ignore)
       printer.println(arr(0))
       printer.println(arr(1))
       headerPrinted = true
     }
     else {
-      printer.println(encode(row, struct))
+      printer.println(encode(row, select, ignore))
     }
   }
 

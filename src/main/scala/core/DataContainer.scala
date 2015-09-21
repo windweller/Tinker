@@ -1,7 +1,8 @@
 package core
 
-import core.structure.{Schema, DataStruct, DataStructure}
+import core.structure.{DataSelect, DataStruct, Schema}
 import processing.Scheduler
+import utils.FailureHandle
 import utils.Global.Implicits._
 
 import scala.annotation.tailrec
@@ -35,9 +36,7 @@ abstract class DataContainer(val f: Option[String] = None,
                               val ignoreFileName: Boolean = false,
                               val fileNameColumn: Option[String] = None,
                               val core: Option[Int] = None,
-                              val schema: Schema = Schema())(implicit val pscheduler: Option[Scheduler] = None) {
-
-  import RowTypes._
+                              val schema: Schema = Schema())(implicit val pscheduler: Option[Scheduler] = None) extends FailureHandle {
 
   /* constructor */
 
@@ -71,23 +70,27 @@ abstract class DataContainer(val f: Option[String] = None,
 
   /* save method (BufferConfig alreayd passed in from Scheduler) */
 
-  def exec(struct: Option[DataStructure]): Unit = {
+  def exec(select: Option[DataSelect], ignore: Option[DataSelect]): Unit = {
+
+    if (select.nonEmpty && ignore.nonEmpty) fatal("You can't choose both select and ignore")
+
     if (scheduler.opSequence.isEmpty) scheduler.opSequence.push(strippedData)
-    scheduler.exec(struct)
+    scheduler.exec(select, ignore)
   }
 
-  def save(struct: Option[DataStructure]): Unit = exec(struct)
-
+  def save(select: Option[DataSelect], ignore: Option[DataSelect]): Unit = exec(select, ignore)
 
   /* shortcut for file save */
-  def exec(filePath: Option[String], fileAppend: Boolean = true, struct: Option[DataStructure] = None): Unit = {
+  def exec(filePath: Option[String], fileAppend: Boolean = true, select: Option[DataSelect] = None,
+           ignore: Option[DataSelect] = None): Unit = {
     scheduler.config.filePath = filePath
     scheduler.config.fileAppend = fileAppend
     if (scheduler.opSequence.isEmpty) scheduler.opSequence.push(strippedData)
-    exec(struct)
+    exec(select, ignore)
   }
 
-  def save(filePath: Option[String], fileAppend: Boolean = true, struct: Option[DataStructure] = None) = exec(filePath, fileAppend, struct)
+  def save(filePath: Option[String], fileAppend: Boolean = true,
+           select: Option[DataSelect] = None, ignore: Option[DataSelect] = None) = exec(filePath, fileAppend, select, ignore)
 
   /* Shortcut Methods */
 
@@ -118,21 +121,24 @@ abstract class DataContainer(val f: Option[String] = None,
   /* Core methods */
 
   //leave implementation details to Doc or other services
-  def iteratorMap: mutable.HashMap[String, RowIterator] = mutable.HashMap.empty[String, RowIterator]
+  def iteratorMap: mutable.HashMap[String, Iterator[TypedRow]] = mutable.HashMap.empty[String, Iterator[TypedRow]]
 
   /**
    * incorporate the file info into a column
    * @param fileColName default value is "fileName"
    * @return
    */
-  def unify(fileColName: Option[String] = None): Iterator[NormalRow] = new AbstractIterator[NormalRow] {
+  def unify(fileColName: Option[String] = None): Iterator[TypedRow] = new AbstractIterator[TypedRow] {
+
+    //provide implicit sm for +=
+    implicit val sm: Schema = schema
 
     val itm = iteratorMap.iterator
     var cit = itm.next()
 
     override def hasNext: Boolean = checkEmpty(itm.hasNext || cit._2.hasNext)
 
-    override def next(): NormalRow = {
+    override def next(): TypedRow = {
       cit._2.next() += (fileColName.getOrElse("file_name") -> cit._1)
     }
 
@@ -154,14 +160,14 @@ abstract class DataContainer(val f: Option[String] = None,
   }
 
   //discard the file information
-  def strip: Iterator[NormalRow] = new AbstractIterator[NormalRow] {
+  def strip: Iterator[TypedRow] = new AbstractIterator[TypedRow] {
 
     var it = iteratorMap.toIterator
     var currentIt = it.next()._2
 
     override def hasNext: Boolean = checkEmpty(it.hasNext || currentIt.hasNext)
 
-    override def next(): NormalRow = {
+    override def next(): TypedRow = {
       currentIt.next()
     }
 

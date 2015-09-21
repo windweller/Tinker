@@ -2,7 +2,6 @@ package files
 
 import core.DataContainer
 import files.filetypes.input.CSV
-import files.operations.FileOp
 import org.scalatest.FlatSpec
 import utils.ParameterCallToOption.Implicits._
 

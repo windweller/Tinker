@@ -1,69 +1,98 @@
 package core.structure
 
-import scala.collection.mutable
+import core.structure.DataStruct._
+
+import scala.collection.{Iterator, mutable}
 
 /**
- * DataStruct goes with each DataContainer file
- * It stores headers, and have vital functions for:
- * 1. Access those values
- * 2. Decide printing orders (stringHeader first, featureHeader later)
- */
-class DataStruct(sHeader: Option[mutable.HashMap[String, Int]] = None,
-                  fHeader: Option[mutable.HashMap[String, Int]] = None) {
-
-  /*
- * Since it's mapping to TypedRow
- * It should have both featureHeader, and StringHeader
+ * Created by Aimingnie on 8/31/15
  *
- * They are implemented as HashMap to achieve O(1) lookup
- * performance
+ * Provide a easy way to produce an ordered
+ * output
+ *
+ * No longer be open to users
+ *
+ * Users should use `DataSelect` or `Schema`
+ * to give commands
  */
+class DataStruct {
 
-  //this maintains the order of the string
-  //don't know if I want to store types as well, probably not needed
+  val headerMap: mutable.HashMap[String, CellInfo] = mutable.HashMap.empty[String, CellInfo]
+
+  //in the end, traverse through ordered header once
   var orderedHeader = Vector.empty[String]
 
-  //"column name" -> 5 (vector position)
-  val stringHeader = sHeader.getOrElse(mutable.HashMap.empty[String, Int])
-  val featureHeader = fHeader.getOrElse(mutable.HashMap.empty[String, Int])
 
-  //"tregexFeatures" -> Vector("VP>NP", "NP>NP>PP")
-  //headerGroup provides a way to quickly access required header
-  val headerGroups = mutable.HashMap.empty[String, Vector[String]]
+  //this iterates headers orderly
+  //and everytime it generates a new iterator
+  def headersIterator: Iterator[String] =  {
+    orderedHeader.iterator
+  }
 
-  //this does not add to string/featureHeader, must be used in conjunction
-  //with other methods
-  def addToHeaderGroup(headerName: String, headers: Vector[String]): Unit = {
-    headerGroups += (headerName -> headers)
+  //this simply groups header, doesn't add to anything
+//  def addToHeaderGroup(headerName: String, headers: Vector[String]): Unit = {
+//    headerGroups += (headerName -> headers)
+//  }
+
+  //mock a hashmap interface
+  def apply(header: String): CellInfo = headerMap(header)
+
+  def foreach[C](f: ((String, CellInfo)) => C): Unit = {
+    headerMap.foreach[C](f)
   }
 
   /**
    * Aux function to add to Vector
    * @param columnName the name to add to hashmap (key)
-   * @param vectorPos corresponding position in the vector of this value
+   * @param rowin corresponding position in the vector of this value, and type info
    */
-  def addToStringHeader(columnName: String, vectorPos: Int): Unit = {
-    stringHeader += (columnName -> vectorPos)
-    orderedHeader = orderedHeader :+ columnName
+  def +=(columnName: String, rowin: CellInfo): Unit = {
+    if (headerMap.get(columnName).isEmpty) //this additional check might result in inefficiency
+      orderedHeader = orderedHeader :+ columnName
+
+    headerMap += (columnName -> rowin)
   }
-  def addToFeatureHeader(columnName: String, vectorPos: Int): Unit = {
-    featureHeader += (columnName -> vectorPos)
-    orderedHeader = orderedHeader :+ columnName
+
+  def +=(tuple: (String, CellInfo)): Unit = {
+    if (headerMap.get(tuple._1).isEmpty)
+      orderedHeader = orderedHeader :+ tuple._1
+
+    headerMap += tuple
   }
+
+  def getPosOf(header: String): Option[Int] = headerMap.get(header).map(h => h.pos)
+
+  def updatePosOf(header: String, pos: Int): Unit = {
+    headerMap(header).pos = pos
+  }
+
+  //in terms of efficiency, this DOES NOT update the rest of cell's position
+  def removeCell(header: String): Option[CellInfo] = headerMap.remove(header)
+
+  def getCellInfoOf(header: String): Option[CellInfo] = headerMap.get(header)
+
+  def getTypeOf(header: String): Option[Symbol] = headerMap.get(header).map(h => h.ty)
 
   //this gurantees one traversal
-  def addToStringHeader(columnName: Vector[String], vectorPos: Range): Unit =
-                          addVectorToHeader(stringHeader, columnName, vectorPos)
+//  def ++=(columnName: Vector[String], vectorPos: Range): Unit =
+//    addVectorToHeader(headerMap, columnName, vectorPos)
+//
+//  private[this] def addVectorToHeader(headerA: mutable.HashMap[String, Int],
+//                                      columnName: Vector[String], vectorPos: Range): Unit = {
+//    vectorPos.indices.foreach { i =>
+//      headerA += columnName(i) -> vectorPos(i)
+//      orderedHeader = orderedHeader :+ columnName(i)
+//    }
+//  }
 
-  def addToFeatureHeader(columnName: Vector[String], vectorPos: Range): Unit =
-                          addVectorToHeader(featureHeader, columnName, vectorPos)
+}
 
-  private[this] def addVectorToHeader(headerA: mutable.HashMap[String, Int],
-                                      columnName: Vector[String], vectorPos: Range): Unit = {
-    vectorPos.indices.foreach { i =>
-      headerA += columnName(i) -> vectorPos(i)
-      orderedHeader = orderedHeader :+ columnName(i)
-    }
-  }
+object DataStruct {
 
+  val string = 'String
+  val double = 'Double
+  val int = 'Int
+
+  //instead of String, we use symbol, for fast comparison
+  case class CellInfo(var pos: Int, ty: Symbol)
 }
