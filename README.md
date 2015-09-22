@@ -34,7 +34,7 @@ Tinker only release documentation for stable components, but its nightly built o
 
 ## For Academics
 
-This library is developed at the time of my undergraduate research project with Dr. Phillip Wolff and Dr. Jinho Choi. Tinker is also included in the CLIR (Computational Linguistics and Information Retrieval) group (a.k.a Emory NLP): https://github.com/clir. The research project focuses on future-orientation detection (a psycholinguistic concept), and deals with files of 60 million lines (NYT corpus) and filtering/processing tweets.  
+This library is developed at the time of my undergraduate research project with Dr. Phillip Wolff and Dr. Jinho Choi. Tinker is also included in the CLIR (Computational Linguistics and Information Retrieval) group: https://github.com/clir. The research project focuses on future-orientation detection (a psycholinguistic concept), and deals with files of 60 million lines (NYT corpus) and filtering/processing tweets.  
 
 If you are using this library in research, and if your research is future-orientation related, please cite:
 
@@ -50,7 +50,7 @@ Then you would see
 
 ```scala
 =======================================
-Welcome to Tinker 0.12 alpha release
+Welcome to Tinker 0.14 release
 =======================================
 >
 ```
@@ -78,8 +78,6 @@ Basic File I/O has a nice high-level abstraction that treats a directory of file
 ## Processing Design
 
 Because we seek to optimize performance (and leverage memory use) to the maximum, we use scheduling as our processing concept. All the processing has been handled by module `Scheduler`. We generate default scheduler for each `DataContainer`, and you can always configure your own `Scheduler` and pass it into `DataContainer` class.
-
-Our default scheduler uses `Sequential` and `FileBuffer` module.
 
 To switch between parallel processing or sequential processing, put in `core = desired # of processes` when constructing your datacontainer.
 
@@ -157,27 +155,28 @@ class TinkerParallel extends TestKit(ActorSystem("testsystem"))
 }
 ```
 
-
-
 #### Parser
+
+`EnglishPCFGParser`: an API to Stanford English PCFG parser.
 
 `TregexMatcher`: an API to Stanford Tregex library. The parsed string has to be a form recognizable from Stanford nlp.parser.
 
-`FileBuffer`: This is a module you call when you are attaching an operational module to your algorithm or data container. This module is mandatory for any processing, becasuse of Tinker's delayed execution pattern. In the future, other modules such as DatabaseBuffer could be developed to substitute this.
+Example Usage:
+```scala
+  val data = new DataContainer("./src/test/scala/tutorial/data/sentences.tab",
+                                header = true,
+                                core = 4) with Tab with EnglishPCFGParser with TregexMatcher
 
-## Base Modules
+  data.parse(None, DataSelect(targetColumnWithName = "Sentence"))
 
-You will only inherit base modules if you wish to customize and develop your own modules. Base modules at most occasions don't provide concrete implementations. You need to manually override those functions.
+  data.matcher(patternsRaw = List(
+    "(VP < (VBG < going) < (S < (VP < TO)))",
+    "(VP < (VBG < going) > (PP < TO))",
+    "MD < will"
+  )).toTab
 
-`FileTypes`: This defines basic functions that are associated with files, including protocols for reading/writing.
-
-`Output`: specify an even higher level output abstraction than `FileTypes`, include basically protocols for writing.
-
-`Buffer`: used mostly by algorithms to determine what the buffer implementation should be - save the intermediate computation and later retrieve them.s
-
-`Operation`: inherits `Buffer`. Inherits this class to add Tinker's processing framework to any base class.
-
-
+  data.save("./src/test/scala/tutorial/data/sentences_parsed.tab")
+```
 ## Advanced Usage
 
 #### Custom Module
@@ -222,11 +221,3 @@ If you want to invoke other dependencies, so for example, if this `specialFeatur
 ```
 
 Every abstract modules will provide information on how to access their features from the `NormalRow`.
-
-## Minor Issues
-
-1. Table columns are not typed (all represented as string - for faster HashMap performance instead of Shapeless' HList https://github.com/milessabin/shapeless), so we suffer minor performance penalty by converting them on spot.
-
-2. Tinker's column count starts at 0 (not 1)
-
-3. Operation module should be a subsidiary module of DataContainer. They are seperate right now due to historical reasons and cleaner code base. They might be combined in the future.
