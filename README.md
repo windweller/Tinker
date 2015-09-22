@@ -1,26 +1,30 @@
 # Tinker
-Tinker is a parallel-by-default File/Multi-File/Data Management System with additional interface to NLP and ML libraries. Tinker right now uses Scala's awesome Stackable Trait Pattern, and is tightly integrated with powerful Akka Stream to handle task parallelization and pipelining.
+Tinker is a parallel-by-default File/Multi-File/Data Management System with additional interface to NLP and ML libraries. Tinker right now uses Scala's  Stackable Trait Pattern, and is tightly integrated with powerful Akka Stream to handle task parallelization and pipelining.
 
 It offers the ease of reading multiple formated files and merge/process as one, parallelize normal file operations (some of them NLP related) such as filtering, tokenization, compressing/aggregating rows, and so on.
 
 ## Primary Usages
 
-1. Convert extremely file from one format to another, similar to Canova  (http://deeplearning4j.org/canova.html#tutorial), but Tinker's performance is much faster (because of default parallel processing), and easier (we don't rely on outside markup language to define data structure).
+1. Convert extremely file from one format to another, similar to Canova  (http://deeplearning4j.org/canova.html#tutorial), but Tinker is easier to use because it doesn't rely on outside markup language to define data structure.
 2. Constituency parsing: with Stanford constituency nlp.parser (http://nlp.stanford.edu/software/lex-nlp.parser.shtml)
 3. Tregex Matching: using a specific regex-like language to search through Stanford constituency tree (http://nlp.stanford.edu/software/tregex.shtml)
 4. Future Classification: for psycholinguistics researchers, they may want to check out this paper (http://www.aclweb.org/anthology/N15-2#page=178).
 
 ## Design Philosophy
 
-We want to make standard large file ML/NLP processing as smooth and as easy as possible, regardless of the computer's power/memory. We parallelize tasks whenever possible, and make most of the tasks asynchronous. Tinker has robust I/O interface that allows users to interact with files (of various format) and databases (PostgreSQL, MySQL...) without pain. It also uses buffering so lower memory computer can still function well with data multiple times larger than its capacity (speed being the drawback).
+We want to make standard large file ML/NLP processing as smooth and as easy as possible, regardless of the computer's power/memory. We parallelize tasks whenever possible, and make most of the tasks asynchronous. Tinker has robust I/O interface that allows users to interact with files (of various format) without pain. It also uses buffering so lower memory computer can still function well with data multiple times larger than its capacity.
 
-Unlike many libaries that rely on configuration files, or 10 config parameters to one method call (or class construction), Tinker uses types (called "modules") to modify and define behavior, which is easier, and can check error at compile time.
+Unlike many libaries that rely on configuration files, or 10 config parameters to one method call (or class construction), Tinker uses modules (traits) to modify and define behavior, which is easier, and can check error at compile time.
+
+Every collection of data (`DataContainer`) is treated as one processing unit, by attaching different modules to a `DataContainer`, data can be efficiently processed. Tinker runs operations on a parallel framework Akka. All operations are delayed until `.exec()` or `.save()` method is called.
 
 ## Current State
 
 Tinker only release documentation for stable components, but its nightly built offers more. The next release will include a better API for NLP components (currently experimental and not very well-integrated into Tinker-processing). 
 
-- (next release) 0.13: added testing for parallel module. Further integrate with Akka Flow Graph as well as iterator approach to provide flexible and easy processing integration. Fixed a problem when generating output, `Datastructure` cannot be passed in.
+- 0.14: Tinker-core gets a total re-written. Adding `TypedRow` to replace `NormalRow`. Adding safe runtime type conversion. Break `DataStructure` class (because it has confusing functionalities) down to `DataSelect`, `DataStruct`, `Schema` for data structure description purposes. Native modules that do not support updates are removed temporarily, and will be added in next release.
+
+- (skipped release but integrated) 0.13: added testing for parallel module. Further integrate with Akka Flow Graph as well as iterator approach to provide flexible and easy processing integration. Fixed a problem when generating output, `Datastructure` cannot be passed in.
 
 - 0.12: Official alpha-release. Cleaned legacy code (version 0.10 old APIs). Added NLP components on top of Tinker-core. Slight performance increase. Documentation major update.
 
