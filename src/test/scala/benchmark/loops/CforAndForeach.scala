@@ -1,4 +1,4 @@
-package benchmark
+package benchmark.loops
 
 import org.scalameter.api._
 import spire.syntax.cfor._
@@ -7,7 +7,7 @@ import spire.syntax.cfor._
 /**
  * Created by Aimingnie on 9/4/15.
  */
-object LoopBenchmark extends Bench.LocalTime {
+object CforAndForeach extends Bench.LocalTime {
 
   val sizes: Gen[Int] = Gen.range("size")(300000, 1500000, 300000)
 
