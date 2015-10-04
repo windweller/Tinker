@@ -91,6 +91,13 @@ Schedulers are independent for each class, and you should not pass the same sche
 
 `DataContainer` has defined a method `exec()`, which is linked with processing. Whenever `exec()` is called, a file is being saved whether the location is provided or not. If the location is not provided, such file will be a temporary file and deleted when JVM is shut down. Users can use `Global.tempFiles.pop()` to get the full filepath (including name) of the last computed file.
 
+## Structure Descriptors
+
+In order to make Tinker generic. It provides a uniform way to allow users to describe their data structures, or give instructions on how to process/output the data (note: if you were using version lower than 0.14, Tinker used `DataStructure` to describe data, but it has been depracated and since removed).
+
+
+
+
 ## Modules
 
 #### Implicit Parameter
