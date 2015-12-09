@@ -91,6 +91,22 @@ Schedulers are independent for each class, and you should not pass the same sche
 
 `DataContainer` has defined a method `exec()`, which is linked with processing. Whenever `exec()` is called, a file is being saved whether the location is provided or not. If the location is not provided, such file will be a temporary file and deleted when JVM is shut down. Users can use `Global.tempFiles.pop()` to get the full filepath (including name) of the last computed file.
 
+## Structure Descriptors
+
+In order to make Tinker generic. It provides a uniform way to allow users to describe their data structures, or give instructions on how to process/output the data (note: if you were using version lower than 0.14, Tinker used `DataStructure` to describe data, but it has been depracated and then removed).
+
+#### Schema
+
+Schema is a class we passed into DataContainer when we are constructing one. It describes the data to sepcify what columns are string data (such as "ID" number, gender, descriptive information). All other columns and then automatically casted and assign a type as `Int` or `Double` (priority given to `Int`).
+
+Schema also lets users tell Tinker which columns should be ignored, thus never loading into Tinker's processing system.
+
+#### DataSelect
+
+This is a uniformed class that lets user instruct Tinker one information: what column/columns to target. Every operational module requires a unique `DataSelect` class passed in to tell which column or columns to target. This class provides the highest level of generalization, handling from a single column to multiple columns. In the future version, it will also support descriptive language such as `all` or `4 to last`.
+
+It could be passed into output processing as well. In quick method `save()` or `exec()` on `DataContainer`, users can choose to `select=DataSelect()` to select columns to print out, or use `ignore=DataSelect()` to not print out certain columns.
+
 ## Modules
 
 #### Implicit Parameter
@@ -103,8 +119,11 @@ All the parameters in all classes are defined as option parameters. It is a Scal
 class DataContainer(val f: Option[String] = None,
                               val header: Boolean = true,
                               val fuzzyMatch: Option[Int] = None,
-                              val rTaskSize: Option[Int] = None)
-                              (implicit val pscheduler: Option[Scheduler] = None)
+                              val taskSize: Option[Int] = None,
+                              val ignoreFileName: Boolean = false,
+                              val fileNameColumn: Option[String] = None,
+                              val core: Option[Int] = None,
+                              val schema: Schema = Schema())(implicit val pscheduler: Option[Scheduler] = None)
 ```
 
 `f: String`: the location of the file, can be a directory or a single file
