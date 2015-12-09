@@ -19,10 +19,8 @@ class DataSelect(targetColumn: Option[Int] = None,
                  targetColumnsWithName: Option[Vector[String]] = None,
                  val targetRange: Option[IndexRange] = None){
 
-  /**
-   * @deprecated for legacy methods, future use please choose targets
-   */
-    lazy val target: Option[String] = getSingleIntStringOption(targetColumn, targetColumnWithName)
+
+    lazy val target: Option[String] = targets.map(ts => ts.head)
 
     lazy val targets: Option[Vector[String]] = {
       val target = getSingleIntStringOption(targetColumn, targetColumnWithName)
@@ -46,11 +44,11 @@ class DataSelect(targetColumn: Option[Int] = None,
     }
   }
 
-  def getTargetValue(row: TypedRow): Option[String] = {
+  def getTargetValue(row: TypedRow): Option[Any] = {
     getSingleIntStringOptionValue(targets.map(e => e.head), row)
   }
 
-  def getTargetsValue(row: TypedRow): Option[Vector[String]] = {
+  def getTargetsValue(row: TypedRow): Option[Vector[Any]] = {
     getMultipleIntStringOptionValue(targetColumns, targetColumnsWithName, row)
   }
 
@@ -59,7 +57,7 @@ class DataSelect(targetColumn: Option[Int] = None,
     else a2
   }
 
-  protected def getSingleIntStringOptionValue(key: Option[String], row: TypedRow): Option[String] = {
+  protected def getSingleIntStringOptionValue(key: Option[String], row: TypedRow): Option[Any] = {
     key.map(k => row(k))
   }
 
@@ -68,7 +66,7 @@ class DataSelect(targetColumn: Option[Int] = None,
     else a2
   }
 
-  protected def getMultipleIntStringOptionValue(a1: Option[Vector[Int]], a2: Option[Vector[String]], row: TypedRow): Option[Vector[String]] = {
+  protected def getMultipleIntStringOptionValue(a1: Option[Vector[Int]], a2: Option[Vector[String]], row: TypedRow): Option[Vector[Any]] = {
     if (a1.nonEmpty) Some(a1.get.map(e => row(e.toString)))
     else if (a2.nonEmpty) Some(a2.get.map(e => row(e)))
     else None

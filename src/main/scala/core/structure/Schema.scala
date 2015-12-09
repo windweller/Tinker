@@ -21,6 +21,8 @@ case class Schema(stringColumn: Option[Int] = None,
                   ignoreColumns: Option[Vector[Int]] = None,
                   ignoreColumnsWithName: Option[Vector[String]] = None) {
 
+  //TODO: add ignoreRange to Schema
+
   lazy val stringColumnNames: Option[mutable.HashSet[String]] = extractVector(stringColumn, stringColumnWithName, stringColumns, stringColumnsWithName)
   lazy val ignoreColumnNames: Option[mutable.HashSet[String]] = extractVector(ignoreColumn, ignoreColumnWithName, ignoreColumns, ignoreColumnsWithName)
 

@@ -1,6 +1,5 @@
 package core
 
-import core.TypedRow.ValueWithType
 import core.structure.DataStruct._
 import core.structure.{DataSelect, DataStruct, Schema}
 import utils.FailureHandle
@@ -48,7 +47,7 @@ class TypedRow()(implicit val struct: DataStruct) extends FailureHandle {
   def +=(arg: (String, String))(implicit sm: Schema = Schema()): TypedRow = {
     val vwt = getValueWithType(arg._1, arg._2)(sm)
     row = row :+ vwt.v
-    struct += arg._1 -> CellInfo(row.length - 1, vwt.ty)
+    struct += arg._1 -> CellInfo(row.length - 1, vwt.tpe)
     this
   }
 
@@ -67,56 +66,104 @@ class TypedRow()(implicit val struct: DataStruct) extends FailureHandle {
       //add to row
       row = row :+ vwt.v
       //add to header
-      struct += (header -> CellInfo(pos, vwt.ty))
+      struct += (header -> CellInfo(pos, vwt.tpe))
     }
 
     this
   }
 
   /**
-   * This serves as a constructor for internal use
-   * passing in Any value. Used by filter
+   * This serves for internal use
+   * passing in Any value.
    *
-   * Those values have been pre-determined type
-   *
-   * position has to be re-calculated
-   * but types stay the same
-   *
-   * Struct is shared, and we only need to update position
+   * Those values have been pre-determined typs
    *
    * mainly used to create a new TypedRow from an old one
+   * and adding values through computation
    * @param hm
    * @return
    */
-  protected def addValuePairs(hm: mutable.HashMap[String, Any]): TypedRow = {
-    hm.foreach(addValuePair)
+  protected def updateValuePairs(hm: mutable.HashMap[String, Any]): TypedRow = {
+    hm.foreach(updateValuePair)
     this
   }
 
-  protected def addValuePair(pair: (String, Any)): TypedRow = {
+  /**
+   * This method does not create new header, just update the position
+   * of existing one. Is only used in conjunction with TypedRow operations
+   * (like drop an element and such)
+   * @param pair
+   * @return
+   */
+  protected def updateValuePair(pair: (String, Any)): TypedRow = {
     struct.updatePosOf(pair._1, row.length)  //update new position
     row = row :+ pair._2
     this
   }
 
-  private[this] def getValueWithType(header: String, value: String)(sm: Schema) = {
-    if (!sm.coerceString(header)) typeCast(value)
-    else ValueWithType(value, string)
+  /**
+   * Since the custom type is generated on the user side,
+   * we ask "user" to provide the correct type information
+   * @param pair
+   * @param typeName provided in a form of 'Tree
+   * @return
+   */
+  def addValuePair(pair:(String, Any), typeName: Symbol): TypedRow = {
+    row = row :+ pair._2
+    struct += pair._1 -> CellInfo(row.length - 1, typeName)
+    this
   }
+
+  private[this] def getValueWithType(header: String, value: String)(sm: Schema): Element = {
+    if (!sm.coerceString(header)) typeCast(value)
+    else Element(value, string)
+  }
+
+
+  /**
+   *  behave like a HashMap's remove function
+   *  this takes efficiency into consideration
+   *  it does not REMOVE any value from the vector
+   *  but delete value from the header (DataStruct)
+   *  so the value is ignored at output time
+   *
+   *  so we don't have to update pos of each value
+   *
+   *  Space and efficiency you can only get one
+   *
+   * @param header
+   */
+  def remove[T](header: String): Option[T] = {
+    val cellinfo = struct.removeCell(header)
+    cellinfo.map(ci => row(ci.pos).asInstanceOf[T])
+  }
+
+  /**
+   * This returns a copy (not just reference)
+   * of a new TypedRow
+   * @return
+   */
+  def duplicate: TypedRow = {
+    val tr = new TypedRow()(struct)
+    tr.row = row
+    tr
+  }
+
+  def copy = duplicate
 
   // ===== Casting functions =====
 
-  private[this] def typeCast(value: String): ValueWithType = {
+  private[this] def typeCast(value: String): Element = {
 
     val intoption = cast[Int](value)(v => v.toInt)
     val doubleoption = cast[Double](value)(v => v.toDouble)
 
     if (intoption.nonEmpty)
-      ValueWithType(intoption.get, int)
+      Element(intoption.get, int)
     else if (doubleoption.nonEmpty)
-      ValueWithType(doubleoption.get, double)
+      Element(doubleoption.get, double)
     else
-      ValueWithType(value, string)
+      Element(value, string)
 
   }
 
@@ -139,7 +186,11 @@ class TypedRow()(implicit val struct: DataStruct) extends FailureHandle {
 
   // ====== Accessing functions =====
 
-  def get(header: String): Option[Element] = {
+  def get[T](header: String): Option[T] = {
+    struct.getPosOf(header).map(i => row(i).asInstanceOf[T])
+  }
+
+  def getElement(header: String): Option[Element] = {
     //implicitly[Applicative[Option]].map2(struct.getPosOf(header), struct.getTypeOf(header))((pos, tpe) => Element(pos, tpe))
     struct.getCellInfoOf(header).map(c => Element(c.pos, c.ty))
   }
@@ -189,7 +240,7 @@ class TypedRow()(implicit val struct: DataStruct) extends FailureHandle {
 
     struct.headerMap.foreach { case (header, cellInfo) =>
       if (p.apply(header, row(cellInfo.pos)))
-        tr.addValuePair((header, row(cellInfo.pos)))
+        tr.updateValuePair((header, row(cellInfo.pos)))
     }
 
     tr
@@ -275,7 +326,6 @@ class TypedRow()(implicit val struct: DataStruct) extends FailureHandle {
 }
 
 object TypedRow {
-  case class ValueWithType(v: Any, ty: Symbol)
 
   def apply(sm: Schema = Schema(),
             mp: Option[mutable.HashMap[String, String]] = None)(implicit struct: DataStruct): TypedRow = {
@@ -284,6 +334,7 @@ object TypedRow {
     mp.foreach(m => tr ++= m)
     tr
   }
+
 }
 
 /**

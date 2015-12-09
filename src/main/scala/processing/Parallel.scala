@@ -3,10 +3,11 @@ package processing
 import akka.stream.ActorFlowMaterializer
 import akka.stream.scaladsl._
 import core.TypedRow
-import core.structure.{DataSelect, DataStruct}
+import core.structure.DataSelect
 import utils.ActorSys._
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success}
 
 
 /**
@@ -44,9 +45,15 @@ trait Parallel extends Operation {
 
     val materialized = g.run()
 
-    materialized.onComplete{ e =>
-      bufferClose()
-      system.shutdown()
+    materialized.onComplete {
+      case Success(b) =>
+        bufferClose()
+        system.shutdown()
+      case Failure(e) =>
+        println(s"Error message: ${e.getMessage}")
+        println(s"Error stack: ${e.printStackTrace()}")
+        bufferClose()
+        system.shutdown()
     }
 
   }

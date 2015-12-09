@@ -13,9 +13,9 @@ trait Tokenizer {
    * it can't be added to stream flow graph
    * so it has to be handled by iterator
    *
-   * @param struct pass in the target
+   * @param select pass in the target
    * @return
    */
-  def tokenize(struct: DataSelect): DataContainer with Tokenizer
+  def tokenize(newColumn: Option[String] = None, select: DataSelect): DataContainer with Tokenizer
 
 }

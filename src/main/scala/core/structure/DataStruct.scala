@@ -1,5 +1,6 @@
 package core.structure
 
+import core.TypedRow
 import core.structure.DataStruct._
 
 import scala.collection.{Iterator, mutable}
@@ -62,8 +63,9 @@ class DataStruct {
 
   def getPosOf(header: String): Option[Int] = headerMap.get(header).map(h => h.pos)
 
+  //this update when header exists, but add new if header doesn't
   def updatePosOf(header: String, pos: Int): Unit = {
-    headerMap(header).pos = pos
+        headerMap(header).pos = pos
   }
 
   //in terms of efficiency, this DOES NOT update the rest of cell's position
@@ -95,4 +97,6 @@ object DataStruct {
 
   //instead of String, we use symbol, for fast comparison
   case class CellInfo(var pos: Int, ty: Symbol)
+
+  type Table = Vector[Vector[TypedRow]]
 }

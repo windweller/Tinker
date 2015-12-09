@@ -19,7 +19,6 @@ import scala.collection.{AbstractIterator, mutable}
  * to exec()
  *
  * @param fuzzyMatch this gets passed to FileMapIterator, exclusive end
- * @param rTaskSize Right task size (how many rows), for timer
  * @param ignoreFileName it determines whether file name information if kept (put in a column) or not,
  *                       could be used in conjunction with fileNameColumn
  * @param fileNameColumn this column is only useful if ignoreFileName = true
@@ -32,7 +31,7 @@ import scala.collection.{AbstractIterator, mutable}
 abstract class DataContainer(val f: Option[String] = None,
                               val header: Boolean = true,
                               val fuzzyMatch: Option[Int] = None,
-                              val rTaskSize: Option[Int] = None,
+                              val taskSize: Option[Int] = None,
                               val ignoreFileName: Boolean = false,
                               val fileNameColumn: Option[String] = None,
                               val core: Option[Int] = None,
@@ -63,7 +62,7 @@ abstract class DataContainer(val f: Option[String] = None,
   lazy val strippedData = if (scheduler.opSequence.nonEmpty) scheduler.opSequence.pop() else strip
 
   //only used when timer is activated
-  def taskSize: Option[Int] = if (rTaskSize.nonEmpty) rTaskSize
+  def rTaskSize: Option[Int] = if (taskSize.nonEmpty) taskSize
   else Some(strip.length)
 
   val taskSizeActions: ArrayBuffer[(Int) => Int] = ArrayBuffer.empty[(Int) => Int]
@@ -91,6 +90,16 @@ abstract class DataContainer(val f: Option[String] = None,
 
   def save(filePath: Option[String], fileAppend: Boolean = true,
            select: Option[DataSelect] = None, ignore: Option[DataSelect] = None) = exec(filePath, fileAppend, select, ignore)
+
+  /**
+   * This will sequentially execute everything and return
+   * table value (take everything into memory)
+   * @return
+   */
+//  def collect: Table = {
+//
+//  }
+
 
   /* Shortcut Methods */
 

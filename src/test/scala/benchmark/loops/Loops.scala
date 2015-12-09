@@ -11,15 +11,15 @@ object Loops extends Bench.LocalTime {
 
   val arrays: Gen[Array[Int]] = for {
     size <- sizes
-  } yield Array.fill(0)(size)
+  } yield Array.fill(size)(0)
 
   val vectors: Gen[Vector[Int]] = for {
     size <- sizes
-  } yield Vector.fill(0)(size)
+  } yield Vector.fill(size)(0)
 
   val lists: Gen[List[Int]] =  for {
     size <- sizes
-  } yield List.fill(0)(size)
+  } yield List.fill(size)(0)
 
   performance of "loop" in {
     measure method "array" in {
@@ -29,13 +29,13 @@ object Loops extends Bench.LocalTime {
     }
   }
 
-  performance of "loop" in {
-    measure method "list" in {
-      using(lists) in {
-        r => r.foreach(i => if (i == r.length) println("done"))
-      }
-    }
-  }
+//  performance of "loop" in {
+//    measure method "list" in {
+//      using(lists) in {
+//        r => r.foreach(i => if (i == r.length) println("done"))
+//      }
+//    }
+//  }
 
   performance of "loop" in {
     measure method "vector" in {

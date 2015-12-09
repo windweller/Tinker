@@ -17,6 +17,6 @@ trait Parser {
    *
    * @return the generated column name (columnName if it's specified)
    */
-  def parse(newColumn: Option[String] = None, struct: DataSelect): DataContainer with Parser
+  def parse(newColumn: Option[String] = None, select: DataSelect): DataContainer with Parser
 
 }

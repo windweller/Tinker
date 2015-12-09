@@ -7,6 +7,7 @@ import core.structure.DataSelect
 import utils.ActorSys._
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success}
 
 trait Sequential extends Operation {
 
@@ -30,9 +31,15 @@ trait Sequential extends Operation {
 
     val materialized = g.run()
 
-    materialized.onComplete{ e =>
-      bufferClose()
-      system.shutdown()
+    materialized.onComplete {
+      case Success(b) =>
+        bufferClose()
+        system.shutdown()
+      case Failure(e) =>
+        println(s"Error message: ${e.getMessage}")
+        println(s"Error stack: ${e.printStackTrace()}")
+        bufferClose()
+        system.shutdown()
     }
   }
 }

@@ -10,29 +10,29 @@ import nlp.tokenizer.Tokenizer
 import scala.collection.{AbstractIterator, mutable}
 
 /**
- * Created by anie on 7/28/2015.
+ * Created by anie on 7/28/2015
  */
 trait StanfordPTBTokenizer extends Tokenizer {
 
   this: DataContainer =>
 
   /**
-   * tokenize() will disregard all information of the previous
-   * table except group information (that came with the filename)
-   * and Keep columns in data structure
+   * tokenize() will disregard the original sentence's column
+   * and replace it with new column named "sentence"
+   *
    * @return
    */
-  override def tokenize(struct: DataSelect): DataContainer with Tokenizer = {
-    val it = splitSentences(struct)
+  override def tokenize(newColumn: Option[String], select: DataSelect): DataContainer with Tokenizer = {
+    val it = splitSentences(newColumn, select)
     scheduler.opSequence.push(it)
     this
   }
 
-  def splitSentences(struct: DataSelect) = new AbstractIterator[TypedRow] {
+  private[this] def splitSentences(newColumn: Option[String], select: DataSelect) = new AbstractIterator[TypedRow] {
 
     implicit val schema = Schema()
 
-    val it = data //picks up the right data
+    val it = data
 
     val tempRows = mutable.Queue.empty[TypedRow]
 
@@ -43,14 +43,17 @@ trait StanfordPTBTokenizer extends Tokenizer {
       if (tempRows.isEmpty) {
         val row = it.next()
 
-        val processorIt = new DocumentPreprocessor(new StringReader(row(struct.target.get)))
+        val sentences = row.remove(select.target.get)  //remove from original
+
+        val processorIt = new DocumentPreprocessor(new StringReader(sentences.get))
         val pit = processorIt.iterator()
 
         //put all sentences in
         while (pit.hasNext) {
           val sentence = formSentence(pit.next())
-          row += ("sentence" -> sentence)
-          tempRows.enqueue(row)
+          //duplicate existing row, add the pair to duplicated row
+          val nrow = row.duplicate addValuePair (newColumn.getOrElse("sentence") -> sentence, 'String)
+          tempRows.enqueue(nrow)
         }
         next()
       }
