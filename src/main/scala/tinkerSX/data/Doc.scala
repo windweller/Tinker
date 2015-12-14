@@ -3,6 +3,6 @@ package tinkerSX.data
 /**
   * Created by Aimingnie on 12/9/15.
   */
-class Doc {
+class Doc extends Data {
 
 }
