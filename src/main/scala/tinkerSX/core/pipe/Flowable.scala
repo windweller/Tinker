@@ -1,4 +1,4 @@
-package tinkerSX.core.pipeline
+package tinkerSX.core.pipe
 
 import tinkerSX.data.Data
 
@@ -7,7 +7,8 @@ import tinkerSX.data.Data
   *
   */
 trait Flowable {
-  //require Data to be found
+
+  //require Data
   this: Data =>
 
   def ~>(): Unit = {
