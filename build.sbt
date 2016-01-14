@@ -51,7 +51,7 @@ libraryDependencies ++= {
 
 initialCommands in console := """
 import files.filetypes._
-import utils.ParameterCallToOption.implicits._
+import utils.ParameterCallToOption.Implicits._
 
 println("===============================")
 println("Welcome to Tinker 0.12 alpha release")
