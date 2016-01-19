@@ -1,3 +1,4 @@
+import sbt._
 
 name := "Tinker"
 
@@ -8,6 +9,7 @@ scalaVersion := "2.11.6"
 mainClass in (Compile, run) := Some("experiments.emnlp2015.Stream")
 
 resolvers += Resolver.sonatypeRepo("snapshots")
+resolvers += Resolver.sonatypeRepo("public")
 
 resolvers ++= Seq(
   "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
@@ -45,8 +47,18 @@ libraryDependencies ++= {
     "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1",
     "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1" classifier "models",
     //ML-components
-    "tw.edu.ntu.csie" % "libsvm" % "3.17"
+    "tw.edu.ntu.csie" % "libsvm" % "3.17",
+    //Command-Line arguments
+    "com.github.scopt" %% "scopt" % "3.3.0"
   )
+}
+
+scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation", "-feature")
+
+assemblyMergeStrategy in assembly := {
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case PathList("test", xs @ _*) => MergeStrategy.discard
+  case x => MergeStrategy.first
 }
 
 initialCommands in console := """
@@ -57,5 +69,3 @@ println("===============================")
 println("Welcome to Tinker 0.12 alpha release")
 println("===============================")
 """
-
-scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation", "-feature")
