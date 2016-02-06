@@ -7,8 +7,8 @@ import files.DataContainer
 import files.filetypes.input.Tab
 import files.operations.FileOp
 import files.structure.{DataSelect, DataStructure}
-import matcher.implementations.FutureTregexMatcher
-import nlp.preprocess.filters.{Filter, TwitterNewFilter}
+import matcher.implementations.{TregexMatcher, FutureTregexMatcher}
+import nlp.preprocess.filters.{TwitterFilter, Filter, TwitterNewFilter}
 import parser.implementations.StanfordNLP.EnglishPCFGParser
 import utils.ParameterCallToOption.Implicits._
 
@@ -76,14 +76,14 @@ object Application extends App {
     }
     val struct = new DataStructure(targetColumnWithName = namecolumn)
 
-    val filter = new Filter(data, struct) with TwitterNewFilter
+    val filter = new Filter(data, struct) with TwitterFilter
     filter.preprocess(output.toString)
   }
 
   def parse(input: File, output: File, namecolumn: String, numcore: Int): Unit = {
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with Tab with EnglishPCFGParser with FutureTregexMatcher with FileOp
+      with Tab with EnglishPCFGParser with TregexMatcher with FileOp
 
     if(input.toString.endsWith("csv")) {
       data.toCSV
@@ -97,7 +97,7 @@ object Application extends App {
 
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with Tab with EnglishPCFGParser with FutureTregexMatcher with FileOp
+      with Tab with EnglishPCFGParser with TregexMatcher with FileOp
 
     if(input.toString.endsWith("csv")) {
       data.toCSV
