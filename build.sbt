@@ -45,7 +45,7 @@ libraryDependencies ++= {
     "edu.emory.clir" % "clearnlp-general-en-dep" % "3.2",
     "edu.emory.clir" % "clearnlp-general-en-pos" % "3.2",
     "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1",
-    "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1" classifier "models",
+    "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1" % "provided" classifier "models",
     //ML-components
     "tw.edu.ntu.csie" % "libsvm" % "3.17",
     //Command-Line arguments
@@ -55,11 +55,9 @@ libraryDependencies ++= {
 
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation", "-feature")
 
-assemblyMergeStrategy in assembly := {
-  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
-  case PathList("test", xs @ _*) => MergeStrategy.discard
-  case x => MergeStrategy.first
-}
+assemblyOption in assembly := (assemblyOption in assembly).value.copy(cacheUnzip = false)
+assemblyOption in assembly := (assemblyOption in assembly).value.copy(cacheOutput = false)
+javaOptions in assembly += "-Xmx2g"
 
 initialCommands in console := """
 import files.filetypes._
