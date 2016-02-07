@@ -1,5 +1,6 @@
 package nlp.preprocess.filters
 
+import application.Application
 import com.github.tototoshi.csv.CSVWriter
 
 import scala.collection.mutable
@@ -12,7 +13,8 @@ trait TwitterMispellingFilter extends Filter {
 
     var mispellingdict = mutable.HashMap.empty[String, String]
 
-    val doc = scala.io.Source.fromFile("E:\\Allen\\R\\emnlp2015\\mispellingDic.txt").getLines()
+    val doc = scala.io.Source.fromURL(Application.file("mispellingDic.txt"))
+      .getLines()
 
     doc.foreach { line =>
       val parts = line.split("->")

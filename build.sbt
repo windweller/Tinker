@@ -1,3 +1,4 @@
+import sbt._
 
 name := "Tinker"
 
@@ -8,6 +9,7 @@ scalaVersion := "2.11.6"
 mainClass in (Compile, run) := Some("experiments.emnlp2015.Stream")
 
 resolvers += Resolver.sonatypeRepo("snapshots")
+resolvers += Resolver.sonatypeRepo("public")
 
 resolvers ++= Seq(
   "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
@@ -43,11 +45,19 @@ libraryDependencies ++= {
     "edu.emory.clir" % "clearnlp-general-en-dep" % "3.2",
     "edu.emory.clir" % "clearnlp-general-en-pos" % "3.2",
     "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1",
-    "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1" classifier "models",
+    "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1" % "provided" classifier "models",
     //ML-components
-    "tw.edu.ntu.csie" % "libsvm" % "3.17"
+    "tw.edu.ntu.csie" % "libsvm" % "3.17",
+    //Command-Line arguments
+    "com.github.scopt" %% "scopt" % "3.3.0"
   )
 }
+
+scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation", "-feature")
+
+assemblyOption in assembly := (assemblyOption in assembly).value.copy(cacheUnzip = false)
+assemblyOption in assembly := (assemblyOption in assembly).value.copy(cacheOutput = false)
+javaOptions in assembly += "-Xmx2g"
 
 initialCommands in console := """
 import files.filetypes._
@@ -57,5 +67,3 @@ println("===============================")
 println("Welcome to Tinker 0.12 alpha release")
 println("===============================")
 """
-
-scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation", "-feature")

@@ -1,6 +1,5 @@
 package nlp.preprocess.filters
 
-
 import com.github.tototoshi.csv.CSVWriter
 
 import scala.collection.mutable.ArrayBuffer
@@ -14,7 +13,7 @@ import scala.collection.mutable.ArrayBuffer
  *
  * usage guide: .replaceAll(searchPattern.toString(), "")
  */
-trait TwitterFilter extends Filter {
+trait TwitterNewFilter extends Filter {
 
   //this produces one csv table with tweet + state name
   def preprocess(saveLoc: String): Unit = {
@@ -57,17 +56,12 @@ trait TwitterFilter extends Filter {
   val urlEnd     = "(?:\\.\\.+|[<>]|\\s|$)"
   val url = "(?:"+urlStart1+"|"+urlStart2+")"+urlBody+"(?=(?:"+urlExtraCrapBeforeEnd+")?"+urlEnd+")"
 
-  //  Emoticons
-  val normalEyes = "(?iu)[:=]" // 8 and x are eyes but cause problems
-  val wink = "[;]"
-  val noseArea = "(?:|-|[^a-zA-Z0-9 ])" // doesn't get :'-(
-  val happyMouths = "[D\\)\\]\\}]+"
-  val sadMouths = "[\\(\\[\\{]+"
-  val tongue = "[pPd3]+"
-  val otherMouths = "(?:[oO]+|[/\\\\]+|[vV]+|[Ss]+|[|]+)" // remove forward slash if http://'s aren't cleaned
-
-
-  // mouth repetition examples:
+    //Emoticon
+    val eyes = "[^\\w][:=;xX8]"
+    val nose = "-?"
+    val mouth = "(?:[D\\)\\]\\}\\(\\[\\{pPd3oO/\\\\vVSs|]+)"
+    val l2r = eyes + nose + mouth
+    val r2l = mouth + nose + eyes
 
   val bfLeft = "(♥|0|o|°|v|\\$|t|x|;|\\u0CA0|@|ʘ|•|・|◕|\\^|¬|\\*)"
   val bfCenter = "(?:[\\.]|[_-]+)"
@@ -84,9 +78,7 @@ trait TwitterFilter extends Filter {
   val eastEmote = eeLeft + "(?:"+basicface+"|" +eeSymbol+")+" + eeRight
 
   val emoticon = (
-    "(?:>|&gt;)?" + OR(normalEyes, wink) + OR(noseArea,"[Oo]") +
-      OR(tongue+"(?=\\W|$|RT|rt|Rt)", otherMouths+"(?=\\W|$|RT|rt|Rt)", sadMouths, happyMouths),
-    "(?<=(?: |^))" + OR(sadMouths,happyMouths,otherMouths) + noseArea + OR(normalEyes, wink) + "(?:<|&lt;)?",
+    l2r, r2l,
     eastEmote.replaceFirst("2", "1"), basicface
     )
 
@@ -96,8 +88,7 @@ trait TwitterFilter extends Filter {
     patterns.map{p => s"(?:$p)"}.mkString("|")
   }
 
-  val searchPattern = OR(url, emoticon._1, emoticon._2, emoticon._3, emoticon._4, nonAscii).r
-
+  val searchPattern = OR(url, nonAscii, emoticon._1, emoticon._2, emoticon._3, emoticon._4).r
   }
 
 }
