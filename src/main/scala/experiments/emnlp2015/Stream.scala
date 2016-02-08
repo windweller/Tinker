@@ -11,14 +11,14 @@ import utils.ParameterCallToOption.Implicits._
 /**
  * Created by anie on 6/7/2015
  */
-object Stream extends App {
+object Stream {
 
 //  val struct = new DataStructure(idColumnWithName = "state", targetColumnWithName = "sentence") with BasicNLP
 //  val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\tweetsTokenizedCleanMispelledReplaced.csv", header = true) with CSV
 //  val sentiment = new Sentiment(data, struct)
 //  sentiment.saveSentimentMatching("E:\\Allen\\R\\emnlp2015\\twitterSentimentNoMispell.csv")
 
-  runFuture()
+//  runFuture()
 
 //  tokenize()
 

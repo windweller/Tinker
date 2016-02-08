@@ -58,6 +58,7 @@ scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation", "-feature")
 assemblyOption in assembly := (assemblyOption in assembly).value.copy(cacheUnzip = false)
 assemblyOption in assembly := (assemblyOption in assembly).value.copy(cacheOutput = false)
 javaOptions in assembly += "-Xmx2g"
+test in assembly := {}
 
 initialCommands in console := """
 import files.filetypes._
