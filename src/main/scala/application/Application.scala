@@ -3,12 +3,12 @@ package application
 import java.io.File
 import java.net.URL
 
-import files.DataContainer
-import files.filetypes.input.Tab
+import files.{Doc, DataContainer}
+import files.filetypes.input.{CSV, Tab}
 import files.operations.FileOp
 import files.structure.{DataSelect, DataStructure}
-import matcher.implementations.{TregexMatcher, FutureTregexMatcher}
-import nlp.preprocess.filters.{TwitterFilter, Filter, TwitterNewFilter}
+import matcher.implementations.TregexMatcher
+import nlp.preprocess.filters.{Filter, TwitterFilter}
 import parser.implementations.StanfordNLP.EnglishPCFGParser
 import utils.ParameterCallToOption.Implicits._
 
@@ -27,7 +27,7 @@ object Application extends App {
     opt[File]('o', "out") required() valueName("<file>") action { (x, c) =>
       c.copy(out = x) } text("file for the output, required")
     opt[String]('n',"name") required() action { (x, c) =>
-      c.copy(namecolumn = x) } text("column name where to find text, required")
+      c.copy(namecolumn = x) } text("column name where to find text for `clean` and `parse`, tree for `match`, required")
     opt[Int]("cores") action {(x, c) =>
       c.copy(numcore = x) } text("number of cores")
 
@@ -97,13 +97,12 @@ object Application extends App {
 
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with Tab with EnglishPCFGParser with TregexMatcher with FileOp
+      with CSV with EnglishPCFGParser with TregexMatcher with FileOp
 
     if(input.toString.endsWith("csv")) {
       data.toCSV
     }
 
-    data.parse(None, DataSelect(targetColumnWithName = namecolumn))
     data.matcher(rules.toString)
     data.save(output.toString)
   }
