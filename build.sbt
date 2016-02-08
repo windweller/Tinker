@@ -6,7 +6,7 @@ version := "0.1"
 
 scalaVersion := "2.11.6"
 
-mainClass in (Compile, run) := Some("experiments.emnlp2015.Stream")
+mainClass in (Compile, run) := Some("application.Application")
 
 resolvers += Resolver.sonatypeRepo("snapshots")
 resolvers += Resolver.sonatypeRepo("public")
