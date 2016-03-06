@@ -30,13 +30,16 @@ object Application extends App {
       c.copy(namecolumn = x) } text("column name where to find text for `clean` and `parse`, tree for `match`, required")
     opt[Int]("cores") action {(x, c) =>
       c.copy(numcore = x) } text("number of cores")
-
+    note("")
     cmd("clean") action { (_, c) =>
-      c.copy(mode = "c") } text("clean is a command to cleaning corpus tweets.")
-
+      c.copy(mode = "c") } text("clean is a command to cleaning corpus tweets.\nIt only retains input file name and cleaned text by default.") children(
+      opt[Seq[String]]("keep") valueName("<value>,<value>...") action { (k, c) =>
+        c.copy(keep = k) } text("keep columns names, separated by commas")
+      )
+    note("")
     cmd("parse") action { (_, c) =>
       c.copy(mode = "p") } text("parse is a command to parsing with Stanford Parser.")
-
+    note("")
     cmd("match") action { (_, c) =>
       c.copy(mode = "m") } text("match is a command to find Tregex rules on texts.") children(
       opt[File]('r', "rules") required() valueName("<file>") action { (x, c) =>
@@ -63,33 +66,35 @@ object Application extends App {
   }
 
   if(config.in.toString.endsWith("tab")) {
-    if(config.mode.equals("c")) clean_tab(config.in, config.out, config.namecolumn, config.numcore)
+    if(config.mode.equals("c")) clean_tab(config.in, config.out, config.namecolumn, config.numcore, config.keep)
     if(config.mode.equals("p")) parse_tab(config.in, config.out, config.namecolumn, config.numcore)
     if(config.mode.equals("m")) matched_tab(config.in, config.out, config.rules, config.namecolumn, config.numcore)
   }
   else {
-    if(config.mode.equals("c")) clean_csv(config.in, config.out, config.namecolumn, config.numcore)
+    if(config.mode.equals("c")) clean_csv(config.in, config.out, config.namecolumn, config.numcore, config.keep)
     if(config.mode.equals("p")) parse_csv(config.in, config.out, config.namecolumn, config.numcore)
     if(config.mode.equals("m")) matched_csv(config.in, config.out, config.rules, config.namecolumn, config.numcore)
   }
 
-  def clean_csv(input: File, output: File, namecolumn: String, numcore: Int): Unit = {
+  def clean_csv(input: File, output: File, namecolumn: String, numcore: Int, keepColumns: Seq[String]): Unit = {
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
       with CSV
 
-    val struct = new DataStructure(targetColumnWithName = namecolumn)
+    val struct = new DataStructure(targetColumnWithName = namecolumn,
+      keepColumnsWithNames = keepColumns.toIndexedSeq)
 
     val filter = new Filter(data, struct) with TwitterFilter
     filter.preprocess(output.toString)
   }
 
-  def clean_tab(input: File, output: File, namecolumn: String, numcore: Int): Unit = {
+  def clean_tab(input: File, output: File, namecolumn: String, numcore: Int, keepColumns: Seq[String]): Unit = {
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
       with Tab
 
-    val struct = new DataStructure(targetColumnWithName = namecolumn)
+    val struct = new DataStructure(targetColumnWithName = namecolumn,
+      keepColumnsWithNames = keepColumns.toIndexedSeq)
 
     val filter = new Filter(data, struct) with TwitterFilter
     filter.preprocess(output.toString)

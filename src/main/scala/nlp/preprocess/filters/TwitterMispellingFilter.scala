@@ -37,7 +37,12 @@ trait TwitterMispellingFilter extends Filter {
            if (replaceWord.nonEmpty) counts += 1
            replaceWord.getOrElse(word)
          }.mkString(" ")
-        result += Seq(struct.getIdValue(row).getOrElse("id"), sen) ++ struct.getKeepColumnsValue(row).get
+        val keep = struct.getKeepColumnsValue(row)
+        val seqnormal = Seq(struct.getIdValue(row).getOrElse("id"), sen)
+        if(keep.isEmpty)
+          result += seqnormal
+        else
+          result += seqnormal ++ keep.get
       }
     }
 

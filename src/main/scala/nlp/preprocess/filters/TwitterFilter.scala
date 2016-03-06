@@ -27,7 +27,12 @@ trait TwitterFilter extends Filter {
       if (row.get(struct.target.get).nonEmpty) {
         val tweet = row(struct.target.get).replaceAll(TwitterRegex.searchPattern.toString(), "")
         if (tweet.trim.nonEmpty && tweet.split(" ").length >= 2) {
-          result += Seq(struct.getIdValue(row).getOrElse(row("file_name")), tweet)
+          val keep = struct.getKeepColumnsValue(row)
+          val seqnormal = Seq(struct.getIdValue(row).getOrElse(row("file_name")), tweet)
+          if(keep.isEmpty)
+            result += seqnormal
+          else
+            result += seqnormal ++ keep.get
         }
       }
     }

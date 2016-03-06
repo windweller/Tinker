@@ -7,9 +7,9 @@ import scala.collection.mutable.ArrayBuffer
 /**
  * These are pre-processing filters
  *
- * TwitterFilter is taken from CMU Ark
+ * TwitterNewFilter is taken from CMU Ark
  * library, it's used to take out URL
- * and emoticons
+ * ,emoticons and twitter mentions
  *
  * usage guide: .replaceAll(searchPattern.toString(), "")
  */
@@ -26,7 +26,12 @@ trait TwitterNewFilter extends Filter {
       if (row.get(struct.target.get).nonEmpty) {
         val tweet = row(struct.target.get).replaceAll(TwitterRegex.searchPattern.toString(), "")
         if (tweet.trim.nonEmpty && tweet.split(" ").length >= 2) {
-          result += Seq(struct.getIdValue(row).getOrElse(row("file_name")), tweet)
+          val keep = struct.getKeepColumnsValue(row)
+          val seqnormal = Seq(struct.getIdValue(row).getOrElse(row("file_name")), tweet)
+          if(keep.isEmpty)
+            result += seqnormal
+          else
+            result += seqnormal ++ keep.get
         }
       }
     }
