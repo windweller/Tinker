@@ -20,7 +20,9 @@ Unlike many libaries that rely on configuration files, or 10 config parameters t
 
 Tinker only release documentation for stable components, but its nightly built offers more. The next release will include a better API for NLP components (currently experimental and not very well-integrated into Tinker-processing). 
 
-- (next release) 0.13: added testing for parallel module. Further integrate with Akka Flow Graph as well as iterator approach to provide flexible and easy processing integration. Fixed a problem when generating output, `Datastructure` cannot be passed in.
+- (next release) 0.14: Added executable generation and new Filters
+
+- 0.13: added testing for parallel module. Further integrate with Akka Flow Graph as well as iterator approach to provide flexible and easy processing integration. Fixed a problem when generating output, `Datastructure` cannot be passed in.
 
 - 0.12: Official alpha-release. Cleaned legacy code (version 0.10 old APIs). Added NLP components on top of Tinker-core. Slight performance increase. Documentation major update.
 
@@ -46,7 +48,7 @@ Then you would see
 
 ```scala
 =======================================
-Welcome to Tinker 0.12 alpha release
+Welcome to Tinker 0.14 alpha release
 =======================================
 >
 ```
@@ -70,6 +72,17 @@ workerBook2.data.foreach(e => println(e))
 Stackable trait pattern means you can swap in and out different modules, like playing Lego. If you are dealing with a tab file, you can choose to use `Tab` module instead of `CSV`. This type of design is consistent throughout Tinker.
 
 Basic File I/O has a nice high-level abstraction that treats a directory of files and a single file as the same entity, and allow `Iterator` access throught the whole data corpus. Every other Tinker function is built on this concept.
+
+## Generating fat JAR (JAR file)
+
+Tinker is now compatible with JAR generation through SBT Assembly (https://github.com/sbt/sbt-assembly) . It provides also a complete command-line interface.
+Generation will not automatically add the `stanford-corenlp-models.jar` due to some inconsistency. Please add it on your own to make the executable.
+
+Fully information on the command-line options could be read on launching this command :
+
+```
+java -jar Tinker-assembly.jar --help
+```
 
 ## Processing Design
 
@@ -152,8 +165,6 @@ class TinkerParallel extends TestKit(ActorSystem("testsystem"))
 
 }
 ```
-
-
 
 #### Parser
 

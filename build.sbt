@@ -65,6 +65,6 @@ import files.filetypes._
 import utils.ParameterCallToOption.Implicits._
 
 println("===============================")
-println("Welcome to Tinker 0.12 alpha release")
+println("Welcome to Tinker 0.14 alpha release")
 println("===============================")
 """
