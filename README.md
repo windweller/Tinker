@@ -20,7 +20,9 @@ Unlike many libaries that rely on configuration files, or 10 config parameters t
 
 Tinker only release documentation for stable components, but its nightly built offers more. The next release will include a better API for NLP components (currently experimental and not very well-integrated into Tinker-processing). 
 
-- (next release) 0.14: Added executable generation and new Filters
+- (next release) 0.15: Added executable generation with `sbt assembly` and new Filters
+
+- 0.14: All core-APIs and a limited number of native modules (Tregex, Parser) are stable and working with new updates.
 
 - 0.13: added testing for parallel module. Further integrate with Akka Flow Graph as well as iterator approach to provide flexible and easy processing integration. Fixed a problem when generating output, `Datastructure` cannot be passed in.
 
@@ -48,8 +50,8 @@ Then you would see
 
 ```scala
 =======================================
-Welcome to Tinker 0.14 alpha release
-=======================================
+Welcome to Tinker 0.15 alpha release
+====================================
 >
 ```
 
