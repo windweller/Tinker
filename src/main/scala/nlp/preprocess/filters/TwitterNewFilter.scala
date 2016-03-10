@@ -1,7 +1,9 @@
 package nlp.preprocess.filters
 
+import application.Application
 import com.github.tototoshi.csv.CSVWriter
 
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -12,8 +14,24 @@ import scala.collection.mutable.ArrayBuffer
  * ,emoticons and twitter mentions
  *
  * usage guide: .replaceAll(searchPattern.toString(), "")
+ *
+ * It will also change forms, (like duh to the), changing
+ * from a mispelling dictionary. (See : TwitterMispellingFilter.scala)
+ *
  */
 trait TwitterNewFilter extends Filter {
+
+  var mispellingdict = mutable.HashMap.empty[String, String]
+
+  val doc = scala.io.Source.fromURL(Application.file("mispellingDic.txt"))
+    .getLines()
+
+  doc.foreach { line =>
+    val parts = line.split("->")
+    val value = parts(0).trim
+    val keys = parts(1).split("\\|")
+    keys.foreach(k => mispellingdict.put(k.trim, value))
+  }
 
   //this produces one csv table with tweet + state name
   def preprocess(saveLoc: String): Unit = {
@@ -24,11 +42,15 @@ trait TwitterNewFilter extends Filter {
 
     it.foreach { row =>
       if (row.get(struct.target.get).nonEmpty) {
-        val tweet = row(struct.target.get).replaceAll(TwitterRegex.searchPattern.toString(), "")
-        if (tweet.trim.nonEmpty && tweet.split(" ").length >= 2) {
+        val mispelledTweet = row(struct.target.get).replaceAll(TwitterRegex.searchPattern.toString(), "")
+        if (mispelledTweet.trim.nonEmpty && mispelledTweet.split(" ").length >= 2) {
           val keep = struct.getKeepColumnsValue(row)
+          val tweet = mispelledTweet.split(" ").map { word =>
+            val replaceWord = mispellingdict.get(word)
+            replaceWord.getOrElse(word)
+          }.mkString(" ")
           val seqnormal = Seq(struct.getIdValue(row).getOrElse(row("file_name")), tweet)
-          if(keep.isEmpty)
+          if (keep.isEmpty)
             result += seqnormal
           else
             result += seqnormal ++ keep.get
@@ -37,6 +59,7 @@ trait TwitterNewFilter extends Filter {
     }
 
     output.writeAll(result.toSeq)
+
   }
 
   object TwitterRegex {
