@@ -3,7 +3,7 @@ excited -> excite | exited | xcited
 about -> bout | ‘bout | abt | bowt | abowt
 about to -> abouta | aboutta | bouta | boutta | ‘bouta
 instead -> instd | insted | nsted | nstead | nstd
-have -> hav
+have -> hav | haz
 have to -> hafta | hav to | haveta | havta
 supposed -> suposed | sposed | spost | post | posed
 supposed to -> suposed ta | sposed ta | sposta | posta | posed ta
@@ -27,11 +27,23 @@ past -> pst | passed
 last -> lst
 previous -> prev
 out -> owt
-gon -> gun | fun | fin
-you -> u
+gon -> gun | fin
+you -> u | youu | youuu | youuuu
 your -> ur
 yours -> urs | urz | yourz
 and -> &
 go -> g
 do -> d
 to -> t
+with -> w
+yes -> yea | yeah | yeahp | ya | yep | yup | y | yah | yess | yesss | yessss
+no -> nope
+lol -> haha | hehe | hehehe
+oh -> waaa | wow | omg | omfg | ohh | ohhh | ohhhh
+ah -> ahh | ahhh | ahhhh
+a lot -> alot
+week -> wk
+weeks -> wks
+tonight -> 2nite
+tomorrow -> tomo
+love -> lav
