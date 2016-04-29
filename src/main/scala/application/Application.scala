@@ -7,7 +7,7 @@ import files.DataContainer
 import files.filetypes.input.{CSV, Tab}
 import files.operations.FileOp
 import files.structure.{DataSelect, DataStructure}
-import matcher.implementations.TregexMatcher
+import matcher.implementations.{TregexMatcher, VecMatcher}
 import nlp.preprocess.filters.{Filter, TwitterFilter}
 import parser.implementations.StanfordNLP.EnglishPCFGParser
 import utils.ParameterCallToOption.Implicits._
@@ -16,8 +16,6 @@ import utils.ParameterCallToOption.Implicits._
   * Created by aurore on 19/01/16.
   */
 object Application extends App {
-  var version = getClass.getPackage.getImplementationVersion
-
   val v = if (version == null) "0.1" else version
   val parser = new scopt.OptionParser[Config]("tinker") {
     head("Tinker", v)
@@ -59,11 +57,11 @@ object Application extends App {
 
     help("help") text("prints this usage text")
   }
-
   // parser.parse returns Option[C]
   val config = parser.parse(args, Config()).getOrElse {
     sys.exit(1)
   }
+  var version = getClass.getPackage.getImplementationVersion
 
   if(config.in.toString.endsWith("tab")) {
     if(config.mode.equals("c")) clean_tab(config.in, config.out, config.namecolumn, config.numcore, config.keep)
@@ -122,9 +120,9 @@ object Application extends App {
 
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with CSV with EnglishPCFGParser with TregexMatcher with FileOp
+      with CSV with EnglishPCFGParser with VecMatcher with FileOp
 
-    data.matcher(rules.toString)
+    data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
     data.save(output.toString)
   }
 
@@ -132,9 +130,9 @@ object Application extends App {
 
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with Tab with EnglishPCFGParser with TregexMatcher with FileOp
+      with Tab with EnglishPCFGParser with VecMatcher with FileOp
 
-    data.matcher(rules.toString)
+    data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
     data.save(output.toString)
   }
 
