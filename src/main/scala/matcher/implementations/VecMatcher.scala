@@ -68,24 +68,34 @@ trait VecMatcher extends Matcher with FailureHandle {
           val found = matcher.getMatch.children().map(x => x.value()).mkString(" ").trim
           val foundbeginpos = sentence.indexOf(found)
           matched += foundbeginpos -> i._1
-          /*matched = if(matched.length == 0) i._1
-                    else matched.concat(";").concat(i._1)
-*/        }
+        }
       } catch {
         case e: NullPointerException =>
           return "tree error"
       }
     }
-    //return at middle if one rule triggered
     if(matched.length == 1) {
-      val middle = sentence.length / 2;
+      /*val middle = sentence.length / 2;
       var blank = sentence.indexOf(' ',middle)
       if (blank.equals(0)) blank = sentence.indexOf(' ',0)
       val rule = " ["+matched.head._2+"] "
-      return sentence.substring(0, blank) + rule + sentence.substring(blank+1, sentence.length-1)
+      return sentence.substring(0, blank) + rule + sentence.substring(blank, sentence.length-1)*/
+      val subs = sentence.substring(0,matched.head._1)
+      val rule = " $"+matched.head._2
+      val result = subs + rule + sentence.substring(matched.head._1, sentence.length-1)
+      return result
     }
-    else(matched.length > 1)
-      return sentence
+    else if (matched.length > 1) {
+      val sorted = matched.sortBy(_._1)
+      var prec = 0
+      var resultmultiple = ""
+      sorted.foreach { i =>
+        val rule = " $"+i._2
+        resultmultiple = resultmultiple.concat(sentence.substring(prec,i._1)).concat(rule)
+        prec = i._1
+      }
+      resultmultiple = resultmultiple.concat(sentence.substring(prec, sentence.length-1))
+    }
     sentence
   }
 
