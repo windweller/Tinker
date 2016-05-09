@@ -9,6 +9,7 @@ import matcher.Matcher
 import utils.FailureHandle
 
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -47,9 +48,10 @@ trait VecMatcher extends Matcher with FailureHandle {
 
       //On ajoute au graphe une ligne
       scheduler.addToGraph(row => scala.concurrent.Future {
-        val tree = Tree.valueOf(struct.getTargetValue(row).getOrElse(row("parsed")))
+        //parsed only worked
+        val tree = Tree.valueOf(row("parsed"))
         //On ajoute à la ligne une colonne avec en titre la règle
-        row += ("matched" -> search(struct.getTargetValue(row).get, tree, patterns))
+        row += ("matched" -> search(struct.getTargetValue(row).getOrElse("sentence"), tree, patterns))
         row
       })
     }
@@ -57,25 +59,34 @@ trait VecMatcher extends Matcher with FailureHandle {
   }
 
   private def search(sentence: String, tree: Tree, patterns: mutable.HashMap[String,TregexPattern]): String = {
-    val rulesmatched = ""
-    var modifiedsentence = ""
-    patterns.values.foreach { i =>
-      try {
-        val matcher = i.matcher(tree)
-        if (matcher.find()) {
+    val matched = ListBuffer[Tuple2[Int, String]]()
 
-          //on ne va pas incrémenter mais garder le nom de la règle
-          rulesmatched.concat('$'+i.toString)
-        }
+    patterns.foreach { i =>
+      try {
+        val matcher = i._2.matcher(tree)
+        if (matcher.find()) {
+          val found = matcher.getMatch.children().map(x => x.value()).mkString(" ").trim
+          val foundbeginpos = sentence.indexOf(found)
+          matched += foundbeginpos -> i._1
+          /*matched = if(matched.length == 0) i._1
+                    else matched.concat(";").concat(i._1)
+*/        }
       } catch {
         case e: NullPointerException =>
           return "tree error"
-          //this happens when a tree is malformed
-          //we will not add any number to stats, just return it as is
-          //println("NULL Pointer with " + tree.toString)
       }
     }
-    modifiedsentence
+    //return at middle if one rule triggered
+    if(matched.length == 1) {
+      val middle = sentence.length / 2;
+      var blank = sentence.indexOf(' ',middle)
+      if (blank.equals(0)) blank = sentence.indexOf(' ',0)
+      val rule = " ["+matched.head._2+"] "
+      return sentence.substring(0, blank) + rule + sentence.substring(blank+1, sentence.length-1)
+    }
+    else(matched.length > 1)
+      return sentence
+    sentence
   }
 
   private def rulesFromFile(fileLoc: Option[String]): Option[List[String]] = {
