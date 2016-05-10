@@ -41,8 +41,9 @@ object Application extends App {
     cmd("match") action { (_, c) =>
       c.copy(mode = "m") } text("match is a command to find Tregex rules on texts.") children(
       opt[File]('r', "rules") required() valueName("<file>") action { (x, c) =>
-        c.copy(rules = x) } text("file with line-separated tregex rules, required")
-      )
+        c.copy(rules = x) } text("file with line-separated tregex rules, required"))
+      opt[Unit]("label") action { (x, c) =>
+        c.copy(label = true) } text("output contains for each line a sentence-labeled column")
 
     checkConfig { c =>
       if (c.mode.equals("")) failure("please choose a command, like clean")
@@ -66,12 +67,20 @@ object Application extends App {
   if(config.in.toString.endsWith("tab")) {
     if(config.mode.equals("c")) clean_tab(config.in, config.out, config.namecolumn, config.numcore, config.keep)
     if(config.mode.equals("p")) parse_tab(config.in, config.out, config.namecolumn, config.numcore)
-    if(config.mode.equals("m")) matched_tab(config.in, config.out, config.rules, config.namecolumn, config.numcore)
+    if(config.mode.equals("m")) {
+      if(config.label)
+        matchedlabel_tab(config.in, config.out, config.rules, config.namecolumn, config.numcore)
+      else matched_tab(config.in, config.out, config.rules, config.namecolumn, config.numcore)
+    }
   }
   else {
     if(config.mode.equals("c")) clean_csv(config.in, config.out, config.namecolumn, config.numcore, config.keep)
     if(config.mode.equals("p")) parse_csv(config.in, config.out, config.namecolumn, config.numcore)
-    if(config.mode.equals("m")) matched_csv(config.in, config.out, config.rules, config.namecolumn, config.numcore)
+    if(config.mode.equals("m")) {
+      if(config.label)
+        matchedlabel_csv(config.in, config.out, config.rules, config.namecolumn, config.numcore)
+      else matched_csv(config.in, config.out, config.rules, config.namecolumn, config.numcore)
+    }
   }
 
   def clean_csv(input: File, output: File, namecolumn: String, numcore: Int, keepColumns: Seq[String]): Unit = {
