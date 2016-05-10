@@ -33,16 +33,14 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
       val patterns = mutable.HashMap.empty[String, TregexPattern]
       val patternsText = rulesFromFile(file).getOrElse(patternsRaw.get)
 
-      patternsText.foreach { line => scala.concurrent.Future {
-          val parts = line.split("->")
-          val value = parts(0).trim
-          val key = if (parts.size > 1) parts(1).trim
-                    else value
-          val pattern = if (tnterms.nonEmpty || tcterms.nonEmpty) TregexPattern.compile(preprocessTregex(value))
-                        else  TregexPattern.compile(value)
-          patterns.put(key, pattern)
-        }
-      }
+      patternsText.foreach { line => {
+        val parts = line.split("->")
+        val value = parts(0).trim
+        val pattern = if (tnterms.nonEmpty || tcterms.nonEmpty) TregexPattern.compile(preprocessTregex(value))
+        else TregexPattern.compile(value)
+        val key = if (parts.size > 1) parts(1).trim else value
+        patterns.put(key, pattern)
+      }}
 
       scheduler.addToGraph(row => scala.concurrent.Future {
         val tree = Tree.valueOf(row("parsed"))
@@ -76,7 +74,7 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
       val rule = " ["+matched.head._2+"] "
       return sentence.substring(0, blank) + rule + sentence.substring(blank, sentence.length-1)*/
       val subs = sentence.substring(0,matched.head._1)
-      val rule = " $"+matched.head._2
+      val rule = " $"+matched.head._2+" "
       val result = subs + rule + sentence.substring(matched.head._1, sentence.length-1)
       return result
     }
@@ -85,11 +83,12 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
       var prec = 0
       var resultmultiple = ""
       sorted.foreach { i =>
-        val rule = " $"+i._2
+        val rule = " $"+i._2+" "
         resultmultiple = resultmultiple.concat(sentence.substring(prec,i._1)).concat(rule)
         prec = i._1
       }
-      resultmultiple = resultmultiple.concat(sentence.substring(prec, sentence.length-1))
+      if(prec < sentence.length-1) resultmultiple = resultmultiple.concat(sentence.substring(prec, sentence.length-1))
+      return resultmultiple
     }
     sentence
   }
