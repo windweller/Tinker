@@ -30,8 +30,6 @@ trait VecMatcher extends Matcher with FailureHandle {
     if (patternsRaw.isEmpty && file.isEmpty) {
       fail("you must put in file or list of patterns")
     } else {
-      //On récupère ici le nom des règles et les règles
-
       val patterns = mutable.HashMap.empty[String, TregexPattern]
       val patternsText = rulesFromFile(file).getOrElse(patternsRaw.get)
 
@@ -46,11 +44,8 @@ trait VecMatcher extends Matcher with FailureHandle {
         }
       }
 
-      //On ajoute au graphe une ligne
       scheduler.addToGraph(row => scala.concurrent.Future {
-        //parsed only worked
         val tree = Tree.valueOf(row("parsed"))
-        //On ajoute à la ligne une colonne avec en titre la règle
         row += ("matched" -> search(struct.getTargetValue(row).getOrElse("sentence"), tree, patterns))
         row
       })
