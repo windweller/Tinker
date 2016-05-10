@@ -70,16 +70,17 @@ trait FutureTregexMatcher extends Matcher with FailureHandle {
   private def preprocessTregex(patterns: List[String]): List[String] = {
     val result = ListBuffer.empty[String]
     patterns.foreach { p =>
-      if (p.contains("TN|TC")) {
-        result += p.replaceAll("TN|TC", tnterms+"|"+tcterms)
+      val rule = p.split("->")(0).trim
+      if (rule.contains("TN|TC")) {
+        result += rule.replaceAll("TN|TC", tnterms+"|"+tcterms)
       }
-      else if (p.contains("TN")) {
-        result += p.replaceAll("TN", tnterms)
+      else if (rule.contains("TN")) {
+        result += rule.replaceAll("TN", tnterms)
       }
-      else if (p.contains("TC")) {
-        result += p.replaceAll("TC", tcterms)
+      else if (rule.contains("TC")) {
+        result += rule.replaceAll("TC", tcterms)
       }
-      else result += p
+      else result += rule
     }
     result.toList
   }
