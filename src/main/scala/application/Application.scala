@@ -7,7 +7,7 @@ import files.DataContainer
 import files.filetypes.input.{CSV, Tab}
 import files.operations.FileOp
 import files.structure.{DataSelect, DataStructure}
-import matcher.implementations.{TregexMatcher, VecMatcher}
+import matcher.implementations.{FutureTregexMatcher, LabelOnMatcher, TregexMatcher}
 import nlp.preprocess.filters.{Filter, TwitterFilter}
 import parser.implementations.StanfordNLP.EnglishPCFGParser
 import utils.ParameterCallToOption.Implicits._
@@ -120,7 +120,7 @@ object Application extends App {
 
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with CSV with EnglishPCFGParser with VecMatcher with FileOp
+      with CSV with EnglishPCFGParser with FutureTregexMatcher with FileOp
 
     data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
     data.save(output.toString)
@@ -130,7 +130,27 @@ object Application extends App {
 
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with Tab with EnglishPCFGParser with VecMatcher with FileOp
+      with Tab with EnglishPCFGParser with FutureTregexMatcher with FileOp
+
+    data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
+    data.save(output.toString)
+  }
+
+  def matchedlabel_csv(input: File, output: File, rules: File, namecolumn: String, numcore: Int): Unit = {
+
+    val data = new DataContainer(input.toString,
+      header = true, core = numcore)
+      with CSV with EnglishPCFGParser with LabelOnMatcher with FileOp
+
+    data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
+    data.save(output.toString)
+  }
+
+  def matchedlabel_tab(input: File, output: File, rules: File, namecolumn: String, numcore: Int): Unit = {
+
+    val data = new DataContainer(input.toString,
+      header = true, core = numcore)
+      with Tab with EnglishPCFGParser with LabelOnMatcher with FileOp
 
     data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
     data.save(output.toString)

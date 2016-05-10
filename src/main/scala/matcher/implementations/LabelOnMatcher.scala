@@ -15,7 +15,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
   * Created by Aurore on 4/17/16
   */
-trait VecMatcher extends Matcher with FailureHandle {
+trait LabelOnMatcher extends Matcher with FailureHandle {
 
   this: DataContainer =>
   val tnterms = scala.io.Source.fromURL(Application.file("TNTermsReduced2.txt"))
