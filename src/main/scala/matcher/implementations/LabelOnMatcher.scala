@@ -14,6 +14,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
   * Created by Aurore on 4/17/16
+  * This implementation creates a new column where all matched rules
+  * will be inserted in the sentence as a flag $rule where it was first
+  * triggered.
   */
 trait LabelOnMatcher extends Matcher with FailureHandle {
 
