@@ -7,8 +7,8 @@ import files.DataContainer
 import files.filetypes.input.{CSV, Tab}
 import files.operations.FileOp
 import files.structure.{DataSelect, DataStructure}
-import matcher.implementations.{FutureTregexMatcher, LabelOnMatcher, TregexMatcher}
-import nlp.preprocess.filters.{Filter, TwitterFilter}
+import matcher.implementations.{FutureTregexMatcher, LabelOnMatcher}
+import nlp.preprocess.filters.{Filter, TwitterNewFilter}
 import parser.implementations.StanfordNLP.EnglishPCFGParser
 import utils.ParameterCallToOption.Implicits._
 
@@ -91,7 +91,7 @@ object Application extends App {
     val struct = new DataStructure(targetColumnWithName = namecolumn,
       keepColumnsWithNames = keepColumns.toIndexedSeq)
 
-    val filter = new Filter(data, struct) with TwitterFilter
+    val filter = new Filter(data, struct) with TwitterNewFilter
     filter.preprocess(output.toString)
   }
 
@@ -103,14 +103,14 @@ object Application extends App {
     val struct = new DataStructure(targetColumnWithName = namecolumn,
       keepColumnsWithNames = keepColumns.toIndexedSeq)
 
-    val filter = new Filter(data, struct) with TwitterFilter
+    val filter = new Filter(data, struct) with TwitterNewFilter
     filter.preprocess(output.toString)
   }
 
   def parse_tab(input: File, output: File, namecolumn: String, numcore: Int): Unit = {
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with Tab with EnglishPCFGParser with TregexMatcher with FileOp
+      with Tab with EnglishPCFGParser with FileOp
 
     data.parse(None, DataSelect(targetColumnWithName = namecolumn))
     data.save(output.toString)
@@ -119,7 +119,7 @@ object Application extends App {
   def parse_csv(input: File, output: File, namecolumn: String, numcore: Int): Unit = {
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with CSV with EnglishPCFGParser with TregexMatcher with FileOp
+      with CSV with EnglishPCFGParser with FileOp
 
     data.parse(None, DataSelect(targetColumnWithName = namecolumn))
     data.save(output.toString)
@@ -129,7 +129,7 @@ object Application extends App {
 
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with CSV with EnglishPCFGParser with FutureTregexMatcher with FileOp
+      with CSV with FutureTregexMatcher with EnglishPCFGParser with FileOp
 
     data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
     data.save(output.toString)
@@ -139,7 +139,7 @@ object Application extends App {
 
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with Tab with EnglishPCFGParser with FutureTregexMatcher with FileOp
+      with Tab with FutureTregexMatcher with EnglishPCFGParser with FileOp
 
     data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
     data.save(output.toString)
@@ -149,7 +149,7 @@ object Application extends App {
 
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with CSV with EnglishPCFGParser with LabelOnMatcher with FileOp
+      with CSV with LabelOnMatcher with EnglishPCFGParser with FileOp
 
     data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
     data.save(output.toString)
@@ -159,7 +159,7 @@ object Application extends App {
 
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with Tab with EnglishPCFGParser with LabelOnMatcher with FileOp
+      with Tab with LabelOnMatcher with EnglishPCFGParser with FileOp
 
     data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
     data.save(output.toString)
