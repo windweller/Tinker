@@ -16,6 +16,7 @@ import utils.ParameterCallToOption.Implicits._
   * Created by aurore on 19/01/16.
   */
 object Application extends App {
+  val version = getClass.getPackage.getImplementationVersion
   val v = if (version == null) "0.1" else version
   val parser = new scopt.OptionParser[Config]("tinker") {
     head("Tinker", v)
@@ -62,7 +63,6 @@ object Application extends App {
   val config = parser.parse(args, Config()).getOrElse {
     sys.exit(1)
   }
-  var version = getClass.getPackage.getImplementationVersion
 
   if(config.in.toString.endsWith("tab")) {
     if(config.mode.equals("c")) clean_tab(config.in, config.out, config.namecolumn, config.numcore, config.keep)
