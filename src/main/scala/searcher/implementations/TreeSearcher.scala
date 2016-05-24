@@ -1,11 +1,12 @@
 package searcher.implementations
 
+import application.Application
 import edu.stanford.nlp.trees.Tree
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.DataContainer
 import files.structure.DataSelect
 import searcher.Searcher
-import utils.FailureHandle
+import utils.{FailureHandle, Timer}
 
 import scala.collection.mutable
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -26,6 +27,7 @@ trait TreeSearcher extends Searcher with FailureHandle {
       val patternsText = rulesFromFile(file).getOrElse(patternsRaw.get)
       val patterns = patternsText.map(e =>  TregexPattern.compile(e))
       scheduler.addToGraph(row => scala.concurrent.Future {
+        if(Application.verbose) Timer.completeOne
         val tree = Tree.valueOf(struct.getTargetValue(row).getOrElse(row("parsed")))
         val array = getSearch(tree, patterns).map(i => i)
         row ++= mutable.HashMap(patternsText.zip(array): _*)
