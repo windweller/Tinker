@@ -20,7 +20,6 @@ object Application extends App {
   val v = if (version == null) "0.1" else version
   val parser = new scopt.OptionParser[Config]("tinker") {
     head("Tinker", v)
-
     opt[File]('i', "in") required() valueName("<file>") action { (x, c) =>
       c.copy(in = x) } text("file with line-separated sentences, required")
     opt[File]('o', "out") required() valueName("<file>") action { (x, c) =>
@@ -29,6 +28,8 @@ object Application extends App {
       c.copy(namecolumn = x) } text("column name where to find text for `clean` and `parse`, tree for `match`, required")
     opt[Int]("cores") action {(x, c) =>
       c.copy(numcore = x) } text("number of cores")
+    opt[Unit]('v', "verbose") action { (x, c) =>
+      c.copy(verbose = true) } text("verbose option")
     note("")
     cmd("clean") action { (_, c) =>
       c.copy(mode = "c") } text("clean is a command to cleaning corpus tweets.\nIt only retains input file name and cleaned text by default.") children(
@@ -45,7 +46,6 @@ object Application extends App {
         c.copy(rules = x) } text("file with line-separated tregex rules, required"))
       opt[Unit]("label") action { (x, c) =>
         c.copy(label = true) } text("output contains for each line a sentence-labeled column")
-
     checkConfig { c =>
       if (c.mode.equals("")) failure("please choose a command, like clean")
       else if(!c.in.exists()) {
@@ -56,7 +56,6 @@ object Application extends App {
       }
       else success
     }
-
     help("help") text("prints this usage text")
   }
   // parser.parse returns Option[C]
@@ -167,4 +166,7 @@ object Application extends App {
 
   def file(path: String): URL =
     getClass().getClassLoader().getResource(path)
+
+  def verbose: Boolean =
+    config.verbose
 }
