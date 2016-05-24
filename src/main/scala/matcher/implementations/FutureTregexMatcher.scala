@@ -6,7 +6,7 @@ import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.DataContainer
 import files.structure.DataSelect
 import matcher.Matcher
-import utils.FailureHandle
+import utils.{FailureHandle, Timer}
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
@@ -35,6 +35,7 @@ trait FutureTregexMatcher extends Matcher with FailureHandle {
                       else  patternsText.map(e => TregexPattern.compile(e))
 
       scheduler.addToGraph(row => scala.concurrent.Future {
+        if(Application.verbose) Timer.completeOne
         val tree = Tree.valueOf(struct.getTargetValue(row).getOrElse(row("parsed")))
         val array = search(tree, patterns).map(i => i.toString)
         row ++= mutable.HashMap(patternsText.zip(array): _*)

@@ -1,7 +1,7 @@
 package nlp.preprocess.filters
 
-import com.github.tototoshi.csv.CSVWriter
-import utils.TabPrinter
+import application.Application
+import utils.{TabPrinter, Timer}
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -25,6 +25,7 @@ trait CharacterFilter extends Filter{
           val tweet = row(struct.target.get).replaceAll("\\W \\S", "") //replace non-English characters
           if (tweet.split(" ").length >= character_limit) {
             printer.print(Seq(struct.getIdValue(row).getOrElse(group._1), tweet))
+            if(Application.verbose) Timer.completeOne
           }
         }
       }

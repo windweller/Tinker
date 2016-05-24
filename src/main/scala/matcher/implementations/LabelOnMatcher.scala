@@ -6,7 +6,7 @@ import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.DataContainer
 import files.structure.DataSelect
 import matcher.Matcher
-import utils.FailureHandle
+import utils.{FailureHandle, Timer}
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
@@ -46,6 +46,7 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
       }}
 
       scheduler.addToGraph(row => scala.concurrent.Future {
+        if(Application.verbose) Timer.completeOne
         val tree = Tree.valueOf(row("parsed"))
         row += ("matched" -> search(struct.getTargetValue(row).getOrElse("sentence"), tree, patterns))
         row
@@ -63,7 +64,12 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
         if (matcher.find()) {
           val found = matcher.getMatch.children().map(x => x.value()).mkString(" ").trim
           val foundbeginpos = sentence.indexOf(found)
-          matched += foundbeginpos -> i._1
+          //If it doesn't find the right text, it will put at the middle of the sentence
+          if(foundbeginpos >= 0) { matched += foundbeginpos -> i._1 }
+          else {
+            val foundfirstblank = sentence.indexOf(" ", sentence.length/2)
+            matched += foundfirstblank -> i._1
+          }
         }
       } catch {
         case e: NullPointerException =>

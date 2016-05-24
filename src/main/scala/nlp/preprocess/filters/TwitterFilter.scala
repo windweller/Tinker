@@ -1,7 +1,9 @@
 package nlp.preprocess.filters
 
 
+import application.Application
 import com.github.tototoshi.csv.CSVWriter
+import utils.Timer
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -33,6 +35,7 @@ trait TwitterFilter extends Filter {
             result += seqnormal
           else
             result += seqnormal ++ keep.get
+          if(Application.verbose) Timer.completeOne
         }
       }
     }
@@ -96,12 +99,11 @@ trait TwitterFilter extends Filter {
     )
 
     val nonAscii = "[^\\x00-\\x7F]+"
+  val searchPattern = OR(url, emoticon._1, emoticon._2, emoticon._3, emoticon._4, nonAscii).r
 
   def OR(patterns: String*) = {
     patterns.map{p => s"(?:$p)"}.mkString("|")
   }
-
-  val searchPattern = OR(url, emoticon._1, emoticon._2, emoticon._3, emoticon._4, nonAscii).r
 
   }
 
