@@ -41,7 +41,7 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
         val value = parts(0).trim
         val pattern = if (tnterms.nonEmpty || tcterms.nonEmpty) TregexPattern.compile(preprocessTregex(value))
         else TregexPattern.compile(value)
-        val key = if (parts.size > 1) parts(1).trim else value
+        val key = if (parts.size > 1) parts(1).trim else value.replaceAll(" ", "_").trim
         patterns.put(key, pattern)
       }}
 
