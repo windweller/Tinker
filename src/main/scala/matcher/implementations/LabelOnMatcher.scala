@@ -48,7 +48,8 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
       scheduler.addToGraph(row => scala.concurrent.Future {
         if(Application.verbose) Timer.completeOne
         val tree = Tree.valueOf(row("parsed"))
-        row += ("matched" -> search(struct.getTargetValue(row).getOrElse("sentence"), tree, patterns))
+        if(tree == null) { fail("No tree found for \""+row("parsed")+"\"") }
+        else { row += ("matched" -> search(struct.getTargetValue(row).getOrElse("sentence"), tree, patterns)) }
         row
       })
     }
@@ -56,6 +57,8 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
   }
 
   private def search(sentence: String, tree: Tree, patterns: mutable.HashMap[String,TregexPattern]): String = {
+    if(sentence == null) fail("No sentences found")
+
     val matched = ListBuffer[Tuple2[Int, String]]()
 
     patterns.foreach { i =>
@@ -68,12 +71,13 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
           if(foundbeginpos >= 0) { matched += foundbeginpos -> i._1 }
           else {
             val foundfirstblank = sentence.indexOf(" ", sentence.length/2)
-            matched += foundfirstblank -> i._1
+            if(foundfirstblank >= 0 ) { matched += foundfirstblank -> i._1 }
+            else { matched += 0 -> i._1 }
           }
         }
       } catch {
         case e: NullPointerException =>
-          return "tree error"
+          fail("tree error with \""+ sentence+"\"")
       }
     }
     if(matched.length == 1) {
