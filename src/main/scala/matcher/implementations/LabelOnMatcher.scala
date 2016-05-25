@@ -86,9 +86,9 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
       if (blank.equals(0)) blank = sentence.indexOf(' ',0)
       val rule = " ["+matched.head._2+"] "
       return sentence.substring(0, blank) + rule + sentence.substring(blank, sentence.length-1)*/
+      if(matched.head._1 == 0) return "$" + matched.head._2+" " + sentence
       val subs = sentence.substring(0,matched.head._1)
-      val rule = " $"+matched.head._2+" "
-      val result = subs + rule + sentence.substring(matched.head._1, sentence.length-1)
+      val result = subs + " $"+matched.head._2+" " + sentence.substring(matched.head._1, sentence.length-1)
       return result
     }
     else if (matched.length > 1) {
@@ -96,8 +96,13 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
       var prec = 0
       var resultmultiple = ""
       sorted.foreach { i =>
-        val rule = " $"+i._2+" "
-        resultmultiple = resultmultiple.concat(sentence.substring(prec,i._1)).concat(rule)
+        if(i._1 == 0) {
+          resultmultiple = resultmultiple.concat("$"+i._2+" ")
+        }
+        else {
+          val rule = " $"+i._2+" "
+          resultmultiple = resultmultiple.concat(sentence.substring(prec,i._1)).concat(rule)
+        }
         prec = i._1
       }
       if(prec < sentence.length-1) resultmultiple = resultmultiple.concat(sentence.substring(prec, sentence.length-1))
