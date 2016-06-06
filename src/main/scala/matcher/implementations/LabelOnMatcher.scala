@@ -65,8 +65,18 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
       try {
         val matcher = i._2.matcher(tree)
         if (matcher.find()) {
-          val found = matcher.getMatch.children().map(x => x.value()).mkString(" ").trim
-          val foundbeginpos = sentence.indexOf(found)
+          var found = ""
+          //val found = matcher.getMatch.children().map(x => x.value()).mkString(" ").trim
+          if(matcher.getMatch.children().nonEmpty) {
+            val leaves = matcher.getMatch.yieldWords().iterator()
+            var rec = 0
+            while(leaves.hasNext && rec < 5) {
+              found += leaves.next().word()
+              found += " "
+              rec+=1
+            }
+          }
+          val foundbeginpos = sentence.indexOf(" "+found)
           //If it doesn't find the right text, it will put at the middle of the sentence
           if(foundbeginpos >= 0) { matched += foundbeginpos -> i._1 }
           else {
@@ -81,11 +91,6 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
       }
     }
     if(matched.length == 1) {
-      /*val middle = sentence.length / 2;
-      var blank = sentence.indexOf(' ',middle)
-      if (blank.equals(0)) blank = sentence.indexOf(' ',0)
-      val rule = " ["+matched.head._2+"] "
-      return sentence.substring(0, blank) + rule + sentence.substring(blank, sentence.length-1)*/
       if(matched.head._1 == 0) return "$" + matched.head._2+" " + sentence
       val subs = sentence.substring(0,matched.head._1)
       val result = subs + " $"+matched.head._2+" " + sentence.substring(matched.head._1, sentence.length-1)
