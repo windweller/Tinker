@@ -112,7 +112,7 @@ object Application extends App {
       with Tab with EnglishPCFGParser with FileOp
 
     data.parse(None, DataSelect(targetColumnWithName = namecolumn))
-    data.save(output.toString)
+    save(output, data)
   }
 
   def parse_csv(input: File, output: File, namecolumn: String, numcore: Int): Unit = {
@@ -121,7 +121,7 @@ object Application extends App {
       with CSV with EnglishPCFGParser with FileOp
 
     data.parse(None, DataSelect(targetColumnWithName = namecolumn))
-    data.save(output.toString)
+    save(output, data)
   }
 
   def matched_csv(input: File, output: File, rules: File, namecolumn: String, numcore: Int): Unit = {
@@ -131,7 +131,7 @@ object Application extends App {
       with CSV with FutureTregexMatcher with EnglishPCFGParser with FileOp
 
     data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
-    data.save(output.toString)
+    save(output, data)
   }
 
   def matched_tab(input: File, output: File, rules: File, namecolumn: String, numcore: Int): Unit = {
@@ -141,7 +141,7 @@ object Application extends App {
       with Tab with FutureTregexMatcher with EnglishPCFGParser with FileOp
 
     data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
-    data.save(output.toString)
+    save(output, data)
   }
 
   def matchedlabel_csv(input: File, output: File, rules: File, namecolumn: String, numcore: Int): Unit = {
@@ -151,7 +151,7 @@ object Application extends App {
       with CSV with LabelOnMatcher with EnglishPCFGParser with FileOp
 
     data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
-    data.save(output.toString)
+    save(output, data)
   }
 
   def matchedlabel_tab(input: File, output: File, rules: File, namecolumn: String, numcore: Int): Unit = {
@@ -161,6 +161,13 @@ object Application extends App {
       with Tab with LabelOnMatcher with EnglishPCFGParser with FileOp
 
     data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
+    save(output, data)
+  }
+
+  def save(output: File, data: DataContainer): Unit = {
+    if(output.toString.endsWith("tab")) {
+      data.toTab
+    }
     data.save(output.toString)
   }
 
