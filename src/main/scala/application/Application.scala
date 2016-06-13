@@ -3,12 +3,12 @@ package application
 import java.io.File
 import java.net.URL
 
+import cleaner.implementations.CharacterCleaner
 import files.DataContainer
 import files.filetypes.input.{CSV, Tab}
 import files.operations.FileOp
-import files.structure.{DataSelect, DataStructure}
+import files.structure.DataSelect
 import matcher.implementations.{FutureTregexMatcher, LabelOnMatcher}
-import nlp.preprocess.filters.{Filter, TwitterNewFilter}
 import parser.implementations.StanfordNLP.EnglishPCFGParser
 import utils.ParameterCallToOption.Implicits._
 
@@ -85,25 +85,19 @@ object Application extends App {
   def clean_csv(input: File, output: File, namecolumn: String, numcore: Int, keepColumns: Seq[String]): Unit = {
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with CSV
+      with CSV with CharacterCleaner
 
-    val struct = new DataStructure(targetColumnWithName = namecolumn,
-      keepColumnsWithNames = keepColumns.toIndexedSeq)
-
-    val filter = new Filter(data, struct) with TwitterNewFilter
-    filter.preprocess(output.toString)
+    data.clean(None, DataSelect(targetColumnWithName = namecolumn))
+    save(output, data)
   }
 
   def clean_tab(input: File, output: File, namecolumn: String, numcore: Int, keepColumns: Seq[String]): Unit = {
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
-      with Tab
+      with Tab with CharacterCleaner
 
-    val struct = new DataStructure(targetColumnWithName = namecolumn,
-      keepColumnsWithNames = keepColumns.toIndexedSeq)
-
-    val filter = new Filter(data, struct) with TwitterNewFilter
-    filter.preprocess(output.toString)
+    data.clean(None, DataSelect(targetColumnWithName = namecolumn))
+    save(output, data)
   }
 
   def parse_tab(input: File, output: File, namecolumn: String, numcore: Int): Unit = {
@@ -134,6 +128,13 @@ object Application extends App {
     save(output, data)
   }
 
+  def save(output: File, data: DataContainer): Unit = {
+    if(output.toString.endsWith("tab")) {
+      data.toTab
+    }
+    data.save(output.toString)
+  }
+
   def matched_tab(input: File, output: File, rules: File, namecolumn: String, numcore: Int): Unit = {
 
     val data = new DataContainer(input.toString,
@@ -162,13 +163,6 @@ object Application extends App {
 
     data.matcher(rules.toString, None, DataSelect(targetColumnWithName = namecolumn))
     save(output, data)
-  }
-
-  def save(output: File, data: DataContainer): Unit = {
-    if(output.toString.endsWith("tab")) {
-      data.toTab
-    }
-    data.save(output.toString)
   }
 
   def file(path: String): URL =
