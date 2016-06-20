@@ -66,20 +66,29 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
         val matcher = i._2.matcher(tree)
         if (matcher.find()) {
           var found = ""
-          //val found = matcher.getMatch.children().map(x => x.value()).mkString(" ").trim
+          //Gives the words triggered by the rule
           if(matcher.getMatch.children().nonEmpty) {
             val leaves = matcher.getMatch.yieldWords().iterator()
             var rec = 0
+            //Creates the part which was triggered by the rule
             while(leaves.hasNext && rec < 5) {
               found += leaves.next().word()
               found += " "
               rec+=1
             }
           }
-          val foundbeginpos = sentence.indexOf(" "+found)
-          //If it doesn't find the right text, it will put at the middle of the sentence
-          if(foundbeginpos >= 0) { matched += foundbeginpos -> i._1 }
-          else {
+
+          //Find the index in sentence of the first word triggered by the rule
+          //val foundbeginpos = sentence.indexOf(found)
+          //val foundi = sentence.indexOf(" "+found.trim)
+          val foundInSent = s"\\b${found.trim}\\b".r.findAllIn(sentence)
+          //val foundInSent = found.r.findAllIn(sentence)
+          while(foundInSent.hasNext) {
+            matched += foundInSent.start -> i._1
+            foundInSent.next()
+          }
+          //if not found, give the index of the sentence's middle part
+          if(matcher.find()) {
             val foundfirstblank = sentence.indexOf(" ", sentence.length/2)
             if(foundfirstblank >= 0 ) { matched += foundfirstblank -> i._1 }
             else { matched += 0 -> i._1 }
@@ -90,12 +99,15 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
           fail("tree error with \""+ sentence+"\"")
       }
     }
+
+    //Only one rule was triggered
     if(matched.length == 1) {
       if(matched.head._1 == 0) return "$" + matched.head._2+" " + sentence
       val subs = sentence.substring(0,matched.head._1)
       val result = subs + " $"+matched.head._2+" " + sentence.substring(matched.head._1, sentence.length-1)
       return result
     }
+    //Several rules triggered
     else if (matched.length > 1) {
       val sorted = matched.sortBy(_._1)
       var prec = 0
