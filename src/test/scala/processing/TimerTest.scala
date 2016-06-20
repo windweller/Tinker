@@ -8,8 +8,10 @@ import utils.Timer
   */
 class TimerTest extends FlatSpec {
   "print Timer" should "work" in {
-    while (true) {
+    var i = 0
+    while (i < 800) {
       Timer.completeOne()
+      i+=1
     }
   }
 }
