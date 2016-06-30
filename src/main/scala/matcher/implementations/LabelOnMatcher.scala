@@ -57,41 +57,25 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
   }
 
   private def search(sentence: String, tree: Tree, patterns: mutable.HashMap[String,TregexPattern]): String = {
-    if(sentence == null) fail("No sentences found")
+    if (sentence == null) fail("no sentence found")
 
     val matched = ListBuffer[Tuple2[Int, String]]()
+    val leaves = tree.yieldWords().toArray().mkString(" ")
 
     patterns.foreach { i =>
       try {
         val matcher = i._2.matcher(tree)
         if (matcher.find()) {
-          var found = ""
           //Gives the words triggered by the rule
           if(matcher.getMatch.children().nonEmpty) {
-            val leaves = matcher.getMatch.yieldWords().iterator()
-            var rec = 0
-            //Creates the part which was triggered by the rule
-            while(leaves.hasNext && rec < 5) {
-              found += leaves.next().word()
-              found += " "
-              rec+=1
-            }
-          }
+            val found = matcher.getMatch.yieldWords().toArray().mkString(" ")
 
-          //Find the index in sentence of the first word triggered by the rule
-          //val foundbeginpos = sentence.indexOf(found)
-          //val foundi = sentence.indexOf(" "+found.trim)
-          val foundInSent = s"\\b${found.trim}\\b".r.findAllIn(sentence)
-          //val foundInSent = found.r.findAllIn(sentence)
-          while(foundInSent.hasNext) {
-            matched += foundInSent.start -> i._1
-            foundInSent.next()
-          }
-          //if not found, give the index of the sentence's middle part
-          if(matcher.find()) {
-            val foundfirstblank = sentence.indexOf(" ", sentence.length/2)
-            if(foundfirstblank >= 0 ) { matched += foundfirstblank -> i._1 }
-            else { matched += 0 -> i._1 }
+            //Find the index in tre of the first word triggered by the rule
+            val foundInSent = s"\\b${found}\\b".r.findAllIn(leaves)
+            while(foundInSent.hasNext) {
+              matched += sentence.lastIndexOf(" ", foundInSent.start-1) -> i._1
+              foundInSent.next()
+            }
           }
         }
       } catch {
