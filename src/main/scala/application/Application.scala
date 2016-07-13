@@ -29,10 +29,10 @@ object Application extends App {
     opt[File]('o', "out") required() valueName("<file>") action { (x, c) =>
       c.copy(out = x) } text("file for the output, required")
 
-    opt[String]('n',"name") required() action { (x, c) =>
+    opt[String]('t',"text") required() action { (x, c) =>
       c.copy(text = x) } text("column name where to find text, required")
 
-    opt[String]('t',"tree") action { (k,c) =>
+    opt[String]("tree") action { (k,c) =>
       c.copy(tree = k) } text("column name where to find parsed tree, `parsed` by default")
 
     opt[Int]("cores") action {(x, c) =>
@@ -62,15 +62,9 @@ object Application extends App {
 
     checkConfig { c =>
       if (c.mode.equals("")) failure("please choose a command, like `clean`")
-      else {
-        if(!c.in.exists())
-          failure("input not found")
-        if(c.out.toString.isEmpty || c.out.isDirectory)
-          failure("output is not a filename")
-        if((c.mode.equals("m") || c.mode.equals("l")) && c.tree.isEmpty)
-          failure("--tree option is required with either command `match` or `label`")
-      }
-      success
+      else if(!c.in.exists()) failure("input not found")
+      else if(c.out.toString.isEmpty || c.out.isDirectory) failure("output is not a filename")
+      else success
     }
   }
   // parser.parse returns Option[C]
@@ -82,13 +76,13 @@ object Application extends App {
     if(config.mode.equals("c")) clean_tab(config.in, config.out, config.text, config.numcore, config.keep)
     if(config.mode.equals("p")) parse_tab(config.in, config.out, config.text, config.numcore)
     if(config.mode.equals("m")) matched_tab(config.in, config.out, config.rules, config.tree, config.numcore)
-    if(config.mode.equals("m")) matchedlabel_tab(config.in, config.out, config.rules, config.tree, config.text, config.numcore)
+    if(config.mode.equals("l")) matchedlabel_tab(config.in, config.out, config.rules, config.tree, config.text, config.numcore)
   }
   else {
     if(config.mode.equals("c")) clean_csv(config.in, config.out, config.text, config.numcore, config.keep)
     if(config.mode.equals("p")) parse_csv(config.in, config.out, config.text, config.numcore)
     if(config.mode.equals("m")) matched_csv(config.in, config.out, config.rules, config.tree, config.numcore)
-    if(config.mode.equals("m")) matchedlabel_csv(config.in, config.out, config.rules, config.tree, config.text, config.numcore)
+    if(config.mode.equals("l")) matchedlabel_csv(config.in, config.out, config.rules, config.tree, config.text, config.numcore)
   }
 
   def clean_csv(input: File, output: File, text: String, numcore: Int, keepColumns: Seq[String]): Unit = {
@@ -125,13 +119,6 @@ object Application extends App {
 
     data.parse(None, DataSelect(targetColumnWithName = text))
     save(output, data)
-  }
-
-  def save(output: File, data: DataContainer): Unit = {
-    if(output.toString.endsWith("tab")) {
-      data.toTab
-    }
-    data.save(output.toString)
   }
 
   def matched_csv(input: File, output: File, rules: File, tree: String, numcore: Int): Unit = {
@@ -172,6 +159,13 @@ object Application extends App {
 
     data.matcher(rules.toString, None, DataSelect(targetColumnWithName = text))
     save(output, data)
+  }
+
+  def save(output: File, data: DataContainer): Unit = {
+    if(output.toString.endsWith("tab")) {
+      data.toTab
+    }
+    data.save(output.toString)
   }
 
   def file(path: String): URL =
