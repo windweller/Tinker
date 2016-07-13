@@ -65,16 +65,25 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
     patterns.foreach { i =>
       try {
         val matcher = i._2.matcher(tree)
-        if (matcher.find()) {
+        //val indices = ListBuffer[Int]()
+        while (matcher.find()) {
           //Gives the words triggered by the rule
           if(matcher.getMatch.children().nonEmpty) {
             val found = matcher.getMatch.yieldWords().toArray().mkString(" ")
 
-            //Find the index in tre of the first word triggered by the rule
+            //Find the index in tree of the first word triggered by the rule
             val foundInSent = s"\\b${found}\\b".r.findAllIn(leaves)
             while(foundInSent.hasNext) {
-              matched += sentence.lastIndexOf(" ", foundInSent.start-1) -> i._1
-              foundInSent.next()
+              var blankpos = sentence.lastIndexOf(" ", foundInSent.start-1)
+
+              if(blankpos < 0) blankpos = 0
+              else if(blankpos > sentence.length) blankpos = sentence.length
+
+              if(matched.indexOf(Tuple2(blankpos,i._1)) == -1) {
+                matched += blankpos -> i._1
+                //indices += blankpos
+              }
+              foundInSent.next
             }
           }
         }
@@ -86,9 +95,9 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
 
     //Only one rule was triggered
     if(matched.length == 1) {
-      if(matched.head._1 == 0) return "$" + matched.head._2+" " + sentence
+      if(matched.head._1 == 0) return "$" + matched.head._2 + " " + sentence
       val subs = sentence.substring(0,matched.head._1)
-      val result = subs + " $"+matched.head._2+" " + sentence.substring(matched.head._1, sentence.length-1)
+      val result = subs + " $"+matched.head._2 + sentence.substring(matched.head._1, sentence.length)
       return result
     }
     //Several rules triggered
@@ -101,12 +110,12 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
           resultmultiple = resultmultiple.concat("$"+i._2+" ")
         }
         else {
-          val rule = " $"+i._2+" "
+          val rule = " $"+i._2
           resultmultiple = resultmultiple.concat(sentence.substring(prec,i._1)).concat(rule)
         }
         prec = i._1
       }
-      if(prec < sentence.length-1) resultmultiple = resultmultiple.concat(sentence.substring(prec, sentence.length-1))
+      if(prec < sentence.length-1) resultmultiple = resultmultiple.concat(sentence.substring(prec, sentence.length))
       return resultmultiple
     }
     sentence
