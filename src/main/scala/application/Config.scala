@@ -7,7 +7,8 @@ import java.io.File
   */
 case class Config(in: File = new File(""),
                   out: File = new File(""),
-                  namecolumn: String="",
+                  text: String="",
+                  tree: String="",
                   numcore: Int=1,
                   rules: File = new File(""),
                   csv: Boolean = false,
