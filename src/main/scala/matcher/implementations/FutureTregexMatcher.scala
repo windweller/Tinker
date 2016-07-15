@@ -19,7 +19,7 @@ trait FutureTregexMatcher extends Matcher with FailureHandle {
 
   this: DataContainer =>
   val tnterms = scala.io.Source.fromURL(Application.file("TNTermsReduced2.txt"))
-    .getLines().mkString("|") //getOrElse !!
+    .getLines().mkString("|")
   val tcterms = scala.io.Source.fromURL(Application.file("TNTermsReduced2.txt"))
     .getLines().mkString("|")
 
