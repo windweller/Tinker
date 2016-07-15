@@ -20,7 +20,9 @@ Unlike many libaries that rely on configuration files, or 10 config parameters t
 
 Tinker only release documentation for stable components, but its nightly built offers more. The next release will include a better API for NLP components (currently experimental and not very well-integrated into Tinker-processing). 
 
-- (next release) 0.15: Added executable generation with `sbt assembly` and new Filters
+- 0.16: (next release) Added a new Label filter, change options from command line
+
+- 0.15: Added executable generation with `sbt assembly` and new Filters
 
 - 0.14: All core-APIs and a limited number of native modules (Tregex, Parser) are stable and working with new updates.
 
