@@ -8,7 +8,7 @@ import java.io.File
 case class Config(in: File = new File(""),
                   out: File = new File(""),
                   text: String="",
-                  tree: String="",
+                  tree: String="parsed",
                   numcore: Int=1,
                   rules: File = new File(""),
                   csv: Boolean = false,
@@ -16,6 +16,7 @@ case class Config(in: File = new File(""),
                   label: Boolean = false,
                   keep: Seq[String] = Seq(),
                   mode: String="",
+                  labelplace: String="start",
                   verbose: Boolean = false)
 {
 

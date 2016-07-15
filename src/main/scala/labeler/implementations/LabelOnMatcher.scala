@@ -1,34 +1,35 @@
-package matcher.implementations
+package labeler.implementations
 
 import application.Application
 import edu.stanford.nlp.trees.Tree
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import files.DataContainer
 import files.structure.DataSelect
-import matcher.Matcher
+import labeler.Labeler
 import utils.{FailureHandle, Timer}
 
 import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.matching.Regex
 
 /**
-  * Created by Aurore on 4/17/16
-  * This implementation creates a new column where all matched rules
-  * will be inserted in the sentence as a flag $rule where it was first
-  * triggered.
+  * LabelOnMatcher Trait
+  * Written by Aurore
   */
-trait LabelOnMatcher extends Matcher with FailureHandle {
+trait LabelOnMatcher extends Labeler with FailureHandle {
 
   this: DataContainer =>
   val tnterms = scala.io.Source.fromURL(Application.file("TNTermsReduced2.txt"))
-    .getLines().mkString("|") //getOrElse !!
+    .getLines().mkString("|")
   val tcterms = scala.io.Source.fromURL(Application.file("TNTermsReduced2.txt"))
       .getLines().mkString("|")
 
-  override def matcher(file: Option[String] = None,
+  override def label(file:Option[String] = None,
                        patternsRaw: Option[List[String]] = None,
-                       struct: DataSelect = DataSelect()): DataContainer with Matcher = {
+                       text: DataSelect = DataSelect(),
+                       tree: DataSelect = DataSelect(),
+                       place: Option[String] = Some("start")): DataContainer with Labeler = {
 
     if (patternsRaw.isEmpty && file.isEmpty) {
       fail("you must put in file or list of patterns")
@@ -47,16 +48,15 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
 
       scheduler.addToGraph(row => scala.concurrent.Future {
         if(Application.verbose) Timer.completeOne
-        val tree = Tree.valueOf(row("parsed"))
-        if(tree == null) { fail("No tree found for \""+row("parsed")+"\"") }
-        else { row += ("matched" -> search(struct.getTargetValue(row).getOrElse("sentence"), tree, patterns)) }
+        else { row += ("matched" -> findIn(text.getTargetValue(row).getOrElse("sentence"),
+          Tree.valueOf(tree.getTargetValue(row).getOrElse("parsed")), patterns, place.get)) }
         row
       })
     }
     this
   }
 
-  private def search(sentence: String, tree: Tree, patterns: mutable.HashMap[String,TregexPattern]): String = {
+  private def findIn(sentence: String, tree: Tree, patterns: mutable.HashMap[String,TregexPattern], place: String): String = {
     if (sentence == null) fail("no sentence found")
 
     val matched = ListBuffer[Tuple2[Int, String]]()
@@ -65,25 +65,30 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
     patterns.foreach { i =>
       try {
         val matcher = i._2.matcher(tree)
-        //val indices = ListBuffer[Int]()
         while (matcher.find()) {
           //Gives the words triggered by the rule
           if(matcher.getMatch.children().nonEmpty) {
-            val found = matcher.getMatch.yieldWords().toArray().mkString(" ")
+            val foundregex = "\\b"+Regex.quote(matcher.getMatch.yieldWords().toArray().mkString(" "))+"\\b"
 
             //Find the index in tree of the first word triggered by the rule
-            val foundInSent = s"\\b${found}\\b".r.findAllIn(leaves)
-            while(foundInSent.hasNext) {
-              var blankpos = sentence.lastIndexOf(" ", foundInSent.start-1)
+            val foundInLeaves = foundregex.r.findAllIn(leaves)
+            //If not find, place at the start or end
+            if(!foundInLeaves.hasNext) place match {
+              case "end" => matched += sentence.length -> i._1
+              case _ => matched += 0 -> i._1
+            }
 
-              if(blankpos < 0) blankpos = 0
-              else if(blankpos > sentence.length) blankpos = sentence.length
+            //For each words found
+            while(foundInLeaves.hasNext) {
+              val blankpos = Some(findBlank(sentence,foundInLeaves.start,foundInLeaves.end,place)).map(x => {
+                if(x < 0) place match { case "end" => sentence.length case _ => 0}
+                else x
+              })
 
-              if(matched.indexOf(Tuple2(blankpos,i._1)) == -1) {
-                matched += blankpos -> i._1
-                //indices += blankpos
+              if(matched.indexOf(Tuple2(blankpos.get,i._1)) == -1) {
+                matched += blankpos.get -> i._1
               }
-              foundInSent.next
+              foundInLeaves.next
             }
           }
         }
@@ -121,12 +126,20 @@ trait LabelOnMatcher extends Matcher with FailureHandle {
     sentence
   }
 
+  private def findBlank(sentence: String, start: Int, end: Int, place: String): Int = {
+    place match {
+      case "start" => sentence.lastIndexOf(" ", start)
+      case "middle" => sentence.indexOf(" ", end - start)
+      case "end" => sentence.indexOf(" ", end)
+      case _ => sentence.lastIndexOf(" ", start)
+    }
+  }
+
   private def rulesFromFile(fileLoc: Option[String]): Option[List[String]] = {
     fileLoc.map(file => scala.io.Source.fromFile(file).getLines().toList)
   }
 
   private def preprocessTregex(pattern: String): String = {
-
     if (pattern.contains("TN|TC")) {
       return pattern.replaceAll("TN|TC", tnterms+"|"+tcterms)
     }

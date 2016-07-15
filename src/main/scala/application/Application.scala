@@ -8,7 +8,8 @@ import files.DataContainer
 import files.filetypes.input.{CSV, Tab}
 import files.operations.FileOp
 import files.structure.DataSelect
-import matcher.implementations.{FutureTregexMatcher, LabelOnMatcher}
+import labeler.implementations.LabelOnMatcher
+import matcher.implementations.FutureTregexMatcher
 import parser.implementations.StanfordNLP.EnglishPCFGParser
 import utils.ParameterCallToOption.Implicits._
 
@@ -58,7 +59,10 @@ object Application extends App {
     cmd("label") action { (_, c) =>
       c.copy(mode = "l") } text("label is a command to find Tregex rules on texts, inserts labels on the sentence") children(
       opt[File]('r', "rules") required() valueName("<file>") action { (x, c) =>
-        c.copy(rules = x) } text("file with line-separated tregex rules, required\n"))
+        c.copy(rules = x) } text("file with line-separated tregex rules, required"),
+      opt[String]("at") action { (n, c) =>
+        c.copy(labelplace = n)} text("where the label is placed, `start` by default. `middle` or `end` available\n")
+      )
 
     checkConfig { c =>
       if (c.mode.equals("")) failure("please choose a command, like `clean`")
@@ -76,13 +80,13 @@ object Application extends App {
     if(config.mode.equals("c")) clean_tab(config.in, config.out, config.text, config.numcore, config.keep)
     if(config.mode.equals("p")) parse_tab(config.in, config.out, config.text, config.numcore)
     if(config.mode.equals("m")) matched_tab(config.in, config.out, config.rules, config.tree, config.numcore)
-    if(config.mode.equals("l")) matchedlabel_tab(config.in, config.out, config.rules, config.tree, config.text, config.numcore)
+    if(config.mode.equals("l")) matchedlabel_tab(config.in, config.out, config.rules, config.tree, config.text, config.labelplace, config.numcore)
   }
   else {
     if(config.mode.equals("c")) clean_csv(config.in, config.out, config.text, config.numcore, config.keep)
     if(config.mode.equals("p")) parse_csv(config.in, config.out, config.text, config.numcore)
     if(config.mode.equals("m")) matched_csv(config.in, config.out, config.rules, config.tree, config.numcore)
-    if(config.mode.equals("l")) matchedlabel_csv(config.in, config.out, config.rules, config.tree, config.text, config.numcore)
+    if(config.mode.equals("l")) matchedlabel_csv(config.in, config.out, config.rules, config.tree, config.text, config.labelplace, config.numcore)
   }
 
   def clean_csv(input: File, output: File, text: String, numcore: Int, keepColumns: Seq[String]): Unit = {
@@ -92,6 +96,13 @@ object Application extends App {
 
     data.clean(None, DataSelect(targetColumnWithName = text))
     save(output, data)
+  }
+
+  def save(output: File, data: DataContainer): Unit = {
+    if(output.toString.endsWith("tab")) {
+      data.toTab
+    }
+    data.save(output.toString)
   }
 
   def clean_tab(input: File, output: File, text: String, numcore: Int, keepColumns: Seq[String]): Unit = {
@@ -141,31 +152,32 @@ object Application extends App {
     save(output, data)
   }
 
-  def matchedlabel_csv(input: File, output: File, rules: File, tree: String, text: String, numcore: Int): Unit = {
+  def matchedlabel_csv(input: File, output: File, rules: File, tree: String, text: String, place: String, numcore: Int): Unit = {
 
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
       with CSV with LabelOnMatcher with EnglishPCFGParser with FileOp
 
-    data.matcher(rules.toString, None, DataSelect(targetColumnWithName = text))
+    data.label(rules.toString, None,
+      DataSelect(targetColumnWithName = text),
+      DataSelect(targetColumnWithName = tree),
+      place
+    )
     save(output, data)
   }
 
-  def matchedlabel_tab(input: File, output: File, rules: File, tree: String, text: String, numcore: Int): Unit = {
+  def matchedlabel_tab(input: File, output: File, rules: File, tree: String, text: String, place: String, numcore: Int): Unit = {
 
     val data = new DataContainer(input.toString,
       header = true, core = numcore)
       with Tab with LabelOnMatcher with EnglishPCFGParser with FileOp
 
-    data.matcher(rules.toString, None, DataSelect(targetColumnWithName = text))
+    data.label(rules.toString, None,
+      DataSelect(targetColumnWithName = text),
+      DataSelect(targetColumnWithName = tree),
+      place
+    )
     save(output, data)
-  }
-
-  def save(output: File, data: DataContainer): Unit = {
-    if(output.toString.endsWith("tab")) {
-      data.toTab
-    }
-    data.save(output.toString)
   }
 
   def file(path: String): URL =
