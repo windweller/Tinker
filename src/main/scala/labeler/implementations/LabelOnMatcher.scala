@@ -12,6 +12,7 @@ import scala.collection.mutable
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.matching.Regex
+import scala.util.matching.Regex.MatchIterator
 
 /**
   * LabelOnMatcher Trait
@@ -59,51 +60,56 @@ trait LabelOnMatcher extends Labeler with FailureHandle {
   private def findIn(sentence: String, tree: Tree, patterns: mutable.HashMap[String,TregexPattern], place: String): String = {
     if (sentence == null) fail("no sentence found")
 
-    val matched = ListBuffer[Tuple2[Int, String]]()
+    val matched = ListBuffer[(Int, String)]()
     val leaves = tree.yieldWords().toArray().mkString(" ")
 
     patterns.foreach { i =>
-      try {
-        val matcher = i._2.matcher(tree)
-        while (matcher.find()) {
-          //Gives the words triggered by the rule
-          if(matcher.getMatch.children().nonEmpty) {
-            val foundregex = "\\b"+Regex.quote(matcher.getMatch.yieldWords().toArray().mkString(" "))+"\\b"
+      val matcher = i._2.matcher(tree)
+      while (matcher.find()) {
+        //Gives the words triggered by the rule
+        if(matcher.getMatch.children().nonEmpty) {
+          val foundRegex = "\\b"+Regex.quote(matcher.getMatch.yieldWords().toArray().mkString(" "))+"\\b"
+          //Find the index in tree of the first word triggered by the rule
+          val foundInLeaves = foundRegex.r.findAllIn(leaves)
 
-            //Find the index in tree of the first word triggered by the rule
-            val foundInLeaves = foundregex.r.findAllIn(leaves)
-            //If not find, place at the start or end
-            if(!foundInLeaves.hasNext) place match {
-              case "end" => matched += sentence.length -> i._1
-              case _ => matched += 0 -> i._1
-            }
-
-            //For each words found
-            while(foundInLeaves.hasNext) {
-              val blankpos = Some(findBlank(sentence,foundInLeaves.start,foundInLeaves.end,place)).map(x => {
-                if(x < 0) place match { case "end" => sentence.length case _ => 0}
-                else x
-              })
-
-              if(matched.indexOf(Tuple2(blankpos.get,i._1)) == -1) {
-                matched += blankpos.get -> i._1
-              }
-              foundInLeaves.next
+          //For each found in the "leaves" sentence
+          foundInLeaves.length match {
+            case 0 => matched += addDefault(sentence.length, place) -> i._1
+            case _ => foundInLeaves foreach { _ =>
+              val result = getBlank(sentence, place, foundInLeaves) -> i._1
+              if(!matched.contains(result)) matched += result
             }
           }
         }
-      } catch {
-        case e: NullPointerException =>
-          fail("tree error with \""+ sentence+"\"")
       }
     }
 
+    getSentLabeled(sentence, matched) match {
+      case Some(sentLabeled) => return sentLabeled
+      case None => sentence
+    }
+  }
+
+  private def addDefault(length: Int, place: String): Int = place match {
+    case "end" => length
+    case _ => 0
+  }
+
+  private def getBlank(sentence: String, place: String, foundInLeaves: MatchIterator): Int = {
+    val blankpos = Some(findBlank(sentence, foundInLeaves.start, foundInLeaves.end, place)).map(x => {
+      if (x < 0) addDefault(sentence.length, place)
+      else x
+    })
+    blankpos.get
+  }
+
+  private def getSentLabeled(sentence: String, matched: ListBuffer[(Int, String)]): Option[String] = {
     //Only one rule was triggered
-    if(matched.length == 1) {
-      if(matched.head._1 == 0) return "$" + matched.head._2 + " " + sentence
-      val subs = sentence.substring(0,matched.head._1)
-      val result = subs + " $"+matched.head._2 + sentence.substring(matched.head._1, sentence.length)
-      return result
+    if (matched.length == 1) {
+      if (matched.head._1 == 0) return Some("$" + matched.head._2 + " " + sentence)
+      val subs = sentence.substring(0, matched.head._1)
+      val result = subs + " $" + matched.head._2 + sentence.substring(matched.head._1, sentence.length)
+      return Some(result)
     }
     //Several rules triggered
     else if (matched.length > 1) {
@@ -111,19 +117,19 @@ trait LabelOnMatcher extends Labeler with FailureHandle {
       var prec = 0
       var resultmultiple = ""
       sorted.foreach { i =>
-        if(i._1 == 0) {
-          resultmultiple = resultmultiple.concat("$"+i._2+" ")
+        if (i._1 == 0) {
+          resultmultiple = resultmultiple.concat("$" + i._2 + " ")
         }
         else {
-          val rule = " $"+i._2
-          resultmultiple = resultmultiple.concat(sentence.substring(prec,i._1)).concat(rule)
+          val rule = " $" + i._2
+          resultmultiple = resultmultiple.concat(sentence.substring(prec, i._1)).concat(rule)
         }
         prec = i._1
       }
-      if(prec < sentence.length-1) resultmultiple = resultmultiple.concat(sentence.substring(prec, sentence.length))
-      return resultmultiple
+      if (prec < sentence.length - 1) resultmultiple = resultmultiple.concat(sentence.substring(prec, sentence.length))
+      return Some(resultmultiple)
     }
-    sentence
+    None
   }
 
   private def findBlank(sentence: String, start: Int, end: Int, place: String): Int = {
