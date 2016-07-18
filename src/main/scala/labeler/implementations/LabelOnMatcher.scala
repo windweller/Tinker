@@ -73,12 +73,12 @@ trait LabelOnMatcher extends Labeler with FailureHandle {
           val foundInLeaves = foundRegex.r.findAllIn(leaves)
 
           //For each found in the "leaves" sentence
-          foundInLeaves.length match {
-            case 0 => matched += addDefault(sentence.length, place) -> i._1
-            case _ => foundInLeaves foreach { _ =>
-              val result = getBlank(sentence, place, foundInLeaves) -> i._1
-              if(!matched.contains(result)) matched += result
-            }
+
+          if(!foundInLeaves.hasNext)
+            matched += addDefault(sentence, sentence.length, place) -> i._1
+          else foundInLeaves foreach { _ =>
+            val result = getBlank(sentence, place, foundInLeaves) -> i._1
+            if(!matched.contains(result)) matched += result
           }
         }
       }
@@ -90,14 +90,15 @@ trait LabelOnMatcher extends Labeler with FailureHandle {
     }
   }
 
-  private def addDefault(length: Int, place: String): Int = place match {
+  private def addDefault(sentence: String, length: Int, place: String): Int = place match {
     case "end" => length
+    case "middle" => findBlank(sentence,0,length,place)
     case _ => 0
   }
 
   private def getBlank(sentence: String, place: String, foundInLeaves: MatchIterator): Int = {
     val blankpos = Some(findBlank(sentence, foundInLeaves.start, foundInLeaves.end, place)).map(x => {
-      if (x < 0) addDefault(sentence.length, place)
+      if (x < 0) addDefault(sentence, sentence.length, place)
       else x
     })
     blankpos.get
