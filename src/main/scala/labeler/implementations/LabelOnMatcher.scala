@@ -136,7 +136,7 @@ trait LabelOnMatcher extends Labeler with FailureHandle {
   private def findBlank(sentence: String, start: Int, end: Int, place: String): Int = {
     place match {
       case "start" => sentence.lastIndexOf(" ", start)
-      case "middle" => sentence.indexOf(" ", end - start)
+      case "middle" => sentence.indexOf(" ", (start+end)/2)
       case "end" => sentence.indexOf(" ", end)
       case _ => sentence.lastIndexOf(" ", start)
     }
