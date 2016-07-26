@@ -95,7 +95,7 @@ trait LabelOnMatcher extends Labeler with FailureHandle {
 
   private def addDefault(sentence: String, length: Int, place: String): Int = place match {
     case "end" => length
-    case "middle" => findBlank(sentence,0,length,place)
+    case "middle" => findBlank(sentence,0,length,place) match { case -1 => 0 case x => x}
     case _ => 0
   }
 
@@ -105,6 +105,15 @@ trait LabelOnMatcher extends Labeler with FailureHandle {
       else x
     })
     blankpos.get
+  }
+
+  private def findBlank(sentence: String, start: Int, end: Int, place: String): Int = {
+    place match {
+      case "start" => sentence.lastIndexOf(" ", start)
+      case "middle" => sentence.indexOf(" ", (start+end-1)/2)
+      case "end" => sentence.indexOf(" ", end)
+      case _ => sentence.lastIndexOf(" ", start)
+    }
   }
 
   private def getSentLabeled(sentence: String, matched: ListBuffer[(Int, String)]): Option[String] = {
@@ -134,15 +143,6 @@ trait LabelOnMatcher extends Labeler with FailureHandle {
       return Some(resultmultiple)
     }
     None
-  }
-
-  private def findBlank(sentence: String, start: Int, end: Int, place: String): Int = {
-    place match {
-      case "start" => sentence.lastIndexOf(" ", start)
-      case "middle" => sentence.indexOf(" ", (start+end)/2)
-      case "end" => sentence.indexOf(" ", end)
-      case _ => sentence.lastIndexOf(" ", start)
-    }
   }
 
   private def rulesFromFile(fileLoc: Option[String]): Option[List[String]] = {
