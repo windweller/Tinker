@@ -49,9 +49,8 @@ trait LabelOnMatcher extends Labeler with FailureHandle {
 
       scheduler.addToGraph(row => scala.concurrent.Future {
         if(Application.verbose) Timer.completeOne
-        else { row += ("matched" -> findIn(text.getTargetValue(row).getOrElse("sentence"),
-          Tree.valueOf(tree.getTargetValue(row).getOrElse("parsed")), patterns, place.get)) }
-        row
+        row += ("matched" -> findIn(text.getTargetValue(row).getOrElse("sentence"),
+          Tree.valueOf(tree.getTargetValue(row).getOrElse("parsed")), patterns, place.get))
       })
     }
     this
@@ -59,6 +58,7 @@ trait LabelOnMatcher extends Labeler with FailureHandle {
 
   private def findIn(sentence: String, tree: Tree, patterns: mutable.HashMap[String,TregexPattern], place: String): String = {
     if (sentence == null) fail("no sentence found")
+    if (tree == null) fail("no tree found")
 
     val matched = ListBuffer[(Int, String)]()
     val leaves = tree.yieldWords().toArray().mkString(" ")
