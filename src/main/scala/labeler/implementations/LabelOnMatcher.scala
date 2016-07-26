@@ -57,9 +57,14 @@ trait LabelOnMatcher extends Labeler with FailureHandle {
   }
 
   private def findIn(sentence: String, tree: Tree, patterns: mutable.HashMap[String,TregexPattern], place: String): String = {
-    if (sentence == null) fail("no sentence found")
-    if (tree == null) fail("no tree found")
-
+    if (sentence == null) {
+      fail("no sentence found")
+      return "";
+    }
+    if (tree == null) {
+      fail("no tree found")
+      return sentence;
+    }
     val matched = ListBuffer[(Int, String)]()
     val leaves = tree.yieldWords().toArray().mkString(" ")
 
@@ -71,8 +76,6 @@ trait LabelOnMatcher extends Labeler with FailureHandle {
           val foundRegex = "\\b"+Regex.quote(matcher.getMatch.yieldWords().toArray().mkString(" "))+"\\b"
           //Find the index in tree of the first word triggered by the rule
           val foundInLeaves = foundRegex.r.findAllIn(leaves)
-
-          //For each found in the "leaves" sentence
 
           if(!foundInLeaves.hasNext)
             matched += addDefault(sentence, sentence.length, place) -> i._1
