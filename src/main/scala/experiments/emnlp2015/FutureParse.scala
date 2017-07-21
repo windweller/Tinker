@@ -9,7 +9,7 @@ import edu.stanford.nlp.trees.Tree
 import files.DataContainer
 import files.RowTypes._
 import files.structure.DataStructure
-import nlp.parser.Parser
+import nlp.parser.ConstituencyParser
 import utils.Timer
 
 /**
@@ -17,7 +17,7 @@ import utils.Timer
  */
 class FutureParse(val data: DataContainer, val struct: DataStructure) {
 
-  val parser = new Parser
+  val parser = new ConstituencyParser
 
   def saveFutureMatching(saveLoc: String): Unit = {
     val output: CSVWriter = CSVWriter.open(saveLoc, append = true)

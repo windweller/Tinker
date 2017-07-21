@@ -44,14 +44,17 @@ libraryDependencies ++= {
     "edu.emory.clir" % "clearnlp-dictionary" % "3.1",
     "edu.emory.clir" % "clearnlp-general-en-dep" % "3.2",
     "edu.emory.clir" % "clearnlp-general-en-pos" % "3.2",
-    "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1",
-    "edu.stanford.nlp" % "stanford-corenlp" % "3.5.1" % "provided" classifier "models",
+    "edu.stanford.nlp" % "stanford-corenlp" % "3.8.0",
+    "edu.stanford.nlp" % "stanford-corenlp" % "3.8.0" classifier "models",
+//    "edu.stanford.nlp" % "stanford-corenlp" % "3.8.0" % "provided" classifier "models",
     //ML-components
     "tw.edu.ntu.csie" % "libsvm" % "3.17",
     //Command-Line arguments
     "com.github.scopt" %% "scopt" % "3.3.0"
   )
 }
+
+
 
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation", "-feature")
 

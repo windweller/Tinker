@@ -12,7 +12,7 @@ import files.RowTypes._
 import files.structure.DataStructure
 import nlp.matcher.Matcher
 import nlp.matcher.impl.Tregex
-import nlp.parser.Parser
+import nlp.parser.ConstituencyParser
 import processing.buffers.Buffer
 import utils.Timer
 
@@ -32,7 +32,7 @@ class Future(val data: DataContainer, val struct: DataStructure, val patternRaw:
 
   this: Buffer =>
 
-  val parser = new Parser
+  val parser = new ConstituencyParser
   val matcher = new Matcher with Tregex
   //pre-processing patterns (replace TN|TC)
   val tnterms = tndoc.map(doc => scala.io.Source.fromFile(doc).getLines().toList)

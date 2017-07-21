@@ -12,7 +12,7 @@ import files.filetypes.input.Tab
 import files.structure.DataStructure
 import nlp.matcher.Matcher
 import nlp.matcher.impl.Tregex
-import nlp.parser.Parser
+import nlp.parser.ConstituencyParser
 import edu.stanford.nlp.trees.tregex.TregexPattern
 import utils.Timer
 import utils.ParameterCallToOption.Implicits._
@@ -25,7 +25,7 @@ object FutureApp extends App {
 
   import scala.io
 
-  val parser = new Parser
+  val parser = new ConstituencyParser
   val matcher = new Matcher with Tregex
 
   val patternRaw = io.Source.fromFile("E:\\Allen\\R\\acl2015\\FutureRules_2.0b.txt").getLines().filter(e => e != "").map(e => e.replaceFirst("\\s+$", ""))

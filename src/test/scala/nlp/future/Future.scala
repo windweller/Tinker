@@ -12,7 +12,7 @@ import files.RowTypes.NormalRow
 import files.structure.DataStructure
 import nlp.matcher.Matcher
 import nlp.matcher.impl.Tregex
-import nlp.parser.Parser
+import nlp.parser.ConstituencyParser
 import utils.Timer
 
 /**
@@ -20,7 +20,7 @@ import utils.Timer
  */
 class Future(val data: DataContainer, val struct: DataStructure, val patternRaw: Iterator[String]) {
 
-  val parser = new Parser
+  val parser = new ConstituencyParser
   val matcher = new Matcher with Tregex
   val patterns = patternRaw.map(e => TregexPattern.compile(e)).toList
 

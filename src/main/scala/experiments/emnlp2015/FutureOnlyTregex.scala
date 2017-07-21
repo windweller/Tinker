@@ -12,7 +12,7 @@ import files.RowTypes._
 import files.structure.DataStructure
 import nlp.matcher.Matcher
 import nlp.matcher.impl.Tregex
-import nlp.parser.Parser
+import nlp.parser.ConstituencyParser
 import utils.Timer
 
 import scala.collection.mutable.ListBuffer
@@ -25,7 +25,7 @@ class FutureOnlyTregex(val data: DataContainer, val struct: DataStructure, val p
 
   import scala.concurrent.Future
 
-  val parser = new Parser
+  val parser = new ConstituencyParser
   val matcher = new Matcher with Tregex
 
   //pre-processing patterns (replace TN|TC)

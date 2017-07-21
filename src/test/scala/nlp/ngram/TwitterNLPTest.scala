@@ -76,12 +76,12 @@ class TwitterNLPTest extends FlatSpec {
     filter.preprocess("E:\\Allen\\R\\emnlp2015\\GabbyDentonRatingOnTweetsMispelledCleaned.csv")
   }
 
-  "sentiment analysis" should "work" in {
-    val struct = new DataStructure(idColumnWithName = "state", targetColumnWithName = "sentence") 
-    val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\tweetsTokenizedCleanMispelledReplaced.csv", header = true) with CSV
-    val sentiment = new Sentiment(data, struct) with nlp.sentiment.impl.Stanford
-    sentiment.classify("E:\\Allen\\R\\emnlp2015\\twitterSentimentNoMispell.csv")
-  }
+//  "sentiment analysis" should "work" in {
+//    val struct = new DataStructure(idColumnWithName = "state", targetColumnWithName = "sentence")
+//    val data = new DataContainer("E:\\Allen\\R\\emnlp2015\\tweetsTokenizedCleanMispelledReplaced.csv", header = true) with CSV
+//    val sentiment = new Sentiment(data, struct) with nlp.sentiment.impl.Stanford
+//    sentiment.classify("E:\\Allen\\R\\emnlp2015\\twitterSentimentNoMispell.csv")
+//  }
 
   "uni-bi-trigram hashmap construction" should "work" in {
 

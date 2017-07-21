@@ -11,7 +11,7 @@ import nlp.preprocess.filters._
 import nlp.future.Future
 import nlp.ngram.{Unigram, Ngram}
 import nlp.sentiment.Sentiment
-import nlp.sentiment.impl.Stanford
+//import nlp.sentiment.impl.Stanford
 import org.scalatest.FlatSpec
 import utils.ParameterCallToOption.Implicits._
 
@@ -67,12 +67,12 @@ class RunAllTweets extends FlatSpec {
 //    basic.splitSentences("/Users/Aimingnie/Desktop/R/ACL2015/tweetsByStateSplitted.csv")
 //  }
 
-  "sentiment analysis" should "work"  in {
-    val struct = new DataStructure(idColumn = 0, targetColumn = 2) 
-    val data = new DataContainer("E:\\Allen\\R\\acl2015\\tweetsByStateSplittedCleaned.tab", header = false) with Tab
-    val sentiment = new Sentiment(data, struct) with Stanford
-    sentiment.classify("E:\\Allen\\R\\acl2015\\twitterSentiment2.csv")
-  }
+//  "sentiment analysis" should "work"  in {
+//    val struct = new DataStructure(idColumn = 0, targetColumn = 2)
+//    val data = new DataContainer("E:\\Allen\\R\\acl2015\\tweetsByStateSplittedCleaned.tab", header = false) with Tab
+//    val sentiment = new Sentiment(data, struct) with Stanford
+//    sentiment.classify("E:\\Allen\\R\\acl2015\\twitterSentiment2.csv")
+//  }
 
   "average by group" should "work" in {
     val struct = new DataStructure(idColumn = 0, ignoreColumn = 1) 
